@@ -64,14 +64,14 @@ include("../../side.php");
 			else message(0," : ".getLabel("message.no_date_value"),"critical");
 
 			# --- Get the graph id from the graph_template id
-			if(isset($graphlocal_hostid)){
+			if(isset($graphlocal_graph_id)){
 				$result_graph=  sqlrequest($database_cacti,"SELECT id FROM graph_local WHERE graph_template_id='$graphlocal_graph_id' ");
 				$nbr_ligne_graph = mysqli_num_rows($result_graph);
 				for ($i=0;$i<$nbr_ligne_graph;$i++)
 				{
 					# --- Print the graph
 					$graph_id = mysqli_result($result_graph,$i,"id");
-					echo "<img src='../../cacti/graph_image.php?local_graph_id=$graph_id&rra_id=$graphlocal_dateid' border='0'><br><br>";
+					echo "<img class='img-responsive center-block' src='../../../cacti/graph_image.php?local_graph_id=$graph_id&rra_id=$graphlocal_dateid' alt='cacti_graph'>";
 				}
 			}
 			echo '</div>';

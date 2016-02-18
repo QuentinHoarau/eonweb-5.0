@@ -2,9 +2,9 @@
 /*
 #########################################
 #
-# Copyright (C) 2014 EyesOfNetwork Team
-# DEV NAME : Jean-Philippe LEVY
-# VERSION 4.2
+# Copyright (C) 2016 EyesOfNetwork Team
+# DEV NAME : Quentin HOARAU
+# VERSION : 5.0
 # APPLICATION : eonweb for eyesofnetwork project
 #
 # LICENCE :
@@ -71,7 +71,7 @@ include("../../side.php");
 				{
 					# --- Print the graph
 					$graph_id = mysqli_result($result_graph,$i,"id");
-					echo "<img src='../../cacti/graph_image.php?local_graph_id=$graph_id&rra_id=$graphlocal_dateid' border='0' />";
+					echo "<img class='img-responsive center-block' src='../../../cacti/graph_image.php?local_graph_id=$graph_id&rra_id=$graphlocal_dateid' alt='graph_cacti'/>";
 				}
 			}
 			echo '</div>';
