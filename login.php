@@ -61,7 +61,7 @@ if(isset($_COOKIE['user_name'])){
 	<script type="text/javascript">
 		document.write("<body id='main'>");
 		if (window!=top){
-				$("body").append("<p class='alert alert-danger'>Message EON - Security : not allowed</p>");
+			window.parent.location="/module/index.php";
 		}
 		else{
 			$("body").append('<div class="container"><div class="row">'
