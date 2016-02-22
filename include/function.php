@@ -20,6 +20,9 @@
 #########################################
 */
 
+# Internationalization
+include("Translator.class.php");
+
 // Display Error Message 
 function message($id, $text,$type){
 	// Get the global value
@@ -750,6 +753,12 @@ function mysqli_result($res, $row, $field=0) {
 function getLabel($reference)
 {
 	global $dictionnary;
+	global $t;
+	
+	if(!isset($t)) {
+		$t = new Translator();
+		$dictionnary = $t::createPHPDictionnary();
+	}
 	
 	$label = $dictionnary[$reference];
 	return $label;

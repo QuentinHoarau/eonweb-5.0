@@ -25,11 +25,6 @@ include("include/config.php");
 include("include/arrays.php");
 include("include/function.php");
 
-# Internationalization
-include("include/Translator.class.php");
-$t=new Translator();
-$dictionnary=$t::createPHPDictionnary();
-
 ?>
 <!DOCTYPE html>
 <html>
