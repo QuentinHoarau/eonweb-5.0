@@ -24,21 +24,19 @@
 include("Translator.class.php");
 
 // Display Error Message 
-function message($id, $text,$type){
-	// Get the global value
-	global $array_msg;
-	$tempid=$array_msg[$id];
+function message($id, $text, $type){
 	
-	$message = false;
-
+	global $array_msg;
+	
+	// Get standard message if exists
+	if(isset($array_msg[$id])) { $tempid=$array_msg[$id]; } 
+	else { $tempid=""; }
+	
 	// Display the message
 	switch($type)
 	{
 		case "critical":
-			echo "<p class='alert alert-danger'>
-					Message EON - $id <br>
-					$tempid $text
-				  </p>";
+			echo "<p class='alert alert-danger'>$tempid $text</p>";
 			break;
 		case "warning":
 			echo "<p class='alert alert-warning'>$tempid $text</p>";
@@ -83,12 +81,12 @@ function sqlrequest($database,$sql,$id=false){
 }
 
 // Display array value
-function display_value($value, $key) {
+function display_value($value, $key){
 	echo "$value\n";
 }
 
 // Function Edit and Modify a file
-function filemodify($path,$get=false) {
+function filemodify($path,$get=false){
 	if(is_writable($path)) {
 	
 		// Test If Update or Display.
@@ -121,7 +119,7 @@ function filemodify($path,$get=false) {
 }
 
 // Host List form Nagios
-function get_host_list_from_nagios($field=false) {
+function get_host_list_from_nagios($field=false){
 	global $database_lilac;
 	$hosts=array();
 
@@ -142,8 +140,8 @@ function get_host_list_from_nagios($field=false) {
 	echo json_encode($hosts);
 }
 
-//Host and Address list from nagios. //TODO send the adress
-function get_host_list() {
+// Host and Address list from nagios. //TODO send the adress
+function get_host_list(){
 	global $database_lilac;
 	$hosts=array();
 
@@ -156,6 +154,7 @@ function get_host_list() {
 	echo json_encode($hosts);
 }
 
+// Host and Address listbox from nagios. //TODO send the adress
 function get_host_listbox_from_nagios(){
 	global $database_lilac;
 	
@@ -172,7 +171,7 @@ function get_host_listbox_from_nagios(){
 }
 
 // Host list from CACTI
-function get_title_list_from_cacti() {
+function get_title_list_from_cacti(){
 
 	global $database_cacti;
 
@@ -186,6 +185,7 @@ function get_title_list_from_cacti() {
 	echo json_encode($titles);
 }
 
+// Host listbox from CACTI
 function get_host_listbox_from_cacti(){
         
 	global $database_cacti;
@@ -199,9 +199,8 @@ function get_host_listbox_from_cacti(){
         print "</SELECT><br>";
 }
 
-
 // system function : CUT
-function cut($string, $width, $padding = "...") {
+function cut($string, $width, $padding = "..."){
     return (strlen($string) > $width ? substr($string, 0, $width-strlen($padding)).$padding : $string);
 } 
 
@@ -262,8 +261,7 @@ function get_user_listbox(){
 }
 
 // Retrive form data
-function retrieve_form_data($field_name,$default_value)
-{
+function retrieve_form_data($field_name,$default_value){
 	if (!isset ($_GET[$field_name]))
 		if (!isset ($_POST[$field_name]))
 			return $default_value;
@@ -273,9 +271,8 @@ function retrieve_form_data($field_name,$default_value)
 		return $_GET[$field_name];
 }
 
-// Delete eccents
-function stripAccents($str, $charset='utf-8')
-{
+// Delete accents
+function stripAccents($str, $charset='utf-8'){
     $str = htmlentities($str, ENT_NOQUOTES, $charset);
 
     $str = preg_replace('#\&([A-za-z])(?:acute|cedil|circ|grave|ring|tilde|uml)\;#', '\1', $str);
@@ -286,8 +283,7 @@ function stripAccents($str, $charset='utf-8')
 }
 
 // Add Logs
-function logging($module,$command,$user=false)
-{
+function logging($module,$command,$user=false){
 	global $database_eonweb;
 	global $dateformat;
 	if($user)
@@ -296,10 +292,8 @@ function logging($module,$command,$user=false)
 		sqlrequest($database_eonweb,"insert into logs values ('','".time()."','".$_COOKIE['user_name']."','$module','$command','".$_SERVER["REMOTE_ADDR"]."');");
 }
 
-
 // Time
-function getmtime()
-{
+function getmtime(){
   
     $temps = microtime();
     $temps = explode(' ', $temps);
@@ -307,8 +301,8 @@ function getmtime()
  
 }
 
-//Get the informations of nagios' config's file.
-function getBpProcess() {
+// Get the informations of nagios' config's file.
+function getBpProcess(){
 	
 	global $path_nagiosbpcfg ;
 	global $path_nagiosbpcfg_lock ;
@@ -362,7 +356,7 @@ function getBpProcess() {
 	return $tabProcess ;
 }
 
-//Wait the end of modification of a file
+// Wait the end of modification of a file
 function wait($file){
 	$retry = 0 ;
 
@@ -373,7 +367,7 @@ function wait($file){
 	}
 }
 
-//Insert a value in an array
+// Insert a value in an array
 function array_push_after($src,$in,$pos){
     if(is_int($pos)) $R=array_merge(array_slice($src,0,$pos+1), $in, array_slice($src,$pos+1));
     else{
@@ -507,7 +501,8 @@ function write_file($file,$contenu,$mode,$message = null){
 		message(3,$file,"critical");
 }
 
-function sqlArrayNagios($request) {
+// MySQL request in php array 
+function sqlArrayNagios($request){
 	global $database_nagios;
 	$result = sqlrequest($database_nagios,$request);
 	$values = array();
@@ -515,6 +510,7 @@ function sqlArrayNagios($request) {
 	return $values ;
 }
 
+// NagiosBP file backup
 function backup_file($start){
 	global $path_nagiosbpcfg;
 	global $path_nagiosbpcfg_bu;
@@ -530,6 +526,7 @@ function backup_file($start){
 	copy($path_nagiosbpcfg,$path_nagiosbpcfg_bu.'1');
 }
 
+// NagiosBP file creation
 function buildFile(){
 
 	global $path_nagiosbpcfg_lock;
@@ -575,6 +572,7 @@ function buildFile(){
     unlink($path_nagiosbpcfg_lock);
 }
 
+// Nagiosbp build
 function build($pRequest,&$file,$pWritenBP){
 
 	$values = sqlArrayNagios($pRequest);
@@ -650,7 +648,8 @@ function build($pRequest,&$file,$pWritenBP){
 	}
 }
 
-function ldap_escape ($str) {
+// Ldap escape special caracters
+function ldap_escape ($str){
 
 	$str = trim($str);
 
@@ -664,8 +663,8 @@ function ldap_escape ($str) {
 
 }
 
-function insert_user($user_name, $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_mail, $user_limitation, $message)
-{
+// User creation
+function insert_user($user_name, $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_mail, $user_limitation, $message){
 	global $database_eonweb;
 	global $database_lilac;
 	$user_id=null;
@@ -738,7 +737,7 @@ function insert_user($user_name, $user_descr, $user_group, $user_password1, $use
 }
 
 // "mysqli" version of mysql_result
-function mysqli_result($res, $row, $field=0) {
+function mysqli_result($res, $row, $field=0){
     $res->data_seek($row);
 	if(gettype($field) == "string"){
 		$datarow = $res->fetch_assoc();
@@ -750,8 +749,7 @@ function mysqli_result($res, $row, $field=0) {
 }
 
 // get traduction words
-function getLabel($reference)
-{
+function getLabel($reference){
 	global $dictionnary;
 	global $t;
 	
@@ -765,8 +763,7 @@ function getLabel($reference)
 }
 
 // get frame url
-function getFrameURL($url) 
-{
+function getFrameURL($url){
 	global $path_frame;
 	
 	$frame_url = $path_frame.urlencode($url);
