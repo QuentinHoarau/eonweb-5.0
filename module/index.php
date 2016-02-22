@@ -20,8 +20,14 @@
 #########################################
 */
 
-$module=0;
-if(isset($_GET["module"])) { $module=exec("rpm -q ".$_GET["module"]." |grep '.eon' |wc -l"); }
+# Check optionnal module to load
+if(isset($_GET["module"])) { 
+	$module=exec("rpm -q ".$_GET["module"]." |grep '.eon' |wc -l"); 
+} else { 
+	header('Location: /index.php'); 
+}
+
+# Redirect to module page if rpm installed
 if($module!=0) { header('Location: '.$_GET["link"].''); }
 else {
 	

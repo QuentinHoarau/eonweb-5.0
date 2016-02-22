@@ -64,20 +64,22 @@ if(isset($_COOKIE['user_name'])){
 				$("body").append("<p class='alert alert-danger'>Message EON - Security : not allowed</p>");
 		}
 		else{
-			$("body").append('<div class="row">'
-							+	'<div class="img col-md-4 col-md-offset-4" style="margin-top: 30px;">'
+			$("body").append('<div class="container"><div class="row">'
+							+	'<div class="img col-md-4 col-md-offset-4">'
 							+		'<div class="login-panel panel panel-default">'
 							+			'<div class="panel-heading">'
 							+				'<img class="img-responsive" src="images/logo.png" alt="logo eyesofnetwork">'
 							+			'</div>'
 							+			'<div class="panel-body">'
-							+				'<p>Vous etes deja connecté en tant que : <?php echo $_COOKIE["user_name"]; ?></p>'
-							+				'<a class="btn btn-default col-md-6" href="<?php echo $defaultpage; ?>">Accueil</a>'
-							+				'<a class="btn btn-default col-md-6" href="logout.php">Se déconnecter</a>'
+							+				'<div class="alert alert-info">Vous etes deja connecté en tant que : <?php echo $_COOKIE["user_name"]; ?></div>'
+							+				'<div class="btn-group btn-group-justified">'
+							+				'<a class="btn btn-success" href="<?php echo $defaultpage; ?>">Accueil</a>'
+							+				'<a class="btn btn-default" href="logout.php">Se déconnecter</a>'
+							+				'</div>'
 							+			'</div>'
 							+		'</div>'
 							+	'</div>'
-							+'</div>');
+							+'</div></div>');
 		}
 	</script>
 	<?php include("footer.php");

@@ -32,32 +32,29 @@ setcookie("user_name",FALSE);
 setcookie("user_id",FALSE);
 setcookie("user_limitation",FALSE);
 setcookie("group_id",FALSE);
-setcookie("active_tab",FALSE);
-setcookie("active_page",FALSE);
 setcookie("nagvis_session",FALSE,0,"/nagvis");
 setcookie("Cacti",FALSE);
 setcookie("clickedFolder",FALSE);
 setcookie("highlightedTreeviewLink",FALSE);
 
-echo '
+?>
+
 <div class="container">
 	<div class="row">
-		<div class="img col-md-4 col-md-offset-4" style="margin-top: 30px;">
+		<div class="img col-md-4 col-md-offset-4">
 			<div class="login-panel panel panel-default">
 				<div class="panel-heading">
 					<img class="img-responsive" src="images/logo.png" alt="logo eyesofnetwork">
 				</div>
 				<div class="panel-body">
 					<div class="alert alert-info">
-						'. getLabel("label.message.logout.success") .'
+						<?php echo getLabel("label.message.logout.success"); ?>
 					</div>
-					<a class="btn btn-lg btn-success btn-block" href="login.php">'. getLabel("action.connect") .'</a>
+					<a class="btn btn-lg btn-success btn-block" href="login.php"><?php echo getLabel("action.connect"); ?></a>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>';
+</div>
 		
-include("footer.php");
-
-?>
+<?php include("footer.php"); ?>
