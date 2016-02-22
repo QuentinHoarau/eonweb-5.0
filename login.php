@@ -61,7 +61,7 @@ if(isset($_COOKIE['user_name'])){
 	<script type="text/javascript">
 		document.write("<body id='main'>");
 		if (window!=top){
-			window.parent.location="/module/index.php";
+			top.location="/module/index.php";
 		}
 		else{
 			$("body").append('<div class="container"><div class="row">'
