@@ -82,23 +82,16 @@ $max_bu_file = 5;
 $min_dup = 1000;
 $max_dup = 9999;
 
-// # Session management
-if ($_SERVER['PHP_SELF'] != '/login.php' && $_SERVER['PHP_SELF'] != '/logout.php' && !isset($_COOKIE['user_name'])) {
-	echo "<meta http-equiv=\"Refresh\" content=\"0;URL=/login.php\" />";
-	echo "</head>";
-	echo "<body>";
-	echo "</body>";
-	echo "</html>";
-	exit;
-}
-
 // # Define All Path
 $path_eon="/srv/eyesofnetwork";
 $path_eonweb="$path_eon/eonweb";
 $path_frame="/module/monitoring_frame/index.php?url=";
 $dir_imgcache="cache";
 $path_languages="$path_eonweb/include/languages";
-$path_messages="$path_languages/messages-$langformat.json";
+$path_messages="$path_languages/messages";
+$path_messages_custom="$path_languages/custom.messages";
+$path_menus="$path_languages/menus";
+$path_menus_custom="$path_languages/custom.menus";
 $path_reports="$path_eonweb/include/reports";
 
 // # Backup Manager

@@ -52,13 +52,11 @@ function check_uncheck($form_name,$name,$checked,$value)
 // get all menu_tab info (create an array with all names)
 function retrieve_menu () {
 	
-	global $database_eonweb;
-		
+	global $menus;
+
 	$array_tabs = array();
-	$sql = "SELECT * FROM menu_tab";
-	$res = sqlrequest("eonweb", $sql);
-	while($tab = mysqli_fetch_assoc($res)){
-		array_push($array_tabs, $tab["name"]);
+	foreach($menus["menutab"] as $menutab) {
+		array_push($array_tabs, $menutab["name"]);
 	}
 	
 	return $array_tabs;
@@ -313,7 +311,7 @@ if($group_type == 0){
 		</div>
 		<br>
 		<div class="row">
-			<label class="col-md-3"><?php echo $group_name;?> <?php echo getLabel("label.admin_group.rights"); ?></label>
+			<label class="col-md-3"><?php echo getLabel("label.admin_group.rights"); ?></label>
 			<div class="col-md-9">
 			<?php retrieve_allowed_menu($array_tabs,$group_id); ?>
 			</div>

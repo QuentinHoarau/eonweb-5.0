@@ -3,7 +3,7 @@
 #########################################
 #
 # Copyright (C) 2016 EyesOfNetwork Team
-# DEV NAME : Quentin HOARAU
+# DEV NAME : Jean-Philippe LEVY
 # VERSION : 5.0
 # APPLICATION : eonweb for eyesofnetwork project
 #
@@ -19,6 +19,11 @@
 #
 #########################################
 */
+
+$m = new Translator();
+$m::initFile($path_menus,$path_menus_custom);
+$menus = $m::createPHPDictionnary();
+
 ?>
 
 <!-- Nav menu -->
@@ -69,58 +74,40 @@
 						</div>
 					</form>
 				</li>
-				<?php
-					$cpt = 1;
-					$tabs = sqlrequest("eonweb", "SELECT * from menu_tab");
-					while( $tab = mysqli_fetch_array($tabs) ){
-						$tab_right = sqlrequest("eonweb", "SELECT tab_".$cpt." FROM groupright WHERE group_id=".$_COOKIE['group_id']);
-						$test = mysqli_fetch_array($tab_right);
-						
-						if($test[0] == 0){
-							$cpt++;
-							continue;
-						} ?>
+				<?php 
+				foreach($menus["menutab"] as $menutab) { 	
+					// Verify group rights
+					$tab_request = "SELECT tab_".$menutab["id"]." FROM groupright WHERE group_id=".$_COOKIE['group_id'].";";
+					$tab_right = mysqli_result(sqlrequest($database_eonweb, $tab_request),0);				
+					if($tab_right == 0){ continue; }
+				?>
+				<li>
+					<a href="#">
+						<i class="<?php echo $menutab["icon"]; ?>"></i>
+						<?php echo getLabel($menutab["name"]); ?>
+						<span class="fa arrow"></span>
+					</a>
+					<ul class="nav nav-second-level collapse">
+						<?php foreach($menutab["menusubtab"] as $menusubtab) { ?>
 						<li>
-							<a href="#">
-								<i class="<?php echo $tab["image"]; ?>"></i>
-								<?php echo getLabel($tab["name"]); ?>
-								<span class="fa arrow"></span>
-							</a>
-							<ul class="nav nav-second-level collapse">
-								<?php
-									$subtabs = sqlrequest("eonweb", "SELECT * FROM menu_subtab WHERE id_tab = ". $tab["id"]);
-									while( $subtab = mysqli_fetch_array($subtabs) ){ ?>
-										<li>
-											<a href="#"><?php echo getLabel($subtab["name"]); ?> <span class="fa arrow"></span> </a>
-											<ul class="nav nav-third-level collapse">
-												<?php 
-													$links = sqlrequest("eonweb", "SELECT * FROM menu_link WHERE id_subtab = ". $subtab["id"]);
-													while( $link = mysqli_fetch_array($links) ){ ?>
-														<li>
-															<a href="
-															<?php 
-																if((strpos($link["url"],'/module') === false) && (strpos($link["url"],'http://') === false) && $link["target"]!="_blank"){
-																	echo getFrameURL($link["url"]);
-																}
-																else {
-																	echo $link["url"];
-																}
-																echo "\" ";
-																if($link["target"]=="_blank"){echo 'target="_blank"';}
-																echo ">".getLabel($link["name"]) ;
-															?>
-															</a>
-														</li>
-												<?php } ?>
-											</ul>
-										</li>
+							<a href="#"><?php echo getLabel($menusubtab["name"]); ?> <span class="fa arrow"></span> </a>
+							<ul class="nav nav-third-level collapse">
+								<?php foreach($menusubtab["link"] as $menulink) { ?>
+								<li>
+									<?php
+										$url=$menulink["url"];
+										if($menulink["target"]=="_blank") { $url=$url.'" target="_blank'; }
+										elseif($menulink["target"]=="frame") { $url=$path_frame.urlencode($menulink["url"]); }
+									?>
+									<a href="<?php echo $url; ?>"><?php echo getLabel($menulink["name"]); ?></a>
+								</li>
 								<?php } ?>
 							</ul>
 						</li>
-					<?php 
-						$cpt++;
-					}
-				?>
+						<?php } ?>
+					</ul>
+				</li>
+				<?php } ?>
 			</ul>
 		</div>
 		<!-- /.sidebar-collapse -->
