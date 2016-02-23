@@ -96,7 +96,6 @@ function filemodify($path,$get=false){
 			if (fwrite ($fconf, str_replace("\r\n", "\n", $_POST['maj'])) === FALSE) message(3,$path,"critical");
 			else { 
 				message(6," : File updated","ok");
-				echo "<br>";
 			}
 			fclose ($fconf);
 			if (!$fconf = fopen($path, "r")) message(2,$path,"critical");
@@ -108,10 +107,14 @@ function filemodify($path,$get=false){
 		if($get)
 			echo "?file=$get";
 		echo "'>";
-		echo "<textarea cols='100' rows='25' name='maj' scrolling='no'>";
+		echo '<div class="form-group">';
+		echo "<textarea class='form-control' cols='100' rows='25' name='maj' scrolling='no'>";
 			print file_get_contents($path);
-		echo "</textarea><br>";
-		echo "<input class='button' type='submit' value='Update'>";
+		echo "</textarea>";
+		echo '</div>';
+		echo '<div class="form-group">';
+		echo "<input class='btn btn-primary' type='submit' value='".getLabel("action.update")."'>";
+		echo '</div>';
 		echo "</form>";
 		fclose ($fconf);
 	}
@@ -751,16 +754,29 @@ function mysqli_result($res, $row, $field=0){
 
 // get traduction words
 function getLabel($reference){
-	global $dictionnary;
-	global $t;
-	
-	if(!isset($t)) {
-		$t = new Translator();
-		$dictionnary = $t::createPHPDictionnary();
-	}
-	
-	$label = $dictionnary[$reference];
-	return $label;
+
+        global $dictionnary;
+        global $path_messages;
+        global $path_messages_custom;
+        global $t;
+
+        // Load dictionnary if not isset
+        if(!isset($t)) {
+                $t = new Translator();
+                $t::initFile($path_messages,$path_messages_custom);
+                $dictionnary = $t::createPHPDictionnary();
+        }
+
+        // Display dictionnary reference if isset or reference
+        if(isset($dictionnary[$reference])) {
+                $label = $dictionnary[$reference];
+        }
+        else {
+                $label = $reference;
+        }
+
+        return $label;
+
 }
 
 // get frame url
