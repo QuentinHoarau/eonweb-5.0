@@ -220,20 +220,20 @@ function get_graph_listbox_from_cacti(){
 
 // Display TOOL list
 function get_tool_listbox(){
-	echo "<h2>".getLabel("label.tool_all.tool")." : </h2>";	
+	echo "<label>".getLabel("label.tool_all.tool")." : </label>";	
 	// Get the global table
 	global $array_tools;
 
-        // Get the first array key
-        reset($array_tools);
+	// Get the first array key
+	reset($array_tools);
 
 	// Display the list of tool
-	echo "<SELECT name='tool_list' class='select' size=4 style='width:250px;'>";
+	echo "<SELECT name='tool_list' class='form-control' size=4>";
  	while (list($tool_name, $tool_url) = each($array_tools)) 
 	{
 		echo "<OPTION value='$tool_url'>&nbsp;$tool_name</OPTION>";
-        }
-	echo "</SELECT><br>";
+	}
+	echo "</SELECT>";
 }
 
 // Display min and max port value for show port tool
@@ -241,10 +241,11 @@ function get_toolport_ports(){
 	global $default_minport;
 	global $default_maxport;
 
-	echo "<h2>Port min - Port max</h2>";
-	echo "(show port ".getLabel("label.tool_all.only").") :<br>";
-	echo "<input type=text name='min_port' value=$default_minport size='8'> - <input type=text name='max_port' value=$default_maxport size=8 >";
+	echo "<label>Port min - Port max <br>(show port ".getLabel("label.tool_all.only").") :</label>";
+	echo "<div class='col-md-6'><input class='form-control' type=text name='min_port' value=$default_minport size=8></div>
+		  <div class='col-md-6'><input class='form-control' type=text name='max_port' value=$default_maxport size=8></div>";
 }
+
 
 // Display User list
 function get_user_listbox(){
@@ -768,6 +769,258 @@ function getFrameURL($url){
 	
 	$frame_url = $path_frame.urlencode($url);
 	return $frame_url;
+}
+
+function pieChart($queue, $field, $search, $period)
+{
+	// all external variables we need
+	global $database_ged;
+	global $array_ged_states;
+	if($queue == "active"){ global $ged_active_intervals; extract($ged_active_intervals); }
+	else{ global $ged_history_intervals; extract($ged_history_intervals); }
+	
+	$array_result = array();
+	$sql = "SELECT pkt_type_name FROM pkt_type WHERE pkt_type_id!='0' AND pkt_type_id<'100'";
+	$pkt_result = sqlrequest($database_ged, $sql);
+	
+	// set the search clause (according to field and value)
+	$search_clause = "";
+	if( isset($search) && $search != "" )
+	{
+		$search_clause = " AND $field LIKE '%$search%'";
+	}
+	
+	// set the period clause (according to checkboxes checked)
+	$period_clause = "";
+	if( isset($period) && $period != "" )
+	{
+		switch($period)
+		{
+			case "day": $period_clause = " AND o_sec >= $day"; break;
+			case "week": $period_clause = " AND o_sec >= $week AND o_sec < $day"; break;
+			case "month": $period_clause = " AND o_sec >= $month AND o_sec < $week"; break;
+			case "year": $period_clause = " AND o_sec >= $year AND o_sec < $month"; break;
+		}
+	}
+	
+	while( $pkt = mysqli_fetch_row($pkt_result) )
+	{
+		foreach($array_ged_states as $key => $state)
+		{
+			if($key == "ok")
+			{
+				continue;
+			}
+			$sql = "SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."'";
+			$sql .= $search_clause;
+			$sql .= $period_clause;
+			
+			$result = sqlrequest($database_ged, $sql);
+			$result = mysqli_fetch_row($result);
+			$array_result["$key"] += $result[0];
+		}
+	}
+	return json_encode($array_result);
+}
+
+function barChart($queue, $field, $search)
+{
+	global $database_ged;
+	global $array_ged_states;
+	if($queue == "active"){ global $ged_active_intervals; extract($ged_active_intervals); }
+	else{ global $ged_history_intervals; extract($ged_history_intervals); }
+	
+	
+	$sql = "SELECT pkt_type_name FROM pkt_type WHERE pkt_type_id!='0' AND pkt_type_id<'100'";
+	$pkt_result = sqlrequest($database_ged, $sql);
+	
+	$array_result = array();
+	$array_now_day = array();
+	$array_day_week = array();
+	$array_week_month = array();
+	$array_month_year = array();
+	$array_year_more = array();
+	
+	// set the search clause (according to field and value)
+	$search_clause = "";
+	if( isset($search) && $search != "" )
+	{
+		$search_clause = " AND $field LIKE '%$search%'";
+	}
+	
+	while( $pkt = mysqli_fetch_row($pkt_result) )
+	{
+		foreach($array_ged_states as $key => $state)
+		{
+			if($key == "ok")
+			{
+				continue;
+			}
+			$sql = "
+				SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."' AND o_sec >= $day".$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."' AND o_sec >= $week AND o_sec < $day".$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."' AND o_sec >= $month AND o_sec < $week".$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."' AND o_sec >= $year AND o_sec < $month".$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."' AND o_sec < $year".$search_clause;
+			$result = sqlrequest($database_ged, $sql);
+			
+			$cpt = 0;
+			while( $row = mysqli_fetch_row($result) )
+			{
+				switch($cpt)
+				{
+					case 0: $array_now_day["$key"] += $row[0]; break;
+					case 1: $array_day_week["$key"] += $row[0]; break;
+					case 2: $array_week_month["$key"] += $row[0]; break;
+					case 3: $array_month_year["$key"] += $row[0]; break;
+					case 4: $array_year_more["$key"] += $row[0]; break;
+				}
+				$cpt++;
+			}
+		}
+	}
+	array_push($array_result, $array_now_day);
+	array_push($array_result, $array_day_week);
+	array_push($array_result, $array_week_month);
+	array_push($array_result, $array_month_year);
+	array_push($array_result, $array_year_more);
+	
+	return json_encode($array_result);
+}
+
+function slaPieChart($field, $search, $period)
+{
+	// all external variables we need
+	global $database_ged;
+	global $ged_sla_intervals;
+	global $ged_history_intervals;
+	extract($ged_sla_intervals);
+	extract($ged_history_intervals);
+	
+	$array_result = array();
+	$sql = "SELECT pkt_type_name FROM pkt_type WHERE pkt_type_id!='0' AND pkt_type_id<'100'";
+	$pkt_result = sqlrequest($database_ged, $sql);
+	
+	// set the search clause (according to field and value)
+	$search_clause = "";
+	if( isset($search) && $search != "" )
+	{
+		$search_clause = " AND $field LIKE '%$search%'";
+	}
+	
+	// set the period clause (according to checkboxes checked)
+	$period_clause = "";
+	if( isset($period) && $period != "" )
+	{
+		switch($period)
+		{
+			case "day": $period_clause = " AND o_sec >= $day"; break;
+			case "week": $period_clause = " AND o_sec >= $week AND o_sec < $day"; break;
+			case "month": $period_clause = " AND o_sec >= $month AND o_sec < $week"; break;
+			case "year": $period_clause = " AND o_sec >= $year AND o_sec < $month"; break;
+		}
+	}
+	
+	while( $pkt = mysqli_fetch_row($pkt_result) )
+	{
+		foreach($ged_sla_intervals as $key => $value)
+		{
+			$sla_clause = "";
+			switch($key)
+			{
+				case "first" : $sla_clause = " AND a_sec-o_sec < $first"; break;
+				case "second": $sla_clause = " AND a_sec-o_sec >= $first AND a_sec-o_sec < $second"; break;
+				case "third" : $sla_clause = " AND a_sec-o_sec >= $second AND a_sec-o_sec < $third"; break;
+				case "fourth": $sla_clause = " AND a_sec-o_sec >= $third"; break;
+			}
+			$sql = "SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state!='0'".$sla_clause;
+			$sql .= $search_clause;
+			$sql .= $period_clause;
+			
+			$result = sqlrequest($database_ged, $sql);
+			$result = mysqli_fetch_row($result);
+			$array_result["$key"] += $result[0];
+		}
+	}
+	return json_encode($array_result);
+}
+
+function slaBarChart($field, $search)
+{
+	// all external variables we need
+	global $database_ged;
+	global $array_ged_states;
+	global $ged_sla_intervals;
+	global $ged_history_intervals;
+	extract($ged_sla_intervals);
+	extract($ged_history_intervals);
+	
+	$array_result = array();
+	$array_now_day = array();
+	$array_day_week = array();
+	$array_week_month = array();
+	$array_month_year = array();
+	$array_year_more = array();
+	
+	$array_result = array();
+	$sql = "SELECT pkt_type_name FROM pkt_type WHERE pkt_type_id!='0' AND pkt_type_id<'100'";
+	$pkt_result = sqlrequest($database_ged, $sql);
+	
+	// set the search clause (according to field and value)
+	$search_clause = "";
+	if( isset($search) && $search != "" )
+	{
+		$search_clause = " AND $field LIKE '%$search%'";
+	}
+	
+	while( $pkt = mysqli_fetch_row($pkt_result) )
+	{
+		foreach($ged_sla_intervals as $key => $value)
+		{
+			switch($key)
+			{
+				case "first" : $sla_clause = " AND a_sec-o_sec < $first"; break;
+				case "second": $sla_clause = " AND a_sec-o_sec >= $first AND a_sec-o_sec < $second"; break;
+				case "third" : $sla_clause = " AND a_sec-o_sec >= $second AND a_sec-o_sec < $third"; break;
+				case "fourth": $sla_clause = " AND a_sec-o_sec >= $third"; break;
+			}
+			$sql = "SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state !='0' AND o_sec >= $day".$sla_clause.$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state !='0' AND o_sec >= $week AND o_sec < $day".$sla_clause.$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state !='0' AND o_sec >= $month AND o_sec < $week".$sla_clause.$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state !='0' AND o_sec >= $year AND o_sec < $month".$sla_clause.$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state !='0' AND o_sec < $year".$sla_clause.$search_clause;
+			$result = sqlrequest($database_ged, $sql);
+			
+			$cpt = 0;
+			while( $row = mysqli_fetch_row($result) )
+			{
+				switch($cpt)
+				{
+					case 0: $array_now_day["$key"] += $row[0]; break;
+					case 1: $array_day_week["$key"] += $row[0]; break;
+					case 2: $array_week_month["$key"] += $row[0]; break;
+					case 3: $array_month_year["$key"] += $row[0]; break;
+					case 4: $array_year_more["$key"] += $row[0]; break;
+				}
+				$cpt++;
+			}
+		}
+	}
+	array_push($array_result, $array_now_day);
+	array_push($array_result, $array_day_week);
+	array_push($array_result, $array_week_month);
+	array_push($array_result, $array_month_year);
+	array_push($array_result, $array_year_more);
+	
+	return json_encode($array_result);
 }
 
 ?>

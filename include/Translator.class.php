@@ -38,15 +38,15 @@ class Translator
 	 */
 	public function __construct()
 	{
-		// # Languages files
+		// Languages files
 		if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
-				$lang = explode(",",$_SERVER['HTTP_ACCEPT_LANGUAGE']);
-				$lang = strtolower(substr(chop($lang[0]),0,2));
-				$path_messages_tmp=$GLOBALS['path_languages']."/messages-$lang.json";
-				if(file_exists($path_messages_tmp)) {
-					$GLOBALS['langformat']=$lang;
-					$GLOBALS['path_messages']=$path_messages_tmp;
-				}
+			$lang = explode(",",$_SERVER['HTTP_ACCEPT_LANGUAGE']);
+			$lang = strtolower(substr(chop($lang[0]),0,2));
+			$path_messages_tmp=$GLOBALS['path_languages']."/messages-$lang.json";
+			if(file_exists($path_messages_tmp)) {
+				$GLOBALS['langformat']=$lang;
+				$GLOBALS['path_messages']=$path_messages_tmp;
+			}
 		}
 		Translator::$dictionnary_content = file_get_contents($GLOBALS['path_messages']);
 	}

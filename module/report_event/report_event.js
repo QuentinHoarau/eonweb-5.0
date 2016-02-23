@@ -19,54 +19,9 @@
 #########################################
 */
 
-/* ~~~~~~~~~~~~~~~~~~~~ NORMAL GRAPH ~~~~~~~~~~~~~~~~~~~~ */
-/**
- * Will display the graph for normal reports
- *
- * @params graph_type	(String)	-> The type of the graph (pie or bar)
- * @params id_html		(String)	-> The html tag's id
- * @params file			(String)	-> The file which define graph's infos (legends, ect...)
- * @params start_date	(timestamp) -> The begin of the report time range
- * @params end_date		(timestamp) -> The end of the report time range
- * @params event_state	(String) 	-> The state of events (active or history)
- * @params filter_field	(String)	-> The name of the field we want to filter
- * @params filter_value	(String)	-> The value of the field we have filtered
- * @params special		(String)	-> Is this a special graph(for legends) ??
- */
-function getGraph(graph_type, id_html, file, start_date, end_date, event_state, filter_field, filter_value, special)
-{
-	$.ajax({
-		url: "report.php",
-		cache: false,
-		data: {
-			"file": file,
-			"start_date": start_date,
-			"end_date": end_date,
-			"event_state": event_state,
-			"filter_field": filter_field,
-			"filter_value": filter_value
-		},
-		dataType: "JSON",
-		success: function(response){
-			var length = 0;
-			for(i in response){ length++; }
-			if(length > 1)
-			{
-				if(graph_type == "pie"){ drawPieChart(id_html, response); }
-				else{
-					if(special == "yes"){ drawBarChartHistory(id_html, response); }
-					else{ drawBarChart(id_html, response); }
-				}
-			}
-			else
-			{
-				$('#'+id_html).append("<h2 style=\"text-align:center;vertical-align:middle;display:inline-block;margin-top:200px;\">No data to display ...</h2>");
-			}
-		},
-		error: function(){ }
-	});
-}
 
+/* ########## FUNCTIONS DECLARATION ########## */
+/* ~~~~~~~~~~~~~~~~~~~~ NORMAL GRAPH ~~~~~~~~~~~~~~~~~~~~ */
 /**
  * Draw the pie chart with selected title, values, in a HTML target
  *
@@ -75,13 +30,12 @@ function getGraph(graph_type, id_html, file, start_date, end_date, event_state, 
  */
 function drawPieChart(div_id, datas)
 {
-	//alert(graph_color.warning);
 	$('#'+div_id).highcharts({
 		chart: {
 			backgroundColor: 'rgba(255, 255, 255, 0.01)',
 			plotShadow: false,
-			width: 430,
-			height: 350
+			renderto: 'container',
+			margin: '40'
 		},
 		exporting: {
 			enabled: false
@@ -159,19 +113,16 @@ function drawPieChart(div_id, datas)
 function drawBarChart(div_id, datas, queue)
 {
 	// define categories for xAxis
-	var categories = ['0 ~ 5min','5 ~ 15min','15 ~ 30min','30min ~ 1h','more'];
-	if(queue == "history")
-	{
-		categories = ['day','week','month','year','more'];
-	}
+	var categories = barChart_active_categories;
+	if(queue == "history"){ categories = barChart_history_categories; }
 	
 	$('#'+div_id).highcharts({
 		chart: {
 			type: 'column',
 			backgroundColor: 'rgba(255, 255, 255, 0.01)',
 			plotShadow: false,
-			width: 400,
-			height: 350
+			renderto: 'container',
+			marginTop: '80',
 		},
 		exporting: {
 			enabled: false
@@ -232,49 +183,6 @@ function drawBarChart(div_id, datas, queue)
 
 /* ~~~~~~~~~~~~~~~~~~~~ SLA GRAPH ~~~~~~~~~~~~~~~~~~~~ */
 /**
- * Will display the graph for sla reports
- *
- * @params graph_type	(String)	-> The type of the graph (pie or bar)
- * @params id_html		(String)	-> The html tag's id
- * @params file			(String)	-> The file which define graph's infos (legends, ect...)
- * @params start_date	(timestamp)	-> The begin of the report time range
- * @params end_date		(timestamp)	-> The end of the report time range
- * @params event_state	(String)	-> The state of events (active or history)
- * @params filter_field	(String)	-> The name of the field we want to filter
- * @params filter_value	(String)	-> The value of the field we have filtered
- */
-function getSlaGraph(graph_type, id_html, file, start_date, end_date, event_state, filter_field, filter_value)
-{
-	$.ajax({
-		url: "report.php",
-		cache: false,
-		data: {
-			"file": file,
-			"start_date": start_date,
-			"end_date": end_date,
-			"event_state": event_state,
-			"filter_field": filter_field,
-			"filter_value": filter_value
-		},
-		dataType: "JSON",
-		success: function(response){
-			var length = 0;
-			for(i in response){ length++; }
-			if(length > 1)
-			{
-				if(graph_type == "pie"){ drawSlaPieChart(id_html, response); }
-				else{ drawSlaBarChart(id_html, response); }
-			}
-			else
-			{
-				$('#'+id_html).append("<h2 style=\"text-align:center;vertical-align:middle;display:inline-block;margin-top:200px;\">No data to display ...</h2>");
-			}
-		},
-		error: function(){ }
-	});
-}
-
-/**
  * Draw the pie chart with selected title, values, in a HTML target
  *
  * @param div_id (String)	-> The HTML target's id
@@ -320,7 +228,7 @@ function drawSlaPieChart(div_id, datas)
 			data: [
 				{
 					name: '0-5min',
-					y: datas["0-5min"],
+					y: datas.first,
 					color: {
 						radialGradient: { cx: 0.5, cy: 0.5, r: 0.8 },
 						stops: [
@@ -331,7 +239,7 @@ function drawSlaPieChart(div_id, datas)
 				},
 				{
 					name: '5-10min',
-					y: datas["5-10min"],
+					y: datas.second,
 					color: {
 						radialGradient: { cx: 0.5, cy: 0.5, r: 0.8 },
 						stops: [
@@ -342,7 +250,7 @@ function drawSlaPieChart(div_id, datas)
 				},
 				{
 					name: '10-20min',
-					y: datas["10-20min"],
+					y: datas.third,
 					color: {
 						radialGradient: { cx: 0.5, cy: 0.5, r: 0.8 },
 						stops: [
@@ -353,7 +261,7 @@ function drawSlaPieChart(div_id, datas)
 				},
 				{
 					name: '>=20min',
-					y: datas[">=20min"],
+					y: datas.fourth,
 					color: {
 						radialGradient: { cx: 0.5, cy: 0.5, r: 0.8 },
 						stops: [
@@ -375,6 +283,8 @@ function drawSlaPieChart(div_id, datas)
  */
 function drawSlaBarChart(div_id, datas)
 {
+	var categories = barChart_history_categories;
+	// console.log(datas);
 	$('#'+div_id).highcharts({
 		chart: {
 			type: 'column',
@@ -394,15 +304,9 @@ function drawSlaBarChart(div_id, datas)
 		},
 		xAxis: {
 			title: {
-				text: 'Plage Horaire'
+				text: false
 			},
-			categories: [
-				'day',
-				'week',
-				'month',
-				'year',
-				'more'
-			],
+			categories: categories,
 			label: {
 				overflow: 'justify'
 			}
@@ -411,7 +315,7 @@ function drawSlaBarChart(div_id, datas)
 			allowDecimals: false,
 			min: 0,
 			title: {
-				text: 'Nbr Events'
+				text: false
 			}
 		},
 		tooltip: {
@@ -430,23 +334,24 @@ function drawSlaBarChart(div_id, datas)
 		},
 		series: [{
 			name: '0-5min',
-			data: [datas["0-5min"].day, datas["0-5min"].week, datas["0-5min"].month, datas["0-5min"].year, datas["0-5min"].more],
+			data: [datas[0].first, datas[1].first, datas[2].first, datas[3].first, datas[4].first],
 			color: '#00CC33'
 		}, {
 			name: '5-10min',
-			data: [datas["5-10min"].day, datas["5-10min"].week, datas["5-10min"].month, datas["5-10min"].year, datas["5-10min"].more],
+			data: [datas[0].second, datas[1].second, datas[2].second, datas[3].second, datas[4].second],
 			color: '#FFA500'
 		}, {
 			name: '10-20min',
-			data: [datas["10-20min"].day, datas["10-20min"].week, datas["10-20min"].month, datas["10-20min"].year, datas["10-20min"].more],
+			data: [datas[0].third, datas[1].third, datas[2].third, datas[3].third, datas[4].third],
 			color: '#CC77C6'
 		}, {
 			name: '>20min',
-			data: [datas[">20min"].day, datas[">20min"].week, datas[">20min"].month, datas[">20min"].year, datas[">20min"].more],
+			data: [datas[0].fourth, datas[1].fourth, datas[2].fourth, datas[3].fourth, datas[4].fourth],
 			color: '#FF3300'
 		}]
 	});
 }
+/* ########## END OF FUNCTIONS DECLARATION ########## */
 
 
 $("#report-form").on('submit', function(event){
@@ -461,7 +366,6 @@ $("#report-form").on('submit', function(event){
 	var by_month = "";
 	var by_year = "";
 	
-	//alert($("#by_day").is(':checked'));
 	if($("#by_day").is(':checked')){
 		by_day = $("#by_day").val();
 	}
@@ -475,7 +379,6 @@ $("#report-form").on('submit', function(event){
 		by_year = $("#by_year").val();
 	}
 	
-	//alert("AJAX !!!");
 	$.ajax({
 		url: 'graph.php',
 		type: 'POST',
@@ -492,9 +395,6 @@ $("#report-form").on('submit', function(event){
 		success: function(response){
 			$("#result").html(response);
 		},
-		error: function(){
-			
-		}
-	});
-	//$("#result").html("on a fait un AJAX");	
+		error: function(){ }
+	});	
 });

@@ -82,6 +82,16 @@ $max_bu_file = 5;
 $min_dup = 1000;
 $max_dup = 9999;
 
+// # Session management
+if ($_SERVER['PHP_SELF'] != '/login.php' && $_SERVER['PHP_SELF'] != '/logout.php' && !isset($_COOKIE['user_name'])) {
+	echo "<meta http-equiv=\"Refresh\" content=\"0;URL=/login.php\" />";
+	echo "</head>";
+	echo "<body>";
+	echo "</body>";
+	echo "</html>";
+	exit;
+}
+
 // # Define All Path
 $path_eon="/srv/eyesofnetwork";
 $path_eonweb="$path_eon/eonweb";
