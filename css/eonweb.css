@@ -45,6 +45,12 @@
 	}
 }
 
+@media(max-width:768px) {
+	.navbar-top-links .dropdown-user {
+		right: auto;
+	}
+}
+
 @media(max-height:600px) {
 	.sidebar li  a {
 		height: 30px;
