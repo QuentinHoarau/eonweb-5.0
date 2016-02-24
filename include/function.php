@@ -827,6 +827,10 @@ function pieChart($queue, $field, $search, $period)
 			{
 				continue;
 			}
+			
+			if( !isset($array_result["$key"]) ){
+				$array_result["$key"] = 0;
+			}
 			$sql = "SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."'";
 			$sql .= $search_clause;
 			$sql .= $period_clause;
@@ -872,6 +876,12 @@ function barChart($queue, $field, $search)
 			{
 				continue;
 			}
+			
+			if( !isset($array_now_day["$key"]) ){$array_now_day["$key"] = 0;}
+			if( !isset($array_day_week["$key"]) ){$array_day_week["$key"] = 0;}
+			if( !isset($array_week_month["$key"]) ){$array_week_month["$key"] = 0;}
+			if( !isset($array_month_year["$key"]) ){$array_month_year["$key"] = 0;}
+			if( !isset($array_year_more["$key"]) ){$array_year_more["$key"] = 0;}
 			$sql = "
 				SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."' AND o_sec >= $day".$search_clause.
 				" UNION ALL
@@ -945,6 +955,10 @@ function slaPieChart($field, $search, $period)
 	{
 		foreach($ged_sla_intervals as $key => $value)
 		{
+			if( !isset($array_result["$key"]) ){
+				$array_result["$key"] = 0;
+			}
+			
 			$sla_clause = "";
 			switch($key)
 			{
@@ -997,6 +1011,12 @@ function slaBarChart($field, $search)
 	{
 		foreach($ged_sla_intervals as $key => $value)
 		{
+			if( !isset($array_now_day["$key"]) ){$array_now_day["$key"] = 0;}
+			if( !isset($array_day_week["$key"]) ){$array_day_week["$key"] = 0;}
+			if( !isset($array_week_month["$key"]) ){$array_week_month["$key"] = 0;}
+			if( !isset($array_month_year["$key"]) ){$array_month_year["$key"] = 0;}
+			if( !isset($array_year_more["$key"]) ){$array_year_more["$key"] = 0;}
+			
 			switch($key)
 			{
 				case "first" : $sla_clause = " AND a_sec-o_sec < $first"; break;

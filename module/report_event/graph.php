@@ -39,7 +39,7 @@ if(isset($_POST["display"])) {
 	
 	# --- Display reports
 	if($type!="") {
-		$pie_infos = slaPieChart($field, $value);
+		$pie_infos = slaPieChart($field, $value, "");
 		$bar_infos = slaBarChart($field, $value);
 		echo '
 			<div class="row">

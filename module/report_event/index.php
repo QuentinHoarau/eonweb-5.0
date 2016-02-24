@@ -56,7 +56,7 @@ include("../../side.php");
 				</div>
 				<div class="col-md-6 form-group">
 					<label>Rechercher :</label>
-					<input class="form-control col-md-3" id="value" name="value" class="value" type="text" autocomplete="off" onFocus='$(this).autocomplete({source: <?php echo get_host_list_from_nagios();?>})' />
+					<input class="form-control col-md-3" id="value" name="value" type="text" autocomplete="off" onFocus='$(this).autocomplete({source: <?php echo get_host_list_from_nagios();?>})' />
 				</div>
 			</div>
 			<div class="col-md-3 form-group">
@@ -75,7 +75,7 @@ include("../../side.php");
 				</div>
 			</div>
 			<div class="form-group">
-				<input class="btn btn-primary" type="submit" value="Display" name="display"></input>
+				<input class="btn btn-primary" type="submit" value="Display" name="display">
 			</div>
 		</div>
 	</form>
