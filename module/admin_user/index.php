@@ -146,14 +146,12 @@ include("../../side.php");
 						<?php echo "$line[3]";?>
 					</td>
 					<td>
-						<center>
-							<?php
-							if($line[2]=="1")
-								echo "<input type='checkbox' class='checkbox' name='user_selected[]' value='$line[2]' disabled>";
-							else
-								echo "<input type='checkbox' class='checkbox' name='user_selected[]' value='$line[2]'>";
-							?>
-						</center>
+						<?php
+						if($line[2]=="1")
+							echo "<input type='checkbox' class='checkbox' name='user_selected[]' value='$line[2]' disabled>";
+						else
+							echo "<input type='checkbox' class='checkbox' name='user_selected[]' value='$line[2]'>";
+						?>
 					</td>
 				</tr>
 				<?php
