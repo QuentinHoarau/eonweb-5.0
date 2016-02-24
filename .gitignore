@@ -1,7 +1,6 @@
 # Eonweb components 
 bower_components
-images/
-images\
+*.png
 
 # Windows image file caches
 Thumbs.db
