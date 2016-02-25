@@ -35,79 +35,76 @@ include_once("./request.php");
 	</div>
 
 	<?php
-		function createFile($name,$request)
-		{
-			global $database_host;
-			global $database_username;
-			global $database_password;
-			global $database_lilac;
-			global $path_eonweb;
-			global $dir_imgcache;
+	function createFile($name,$request)
+	{
+		global $database_host;
+		global $database_username;
+		global $database_password;
+		global $database_lilac;
+		global $path_eonweb;
+		global $dir_imgcache;
 
-			$file=fopen("/tmp/".$name.".csv","w");
-			
-			$result = sqlrequest($database_lilac, $request);
-			echo "<table id='table-result' class='table table-striped'>
-					<thead>
-						<tr>";
-							$line="";
-							while($i = mysqli_fetch_field($result)){
-								echo "<th>".$i->name."</th>";
-								$line=$line.";".$i->name;
-							}
-							fwrite($file,str_replace("\\","",utf8_decode(substr($line,1)))."\n");
-			echo "		</tr>
-					</thead>
-					<tbody>";
-						while($i=mysqli_fetch_row($result)){
-							echo "<tr>";
-							$line="";
-							for($j=0;$j<count($i);$j++){
-								$line="$line;$i[$j]";
-								echo "<td>".$i[$j]."</td>";
-							}
-							fputs($file,str_replace("\\","",utf8_decode(substr($line,1)))."\n");
-							echo "</tr>";
+		$file=fopen("/tmp/".$name.".csv","w");
+		
+		$result = sqlrequest($database_lilac, $request);
+		
+		echo "<div class='dataTable_wrapper'>";
+		echo "<table class='table table-striped' id='dataTables-adminconf'>
+				<thead>
+					<tr>";
+						$line="";
+						while($i = mysqli_fetch_field($result)){
+							echo "<th>".$i->name."</th>";
+							$line=$line.";".$i->name;
 						}
-			echo "	</tbody>
-				  </table>";
+						fwrite($file,str_replace("\\","",utf8_decode(substr($line,1)))."\n");
+		echo "		</tr>
+				</thead>
+				<tbody>";
+					while($i=mysqli_fetch_row($result)){
+						echo "<tr>";
+						$line="";
+						for($j=0;$j<count($i);$j++){
+							$line="$line;$i[$j]";
+							echo "<td>".$i[$j]."</td>";
+						}
+						fputs($file,str_replace("\\","",utf8_decode(substr($line,1)))."\n");
+						echo "</tr>";
+					}
+		echo "	</tbody>
+			  </table>
+			  </div>";
 
-			fclose($file);
-			if( isset($connect) ){
-				mysqli_close($connect);
-			}
+		fclose($file);
+		if( isset($connect) ){
+			mysqli_close($connect);
 		}
+	}
 	?>
 
-	<form action="index.php" method="post">
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
-					<select class="form-control" id="object" name="object">
-					<?php
-					foreach($request as $object => $request){
-						if(isset($_POST["object"])){
-							if($object==$_POST["object"])
-								$selected="selected";
-							else
-								$selected="";
-						}
-						echo "<option ".$selected." value=\"".$object."\">".$object."</option>";
-					}
-					?>
-					</select>
-				</div>
-				<div class="form-group">
-					<button class="btn btn-primary" type="submit" value="Submit"><?php echo getLabel("action.submit"); ?></button>
-				</div>
-			</div>
+	<form action="index.php" method="post" class="form-inline">
+		<div class="form-group">
+			<select class="form-control" id="object" name="object">
+			<?php
+			foreach($request as $object => $request){
+				if(isset($_POST["object"])){
+					if($object==$_POST["object"])
+						$selected="selected";
+					else
+						$selected="";
+				}
+				echo "<option ".$selected." value=\"".$object."\">".$object."</option>";
+			}
+			?>
+			</select>
 		</div>
+		<button class="btn btn-primary" type="submit" value="Submit"><?php echo getLabel("action.submit"); ?></button>
 	</form>
 	
 	<?php
 	if(isset($_POST["object"])){
 		include("./request.php");
-		echo "<p class='alert alert-info'><i class='fa fa-info-circle'></i> File : <a href=\"./download.php?file=".$_POST["object"].".csv\">".$_POST["object"]."</a><p>";
+		echo "<p class='alert alert-info'><i class='fa fa-info-circle'></i> File : <a href=\"./download.php?file=".$_POST["object"].".csv\">".$_POST["object"]."</a></p>";
 		createFile( $_POST["object"],$request[$_POST["object"]] );
 	}
 	?>
