@@ -21,7 +21,8 @@
 */
 
 include("../../header.php");
-include("../../side.php");	
+include("../../side.php");
+
 ?>
 
 <div id="page-wrapper">

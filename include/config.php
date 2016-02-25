@@ -39,6 +39,7 @@ $database_eonweb="eonweb";
 $database_ged="ged";
 $database_lilac="lilac";
 $database_nagios="nagiosbp";
+$database_notifier="notifier";
 
 // ###################################################
 // # EyesOfNetwork
@@ -49,6 +50,7 @@ $langformat="en";
 
 // # Logs options
 $dateformat="M j, Y g:i:s A";
+$datepurge="-1 month";
 
 // # Menu Config
 // You can view tabid in eonweb database
@@ -81,22 +83,16 @@ $max_bu_file = 5;
 $min_dup = 1000;
 $max_dup = 9999;
 
-// # Session management
-if ($_SERVER['PHP_SELF'] != '/login.php' && $_SERVER['PHP_SELF'] != '/logout.php' && !isset($_COOKIE['user_name'])) {
-	echo "<meta http-equiv=\"Refresh\" content=\"0;URL=/login.php\" />";
-	echo "</head>";
-	echo "<body>";
-	echo "</body>";
-	echo "</html>";
-	exit;
-}
-
 // # Define All Path
 $path_eon="/srv/eyesofnetwork";
 $path_eonweb="$path_eon/eonweb";
 $path_frame="/module/monitoring_frame/index.php?url=";
 $dir_imgcache="cache";
 $path_languages="$path_eonweb/include/languages";
+$path_messages="$path_languages/messages";
+$path_messages_custom="$path_languages/custom.messages";
+$path_menus="$path_languages/menus";
+$path_menus_custom="$path_languages/custom.menus";
 $path_reports="$path_eonweb/include/reports";
 
 // # Backup Manager
@@ -136,17 +132,5 @@ $path_snmptrapconf="/etc/snmp/snmptrapd.conf";
 $default_minport=1;
 $default_maxport=1024;
 $path_netcat="/usr/bin/nc";
-
-// # Languages files
-$path_messages="$path_languages/messages-$langformat.json";
-if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
-        $lang = explode(",",$_SERVER['HTTP_ACCEPT_LANGUAGE']);
-        $lang = strtolower(substr(chop($lang[0]),0,2));
-		$path_messages_tmp="$path_languages/messages-$lang.json";
-        if(file_exists($path_messages_tmp)) {
-			$langformat=$lang;
-			$path_messages=$path_messages_tmp;
-		}
-}
 
 ?>

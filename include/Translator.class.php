@@ -3,7 +3,7 @@
 #########################################
 #
 # Copyright (C) 2016 EyesOfNetwork Team
-# DEV NAME : Quentin HOARAU
+# DEV NAME : Jean-Philippe LEVY
 # VERSION : 5.0
 # APPLICATION : eonweb for eyesofnetwork project
 #
@@ -38,9 +38,35 @@ class Translator
 	 */
 	public function __construct()
 	{
-		Translator::$dictionnary_content = file_get_contents($GLOBALS['path_messages']);
+		// # Languages files
+		if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
+			
+			// Language detection
+			$lang = explode(",",$_SERVER['HTTP_ACCEPT_LANGUAGE']);
+			$lang = strtolower(substr(chop($lang[0]),0,2));
+			$GLOBALS['langformat']=$lang;	
+		}
 	}
 	
+	/**
+	 * Init File
+	 */
+	public static function initFile($file,$file_custom)
+	{		
+		$lang=$GLOBALS['langformat'];
+		
+		$path_tmp=$file."-$lang.json";
+		$path_tmp_custom=$file_custom.".json";
+		$path_tmp_custom_lang=$file_custom."-$lang.json";
+		$file=$file.".json";
+		
+		if(file_exists($path_tmp_custom_lang)) { $file=$path_tmp_custom_lang; }
+		elseif(file_exists($path_tmp)) { $file=$path_tmp; }
+		elseif(file_exists($path_tmp_custom)) { $file=$path_tmp_custom; }
+		
+		Translator::$dictionnary_content = file_get_contents($file);	
+	}
+	 
 	/**
 	 * PHP Dictionnary
 	 */

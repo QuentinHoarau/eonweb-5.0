@@ -32,7 +32,7 @@
 	</div>
 </footer> <!-- !#footer -->
 		
-<?php if(isset($_COOKIE["session_id"])) { ?>
+<?php if(preg_match("/\/module\//",$_SERVER["PHP_SELF"]) > 0 ) { ?>
 
 <!-- jQuery -->
 <script src="/bower_components/jquery/dist/jquery.min.js"></script>

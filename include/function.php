@@ -20,22 +20,23 @@
 #########################################
 */
 
-// Display Error Message 
-function message($id, $text,$type){
-	// Get the global value
-	global $array_msg;
-	$tempid=$array_msg[$id];
-	
-	$message = false;
+# Internationalization
+include("Translator.class.php");
 
+// Display Error Message 
+function message($id, $text, $type){
+	
+	global $array_msg;
+	
+	// Get standard message if exists
+	if(isset($array_msg[$id])) { $tempid=$array_msg[$id]; } 
+	else { $tempid=""; }
+	
 	// Display the message
 	switch($type)
 	{
 		case "critical":
-			echo "<p class='alert alert-danger'>
-					Message EON - $id <br>
-					$tempid $text
-				  </p>";
+			echo "<p class='alert alert-danger'>$tempid $text</p>";
 			break;
 		case "warning":
 			echo "<p class='alert alert-warning'>$tempid $text</p>";
@@ -80,12 +81,12 @@ function sqlrequest($database,$sql,$id=false){
 }
 
 // Display array value
-function display_value($value, $key) {
+function display_value($value, $key){
 	echo "$value\n";
 }
 
 // Function Edit and Modify a file
-function filemodify($path,$get=false) {
+function filemodify($path,$get=false){
 	if(is_writable($path)) {
 	
 		// Test If Update or Display.
@@ -95,7 +96,6 @@ function filemodify($path,$get=false) {
 			if (fwrite ($fconf, str_replace("\r\n", "\n", $_POST['maj'])) === FALSE) message(3,$path,"critical");
 			else { 
 				message(6," : File updated","ok");
-				echo "<br>";
 			}
 			fclose ($fconf);
 			if (!$fconf = fopen($path, "r")) message(2,$path,"critical");
@@ -107,10 +107,14 @@ function filemodify($path,$get=false) {
 		if($get)
 			echo "?file=$get";
 		echo "'>";
-		echo "<textarea cols='100' rows='25' name='maj' scrolling='no'>";
+		echo '<div class="form-group">';
+		echo "<textarea class='form-control' cols='100' rows='25' name='maj' scrolling='no'>";
 			print file_get_contents($path);
-		echo "</textarea><br>";
-		echo "<input class='button' type='submit' value='Update'>";
+		echo "</textarea>";
+		echo '</div>';
+		echo '<div class="form-group">';
+		echo "<input class='btn btn-primary' type='submit' value='".getLabel("action.update")."'>";
+		echo '</div>';
 		echo "</form>";
 		fclose ($fconf);
 	}
@@ -118,7 +122,7 @@ function filemodify($path,$get=false) {
 }
 
 // Host List form Nagios
-function get_host_list_from_nagios($field=false) {
+function get_host_list_from_nagios($field=false){
 	global $database_lilac;
 	$hosts=array();
 
@@ -139,8 +143,8 @@ function get_host_list_from_nagios($field=false) {
 	echo json_encode($hosts);
 }
 
-//Host and Address list from nagios. //TODO send the adress
-function get_host_list() {
+// Host and Address list from nagios. //TODO send the adress
+function get_host_list(){
 	global $database_lilac;
 	$hosts=array();
 
@@ -153,6 +157,7 @@ function get_host_list() {
 	echo json_encode($hosts);
 }
 
+// Host and Address listbox from nagios. //TODO send the adress
 function get_host_listbox_from_nagios(){
 	global $database_lilac;
 	
@@ -169,7 +174,7 @@ function get_host_listbox_from_nagios(){
 }
 
 // Host list from CACTI
-function get_title_list_from_cacti() {
+function get_title_list_from_cacti(){
 
 	global $database_cacti;
 
@@ -183,6 +188,7 @@ function get_title_list_from_cacti() {
 	echo json_encode($titles);
 }
 
+// Host listbox from CACTI
 function get_host_listbox_from_cacti(){
         
 	global $database_cacti;
@@ -196,9 +202,8 @@ function get_host_listbox_from_cacti(){
         print "</SELECT><br>";
 }
 
-
 // system function : CUT
-function cut($string, $width, $padding = "...") {
+function cut($string, $width, $padding = "..."){
     return (strlen($string) > $width ? substr($string, 0, $width-strlen($padding)).$padding : $string);
 } 
 
@@ -218,20 +223,20 @@ function get_graph_listbox_from_cacti(){
 
 // Display TOOL list
 function get_tool_listbox(){
-	echo "<h2>".getLabel("label.tool_all.tool")." : </h2>";	
+	echo "<label>".getLabel("label.tool_all.tool")." : </label>";	
 	// Get the global table
 	global $array_tools;
 
-        // Get the first array key
-        reset($array_tools);
+	// Get the first array key
+	reset($array_tools);
 
 	// Display the list of tool
-	echo "<SELECT name='tool_list' class='select' size=4 style='width:250px;'>";
+	echo "<SELECT name='tool_list' class='form-control' size=4>";
  	while (list($tool_name, $tool_url) = each($array_tools)) 
 	{
 		echo "<OPTION value='$tool_url'>&nbsp;$tool_name</OPTION>";
-        }
-	echo "</SELECT><br>";
+	}
+	echo "</SELECT>";
 }
 
 // Display min and max port value for show port tool
@@ -239,10 +244,11 @@ function get_toolport_ports(){
 	global $default_minport;
 	global $default_maxport;
 
-	echo "<h2>Port min - Port max</h2>";
-	echo "(show port ".getLabel("label.tool_all.only").") :<br>";
-	echo "<input type=text name='min_port' value=$default_minport size='8'> - <input type=text name='max_port' value=$default_maxport size=8 >";
+	echo "<label>Port min - Port max <br>(show port ".getLabel("label.tool_all.only").") :</label>";
+	echo "<div class='col-md-6'><input class='form-control' type=text name='min_port' value=$default_minport size=8></div>
+		  <div class='col-md-6'><input class='form-control' type=text name='max_port' value=$default_maxport size=8></div>";
 }
+
 
 // Display User list
 function get_user_listbox(){
@@ -259,8 +265,7 @@ function get_user_listbox(){
 }
 
 // Retrive form data
-function retrieve_form_data($field_name,$default_value)
-{
+function retrieve_form_data($field_name,$default_value){
 	if (!isset ($_GET[$field_name]))
 		if (!isset ($_POST[$field_name]))
 			return $default_value;
@@ -270,9 +275,8 @@ function retrieve_form_data($field_name,$default_value)
 		return $_GET[$field_name];
 }
 
-// Delete eccents
-function stripAccents($str, $charset='utf-8')
-{
+// Delete accents
+function stripAccents($str, $charset='utf-8'){
     $str = htmlentities($str, ENT_NOQUOTES, $charset);
 
     $str = preg_replace('#\&([A-za-z])(?:acute|cedil|circ|grave|ring|tilde|uml)\;#', '\1', $str);
@@ -283,8 +287,7 @@ function stripAccents($str, $charset='utf-8')
 }
 
 // Add Logs
-function logging($module,$command,$user=false)
-{
+function logging($module,$command,$user=false){
 	global $database_eonweb;
 	global $dateformat;
 	if($user)
@@ -293,10 +296,8 @@ function logging($module,$command,$user=false)
 		sqlrequest($database_eonweb,"insert into logs values ('','".time()."','".$_COOKIE['user_name']."','$module','$command','".$_SERVER["REMOTE_ADDR"]."');");
 }
 
-
 // Time
-function getmtime()
-{
+function getmtime(){
   
     $temps = microtime();
     $temps = explode(' ', $temps);
@@ -304,8 +305,8 @@ function getmtime()
  
 }
 
-//Get the informations of nagios' config's file.
-function getBpProcess() {
+// Get the informations of nagios' config's file.
+function getBpProcess(){
 	
 	global $path_nagiosbpcfg ;
 	global $path_nagiosbpcfg_lock ;
@@ -359,7 +360,7 @@ function getBpProcess() {
 	return $tabProcess ;
 }
 
-//Wait the end of modification of a file
+// Wait the end of modification of a file
 function wait($file){
 	$retry = 0 ;
 
@@ -370,7 +371,7 @@ function wait($file){
 	}
 }
 
-//Insert a value in an array
+// Insert a value in an array
 function array_push_after($src,$in,$pos){
     if(is_int($pos)) $R=array_merge(array_slice($src,0,$pos+1), $in, array_slice($src,$pos+1));
     else{
@@ -504,7 +505,8 @@ function write_file($file,$contenu,$mode,$message = null){
 		message(3,$file,"critical");
 }
 
-function sqlArrayNagios($request) {
+// MySQL request in php array 
+function sqlArrayNagios($request){
 	global $database_nagios;
 	$result = sqlrequest($database_nagios,$request);
 	$values = array();
@@ -512,6 +514,7 @@ function sqlArrayNagios($request) {
 	return $values ;
 }
 
+// NagiosBP file backup
 function backup_file($start){
 	global $path_nagiosbpcfg;
 	global $path_nagiosbpcfg_bu;
@@ -527,6 +530,7 @@ function backup_file($start){
 	copy($path_nagiosbpcfg,$path_nagiosbpcfg_bu.'1');
 }
 
+// NagiosBP file creation
 function buildFile(){
 
 	global $path_nagiosbpcfg_lock;
@@ -572,6 +576,7 @@ function buildFile(){
     unlink($path_nagiosbpcfg_lock);
 }
 
+// Nagiosbp build
 function build($pRequest,&$file,$pWritenBP){
 
 	$values = sqlArrayNagios($pRequest);
@@ -647,7 +652,8 @@ function build($pRequest,&$file,$pWritenBP){
 	}
 }
 
-function ldap_escape ($str) {
+// Ldap escape special caracters
+function ldap_escape ($str){
 
 	$str = trim($str);
 
@@ -661,8 +667,8 @@ function ldap_escape ($str) {
 
 }
 
-function insert_user($user_name, $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_mail, $user_limitation, $message)
-{
+// User creation
+function insert_user($user_name, $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_mail, $user_limitation, $message){
 	global $database_eonweb;
 	global $database_lilac;
 	$user_id=null;
@@ -735,7 +741,7 @@ function insert_user($user_name, $user_descr, $user_group, $user_password1, $use
 }
 
 // "mysqli" version of mysql_result
-function mysqli_result($res, $row, $field=0) {
+function mysqli_result($res, $row, $field=0){
     $res->data_seek($row);
 	if(gettype($field) == "string"){
 		$datarow = $res->fetch_assoc();
@@ -747,21 +753,310 @@ function mysqli_result($res, $row, $field=0) {
 }
 
 // get traduction words
-function getLabel($reference)
-{
-	global $dictionnary;
-	
-	$label = $dictionnary[$reference];
-	return $label;
+function getLabel($reference){
+
+        global $dictionnary;
+        global $path_messages;
+        global $path_messages_custom;
+        global $t;
+
+        // Load dictionnary if not isset
+        if(!isset($t)) {
+                $t = new Translator();
+                $t::initFile($path_messages,$path_messages_custom);
+                $dictionnary = $t::createPHPDictionnary();
+        }
+
+        // Display dictionnary reference if isset or reference
+        if(isset($dictionnary[$reference])) {
+                $label = $dictionnary[$reference];
+        }
+        else {
+                $label = $reference;
+        }
+
+        return $label;
+
 }
 
 // get frame url
-function getFrameURL($url) 
-{
+function getFrameURL($url){
 	global $path_frame;
 	
 	$frame_url = $path_frame.urlencode($url);
 	return $frame_url;
+}
+
+function pieChart($queue, $field, $search, $period)
+{
+	// all external variables we need
+	global $database_ged;
+	global $array_ged_states;
+	if($queue == "active"){ global $ged_active_intervals; extract($ged_active_intervals); }
+	else{ global $ged_history_intervals; extract($ged_history_intervals); }
+	
+	$array_result = array();
+	$sql = "SELECT pkt_type_name FROM pkt_type WHERE pkt_type_id!='0' AND pkt_type_id<'100'";
+	$pkt_result = sqlrequest($database_ged, $sql);
+	
+	// set the search clause (according to field and value)
+	$search_clause = "";
+	if( isset($search) && $search != "" )
+	{
+		$search_clause = " AND $field LIKE '%$search%'";
+	}
+	
+	// set the period clause (according to checkboxes checked)
+	$period_clause = "";
+	if( isset($period) && $period != "" )
+	{
+		switch($period)
+		{
+			case "day": $period_clause = " AND o_sec >= $day"; break;
+			case "week": $period_clause = " AND o_sec >= $week AND o_sec < $day"; break;
+			case "month": $period_clause = " AND o_sec >= $month AND o_sec < $week"; break;
+			case "year": $period_clause = " AND o_sec >= $year AND o_sec < $month"; break;
+		}
+	}
+	
+	while( $pkt = mysqli_fetch_row($pkt_result) )
+	{
+		foreach($array_ged_states as $key => $state)
+		{
+			if($key == "ok")
+			{
+				continue;
+			}
+			
+			if( !isset($array_result["$key"]) ){
+				$array_result["$key"] = 0;
+			}
+			$sql = "SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."'";
+			$sql .= $search_clause;
+			$sql .= $period_clause;
+			
+			$result = sqlrequest($database_ged, $sql);
+			$result = mysqli_fetch_row($result);
+			$array_result["$key"] += $result[0];
+		}
+	}
+	return json_encode($array_result);
+}
+
+function barChart($queue, $field, $search)
+{
+	global $database_ged;
+	global $array_ged_states;
+	if($queue == "active"){ global $ged_active_intervals; extract($ged_active_intervals); }
+	else{ global $ged_history_intervals; extract($ged_history_intervals); }
+	
+	
+	$sql = "SELECT pkt_type_name FROM pkt_type WHERE pkt_type_id!='0' AND pkt_type_id<'100'";
+	$pkt_result = sqlrequest($database_ged, $sql);
+	
+	$array_result = array();
+	$array_now_day = array();
+	$array_day_week = array();
+	$array_week_month = array();
+	$array_month_year = array();
+	$array_year_more = array();
+	
+	// set the search clause (according to field and value)
+	$search_clause = "";
+	if( isset($search) && $search != "" )
+	{
+		$search_clause = " AND $field LIKE '%$search%'";
+	}
+	
+	while( $pkt = mysqli_fetch_row($pkt_result) )
+	{
+		foreach($array_ged_states as $key => $state)
+		{
+			if($key == "ok")
+			{
+				continue;
+			}
+			
+			if( !isset($array_now_day["$key"]) ){$array_now_day["$key"] = 0;}
+			if( !isset($array_day_week["$key"]) ){$array_day_week["$key"] = 0;}
+			if( !isset($array_week_month["$key"]) ){$array_week_month["$key"] = 0;}
+			if( !isset($array_month_year["$key"]) ){$array_month_year["$key"] = 0;}
+			if( !isset($array_year_more["$key"]) ){$array_year_more["$key"] = 0;}
+			$sql = "
+				SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."' AND o_sec >= $day".$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."' AND o_sec >= $week AND o_sec < $day".$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."' AND o_sec >= $month AND o_sec < $week".$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."' AND o_sec >= $year AND o_sec < $month".$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_".$queue." WHERE state='".$state."' AND queue='".substr($queue{0},0,1)."' AND o_sec < $year".$search_clause;
+			$result = sqlrequest($database_ged, $sql);
+			
+			$cpt = 0;
+			while( $row = mysqli_fetch_row($result) )
+			{
+				switch($cpt)
+				{
+					case 0: $array_now_day["$key"] += $row[0]; break;
+					case 1: $array_day_week["$key"] += $row[0]; break;
+					case 2: $array_week_month["$key"] += $row[0]; break;
+					case 3: $array_month_year["$key"] += $row[0]; break;
+					case 4: $array_year_more["$key"] += $row[0]; break;
+				}
+				$cpt++;
+			}
+		}
+	}
+	array_push($array_result, $array_now_day);
+	array_push($array_result, $array_day_week);
+	array_push($array_result, $array_week_month);
+	array_push($array_result, $array_month_year);
+	array_push($array_result, $array_year_more);
+	
+	return json_encode($array_result);
+}
+
+function slaPieChart($field, $search, $period)
+{
+	// all external variables we need
+	global $database_ged;
+	global $ged_sla_intervals;
+	global $ged_history_intervals;
+	extract($ged_sla_intervals);
+	extract($ged_history_intervals);
+	
+	$array_result = array();
+	$sql = "SELECT pkt_type_name FROM pkt_type WHERE pkt_type_id!='0' AND pkt_type_id<'100'";
+	$pkt_result = sqlrequest($database_ged, $sql);
+	
+	// set the search clause (according to field and value)
+	$search_clause = "";
+	if( isset($search) && $search != "" )
+	{
+		$search_clause = " AND $field LIKE '%$search%'";
+	}
+	
+	// set the period clause (according to checkboxes checked)
+	$period_clause = "";
+	if( isset($period) && $period != "" )
+	{
+		switch($period)
+		{
+			case "day": $period_clause = " AND o_sec >= $day"; break;
+			case "week": $period_clause = " AND o_sec >= $week AND o_sec < $day"; break;
+			case "month": $period_clause = " AND o_sec >= $month AND o_sec < $week"; break;
+			case "year": $period_clause = " AND o_sec >= $year AND o_sec < $month"; break;
+		}
+	}
+	
+	while( $pkt = mysqli_fetch_row($pkt_result) )
+	{
+		foreach($ged_sla_intervals as $key => $value)
+		{
+			if( !isset($array_result["$key"]) ){
+				$array_result["$key"] = 0;
+			}
+			
+			$sla_clause = "";
+			switch($key)
+			{
+				case "first" : $sla_clause = " AND a_sec-o_sec < $first"; break;
+				case "second": $sla_clause = " AND a_sec-o_sec >= $first AND a_sec-o_sec < $second"; break;
+				case "third" : $sla_clause = " AND a_sec-o_sec >= $second AND a_sec-o_sec < $third"; break;
+				case "fourth": $sla_clause = " AND a_sec-o_sec >= $third"; break;
+			}
+			$sql = "SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state!='0'".$sla_clause;
+			$sql .= $search_clause;
+			$sql .= $period_clause;
+			
+			$result = sqlrequest($database_ged, $sql);
+			$result = mysqli_fetch_row($result);
+			$array_result["$key"] += $result[0];
+		}
+	}
+	return json_encode($array_result);
+}
+
+function slaBarChart($field, $search)
+{
+	// all external variables we need
+	global $database_ged;
+	global $array_ged_states;
+	global $ged_sla_intervals;
+	global $ged_history_intervals;
+	extract($ged_sla_intervals);
+	extract($ged_history_intervals);
+	
+	$array_result = array();
+	$array_now_day = array();
+	$array_day_week = array();
+	$array_week_month = array();
+	$array_month_year = array();
+	$array_year_more = array();
+	
+	$array_result = array();
+	$sql = "SELECT pkt_type_name FROM pkt_type WHERE pkt_type_id!='0' AND pkt_type_id<'100'";
+	$pkt_result = sqlrequest($database_ged, $sql);
+	
+	// set the search clause (according to field and value)
+	$search_clause = "";
+	if( isset($search) && $search != "" )
+	{
+		$search_clause = " AND $field LIKE '%$search%'";
+	}
+	
+	while( $pkt = mysqli_fetch_row($pkt_result) )
+	{
+		foreach($ged_sla_intervals as $key => $value)
+		{
+			if( !isset($array_now_day["$key"]) ){$array_now_day["$key"] = 0;}
+			if( !isset($array_day_week["$key"]) ){$array_day_week["$key"] = 0;}
+			if( !isset($array_week_month["$key"]) ){$array_week_month["$key"] = 0;}
+			if( !isset($array_month_year["$key"]) ){$array_month_year["$key"] = 0;}
+			if( !isset($array_year_more["$key"]) ){$array_year_more["$key"] = 0;}
+			
+			switch($key)
+			{
+				case "first" : $sla_clause = " AND a_sec-o_sec < $first"; break;
+				case "second": $sla_clause = " AND a_sec-o_sec >= $first AND a_sec-o_sec < $second"; break;
+				case "third" : $sla_clause = " AND a_sec-o_sec >= $second AND a_sec-o_sec < $third"; break;
+				case "fourth": $sla_clause = " AND a_sec-o_sec >= $third"; break;
+			}
+			$sql = "SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state !='0' AND o_sec >= $day".$sla_clause.$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state !='0' AND o_sec >= $week AND o_sec < $day".$sla_clause.$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state !='0' AND o_sec >= $month AND o_sec < $week".$sla_clause.$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state !='0' AND o_sec >= $year AND o_sec < $month".$sla_clause.$search_clause.
+				" UNION ALL
+				SELECT count(id) FROM ".$pkt[0]."_queue_history WHERE queue='h' AND state !='0' AND o_sec < $year".$sla_clause.$search_clause;
+			$result = sqlrequest($database_ged, $sql);
+			
+			$cpt = 0;
+			while( $row = mysqli_fetch_row($result) )
+			{
+				switch($cpt)
+				{
+					case 0: $array_now_day["$key"] += $row[0]; break;
+					case 1: $array_day_week["$key"] += $row[0]; break;
+					case 2: $array_week_month["$key"] += $row[0]; break;
+					case 3: $array_month_year["$key"] += $row[0]; break;
+					case 4: $array_year_more["$key"] += $row[0]; break;
+				}
+				$cpt++;
+			}
+		}
+	}
+	array_push($array_result, $array_now_day);
+	array_push($array_result, $array_day_week);
+	array_push($array_result, $array_week_month);
+	array_push($array_result, $array_month_year);
+	array_push($array_result, $array_year_more);
+	
+	return json_encode($array_result);
 }
 
 ?>

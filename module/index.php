@@ -20,10 +20,15 @@
 #########################################
 */
 
-$module=0;
-if(isset($_GET["module"])) { $module=exec("rpm -q ".$_GET["module"]." |grep '.eon' |wc -l"); }
-if($module!=0) { header('Location: '.$_GET["link"].''); }
-else {
+# Check optionnal module to load
+if(isset($_GET["module"]) && isset($_GET["link"])) { 
+
+	$module=exec("rpm -q ".$_GET["module"]." |grep '.eon' |wc -l");
+	
+	# Redirect to module page if rpm installed
+	if($module!=0) { header('Location: '.$_GET["link"].''); }
+
+} 
 	
 include("../header.php"); 
 include("../side.php"); 
@@ -39,12 +44,18 @@ include("../side.php");
 	</div>
 
 	<div class="row">
-		<?php message(0," : Module ".$_GET["module"]." is not installed",'warning'); ?>
+	<?php 
+		# Module not installed
+		if(isset($module)) {
+			message(0," : Module ".$_GET["module"]." is not installed",'warning'); 
+		} 
+		# Module or link not specified
+		else {
+			message(0," : Not allowed",'critical'); 
+		}
+	?>
 	</div>
 	
 </div>
 
-<?php
-include("../footer.php");
-}
-?>
+<?php include("../footer.php"); ?>

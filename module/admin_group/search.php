@@ -20,10 +20,8 @@
 #########################################
 */
 
-include("../../include/function.php");
 include("../../include/config.php");
-
-global $database_eonweb;
+include("../../include/function.php");
 
 // Search function for Jquery an exit
 if(isset($_GET['term']) && isset($_GET['request']) && $_GET['request'] == "search_group") {
