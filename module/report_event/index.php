@@ -41,25 +41,10 @@ include("../../side.php");
 	
 	<form id="report-form" method='POST'>
 		<!-- input hidden with type value in order to send the graph type in AJAX -->
-		
 		<input id="type" type="hidden" value="<?php echo $type; ?>">
+		
 		<div class="row">
-			<div class="col-md-6">
-				<div class="col-md-6 form-group">
-					<label>Filtre :</label>
-					<select class="form-control" id="field" name="field" onchange="$('#value').focus();">
-						<?php
-						for($i=0;$i<count($array_ged_filters);$i++)
-						echo "<option>$array_ged_filters[$i]</option>";
-						?>
-					</select>
-				</div>
-				<div class="col-md-6 form-group">
-					<label>Rechercher :</label>
-					<input class="form-control col-md-3" id="value" name="value" type="text" autocomplete="off" onFocus='$(this).autocomplete({source: <?php echo get_host_list_from_nagios();?>})' />
-				</div>
-			</div>
-			<div class="col-md-3 form-group">
+			<div class="col-md-2 form-group">
 				<label>Time</label>
 				<div class="checkbox">
 					<label><input id="by_day" type="checkbox" name="by_day"><?php echo getLabel("label.report_event.day"); ?></label>
@@ -74,9 +59,31 @@ include("../../side.php");
 					<label><input id="by_year" type="checkbox" name="by_year"><?php echo getLabel("label.report_event.year"); ?></label>
 				</div>
 			</div>
-			<div class="form-group">
-				<input class="btn btn-primary" type="submit" value="Display" name="display">
+			
+			<div class="col-md-4">
+				<div class="form-group">
+					<label>Filtre</label>
+					<select class="form-control" id="field" name="field" onchange="$('#value').focus();">
+						<?php
+						for($i=0;$i<count($array_ged_filters);$i++)
+						echo "<option>$array_ged_filters[$i]</option>";
+						?>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Rechercher</label>
+					<div class="input-group">
+						<input class="form-control col-md-3" id="value" name="value" type="text" autocomplete="off" onFocus='$(this).autocomplete({source: <?php echo get_host_list_from_nagios();?>})' />
+						<span class="input-group-btn">
+							<button class="btn btn-primary" type="submit"><?php echo getLabel("action.search"); ?></button>
+						</span>
+					</div>
+				</div>
 			</div>
+			
+			<!-- <div class="col-md-4 form-group">
+				
+			</div> -->
 		</div>
 	</form>
 	

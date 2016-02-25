@@ -138,6 +138,7 @@ function drawBarChart(div_id, datas, queue)
 				text: false
 			},
 			categories: categories,
+			crosshair: true,
 			label: {
 				overflow: 'justify'
 			}
@@ -150,16 +151,20 @@ function drawBarChart(div_id, datas, queue)
 			}
 		},
 		tooltip: {
+			positioner: function () {
+				return { x: 0, y: 0 };
+			},
 			headerFormat: '<span style="font-size:10px">{point.key}</span><table style="min-width: 150px;">',
 			pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
 			'<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
 			footerFormat: '</table>',
 			shared: true,
-			useHTML: true
+			useHTML: true,
+			hideDelay: 200
 		},
 		plotOptions: {
 			column: {
-				pointPadding: 0.2,
+				pointPadding: 0.1,
 				borderWidth: 0
 			}
 		},
@@ -194,8 +199,8 @@ function drawSlaPieChart(div_id, datas)
 		chart: {
 			backgroundColor: 'rgba(255, 255, 255, 0.01)',
 			plotShadow: false,
-			width: 430,
-			height: 350
+			renderto: 'container',
+			margin: '40'
 		},
 		exporting: {
 			enabled: false
@@ -290,8 +295,8 @@ function drawSlaBarChart(div_id, datas)
 			type: 'column',
 			backgroundColor: 'rgba(255, 255, 255, 0.01)',
 			plotShadow: false,
-			width: 400,
-			height: 350
+			renderto: 'container',
+			marginTop: '80',
 		},
 		exporting: {
 			enabled: false
@@ -307,6 +312,7 @@ function drawSlaBarChart(div_id, datas)
 				text: false
 			},
 			categories: categories,
+			crosshair: true,
 			label: {
 				overflow: 'justify'
 			}
@@ -319,6 +325,9 @@ function drawSlaBarChart(div_id, datas)
 			}
 		},
 		tooltip: {
+			positioner: function () {
+				return { x: 0, y: 0 };
+			},
 			headerFormat: '<span style="font-size:10px">{point.key}</span><table style="min-width: 150px;">',
 			pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
 			'<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
