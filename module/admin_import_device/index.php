@@ -82,7 +82,7 @@ include("../../side.php");
 	<br>
 	
 	<?php 
-		message("", "Format : (Hostname; IP; Description; Template1; Template2; TemplateN; ...)", ""); 
+		message("", "Format : (Hostname ; IP ; Description ; Template1 ; Template2 ; TemplateN ; ...)", ""); 
 		
 		# --- Check if the form is post
 		if( isset($_POST['upload']) )
