@@ -82,10 +82,6 @@ include("../../side.php");
 					</div>
 				</div>
 			</div>
-			
-			<!-- <div class="col-md-4 form-group">
-				
-			</div> -->
 		</div>
 	</form>
 	
