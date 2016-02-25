@@ -1,4 +1,3 @@
-
 <?php
 /*
 #########################################
@@ -40,6 +39,7 @@ $database_eonweb="eonweb";
 $database_ged="ged";
 $database_lilac="lilac";
 $database_nagios="nagiosbp";
+$database_notifier="notifier";
 
 // ###################################################
 // # EyesOfNetwork
@@ -50,6 +50,7 @@ $langformat="en";
 
 // # Logs options
 $dateformat="M j, Y g:i:s A";
+$datepurge="-1 month";
 
 // # Menu Config
 // You can view tabid in eonweb database

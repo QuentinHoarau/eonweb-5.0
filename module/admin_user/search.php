@@ -20,9 +20,9 @@
 #########################################
 */
 
-include("../../include/function.php");
 include("../../include/config.php");
-global $database_eonweb;
+include("../../include/function.php");
+
 // Search function for Jquery an exit
 if(isset($_GET['term']) && isset($_GET['request']) && $_GET['request'] == "search_user") {
 	$result=sqlrequest($database_eonweb,"select * from ldap_users_extended where (user LIKE '%".$_GET['term']."%') OR (login LIKE '%".$_GET['term']."%') order by user");
@@ -33,5 +33,5 @@ if(isset($_GET['term']) && isset($_GET['request']) && $_GET['request'] == "searc
 	}
 	echo json_encode($array);
 }
-?>
 
+?>
