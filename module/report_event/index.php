@@ -46,7 +46,7 @@ include("../../side.php");
 		<input id="type" type="hidden" value="<?php echo $type; ?>">
 		
 		<div class="row">
-			<div class="col-md-2 form-group">
+			<div class="col-md-3 form-group">
 				<label>Time</label>
 				<div class="checkbox">
 					<label><input id="by_day" type="checkbox" name="by_day"><?php echo getLabel("label.report_event.day"); ?></label>
