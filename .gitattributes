@@ -17,6 +17,8 @@
 *.RTF	 diff=astextplain
 
 # Eonweb specifics
+*.eot binary
+*.EOT binary
 *.gif binary
 *.GIF binary
 *.jpeg binary
@@ -25,3 +27,5 @@
 *.PNG binary
 *.ttf binary
 *.TTF binary
+*.woff binary
+*.WOFF binary
