@@ -33,7 +33,7 @@ include("../../side.php");
 		</div>
 	</div>
 
-<?php 
+	<?php 
 	global $database_eonweb;
 	global $database_lilac;
 	$action=retrieve_form_data("action",null);
@@ -45,7 +45,7 @@ include("../../side.php");
 		switch($group_mgt_list)
 		{
 			case "add_group":
-				echo "<META HTTP-EQUIV=refresh CONTENT='0;URL=add_modify_group.php'>";
+				echo "<meta http-equiv=refresh content='0;URL=add_modify_group.php'>";
 				break;
 			case "delete_group":
 				if (isset($group_selected[0]))
@@ -86,16 +86,16 @@ include("../../side.php");
 
 	//Get the name group and description group
 	$group_name_descr=sqlrequest("$database_eonweb","SELECT group_name,group_descr,group_id FROM groups ORDER BY group_name");
-?>
+	?>
 
-	<form action='./index.php' method='GET'>
+	<form action="./index.php" method="GET" class="form-inline">
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
 				<tr>
-					<th> <?php echo getLabel("label.admin_group.group_name"); ?> </th>
-					<th> <?php echo getLabel("label.admin_group.group_desc"); ?> </th>
-					<th class="col-md-2 text-center"> <?php echo getLabel("label.admin_group.select"); ?> </th>
+					<th><?php echo getLabel("label.admin_group.group_name"); ?></th>
+					<th><?php echo getLabel("label.admin_group.group_desc"); ?></th>
+					<th class="col-md-2 text-center"><?php echo getLabel("label.admin_group.select"); ?></th>
 				</tr>
 				</thead>
 				<tbody>
@@ -118,9 +118,9 @@ include("../../side.php");
 					<td class="text-center">
 						<?php
 						if($line[2]=="1")
-							echo "<INPUT type='checkbox' name='group_selected[]' value='$line[2]' disabled>";
+							echo "<input type='checkbox' name='group_selected[]' value='$line[2]' disabled>";
 						else
-							echo "<INPUT type='checkbox' name='group_selected[]' value='$line[2]'>";
+							echo "<input type='checkbox' name='group_selected[]' value='$line[2]'>";
 						?>
 					</td>
 				</tr>
@@ -131,27 +131,23 @@ include("../../side.php");
 			</table>
 		</div>
 		
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
+		<div class="form-group">
+			<select class="form-control" name="group_mgt_list" size=1>
 			<?php
-				// Get the global table
-				global $array_group_mgt;
+			// Get the global table
+			global $array_group_mgt;
 
-				// Get the first array key
-				reset($array_group_mgt);
+			// Get the first array key
+			reset($array_group_mgt);
 
-				// Display the list of management choices
-				echo "<SELECT class='form-control' name='group_mgt_list' size=1>";
-				while (list($mgt_name, $mgt_url) = each($array_group_mgt)) {
-						echo "<OPTION value='$mgt_url'>".getLabel($mgt_name)."</OPTION>";
-				}
-				echo "</SELECT>";
+			// Display the list of management choices
+			while (list($mgt_name, $mgt_url) = each($array_group_mgt)) {
+					echo "<option value='$mgt_url'>".getLabel($mgt_name)."</option>";
+			}
 			?>
-				</div>
-				<button class="btn btn-primary" type="submit" name="action" value="submit"><?php echo getLabel("action.submit"); ?></button>
-			</div>
+			</select>
 		</div>
+		<button class="btn btn-primary" type="submit" name="action" value="submit"><?php echo getLabel("action.submit"); ?></button>
 	</form>
 
 </div>
