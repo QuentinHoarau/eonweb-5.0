@@ -22,9 +22,11 @@
 
 include("../../header.php");
 include("../../side.php");
+
 ?>
 
 <div id="page-wrapper">
+
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header"><?php echo getLabel("label.report_event.title"); ?></h1>
