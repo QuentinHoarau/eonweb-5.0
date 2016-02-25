@@ -26,6 +26,7 @@ include("../../side.php");
 ?>
 
 <div id="page-wrapper">
+
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header"><?php echo getLabel("label.monitoring_ged.title"); ?></h1>
@@ -45,9 +46,6 @@ include("../../side.php");
 		$user_id=false;
 		$user_name=false;
 	}
-	?>
-
-	<?php
 
 	// Open Xml function
 	function openXml($file=false){

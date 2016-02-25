@@ -24,7 +24,6 @@ include("../../include/config.php");
 include("../../include/arrays.php");
 include("../../include/function.php");
 
-
 # --- If Display
 if(isset($_POST["display"])) {
 	// define $type

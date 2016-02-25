@@ -47,7 +47,6 @@ function disable_group(){
 	}
 }
 
-
 $(function() {
 	if($('#form_user').length > 0){
 		/*$("#user_location").autocomplete("search.php?request=search_user");
