@@ -73,22 +73,21 @@ include("../../side.php");
 			$ldap_filter=retrieve_form_data("ldap_filter",null);
 			$ldap_user=retrieve_form_data("ldap_user",null);
 			$ldap_rdn=retrieve_form_data("ldap_rdn",null);
-			$ldap_password=retrieve_form_data("ldap_password",null);
+			$ldap_password_new=retrieve_form_data("ldap_password",null);
 			
 			$sqlresult=sqlrequest("$database_eonweb","select * from auth_settings;");
 			$backend_selected=mysqli_result($sqlresult,0,"auth_type");
-			if($backend_selected=="1")
-				$ldap_password=mysqli_result($sqlresult,0,"ldap_password");
+			if($backend_selected=="1") { $ldap_password=mysqli_result($sqlresult,0,"ldap_password"); }
 
-			if($ldap_password)
-				$ldap_password=retrieve_form_data("ldap_password",null);
-			else
-				$ldap_password=base64_encode(retrieve_form_data("ldap_password",null));
+			if($ldap_password==$ldap_password_new) { $ldap_password=$ldap_password_new; }
+			else { $ldap_password=base64_encode($ldap_password_new); }
 
-			if($ldap_ip=="" || $ldap_port=="" || $ldap_search=="" || $ldap_rdn=="" || $ldap_filter=="")
+			if($ldap_ip=="" || $ldap_port=="" || $ldap_search=="" || $ldap_rdn=="" || $ldap_filter=="") {
 				message(7," : All fields are necessary","warning");
-			else
+			}
+			else {
 				$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='1',ldap_ip='$ldap_ip',ldap_port='$ldap_port',ldap_search='$ldap_search',ldap_filter='$ldap_filter',ldap_user='$ldap_user',ldap_password='$ldap_password',ldap_rdn='$ldap_rdn'");
+			}
 		}
 		// In any case
 		// Retrieve authentification backend settings
