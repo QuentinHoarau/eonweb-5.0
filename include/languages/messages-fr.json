@@ -38,6 +38,7 @@
 	"label.admin_group.title": "Gestion des groupes",
 	"label.admin_group.title_new": "Nouveau groupe",
 	"label.admin_group.title_upd": "Paramètres du groupe",
+	"label.admin_import_device.title": "Rapports de configuration nagios",
 	"label.admin_user.ldap_log": "Login LDAP",
 	"label.admin_user.select_add": "Ajouter utilisateur",
 	"label.admin_user.select_del": "Supprimer utilisateur(s)",

@@ -36,16 +36,16 @@ function message($id, $text, $type){
 	switch($type)
 	{
 		case "critical":
-			echo "<p class='alert alert-danger'>$tempid $text</p>";
+			echo "<p class='alert alert-danger'><i class='fa fa-exclamation-circle'></i> $tempid $text</p>";
 			break;
 		case "warning":
-			echo "<p class='alert alert-warning'>$tempid $text</p>";
+			echo "<p class='alert alert-warning'><i class='fa fa-warning'></i> $tempid $text</p>";
 			break;
    		case "ok":
-			echo "<p class='alert alert-success'>$tempid $text</p>";
+			echo "<p class='alert alert-success'><i class='fa fa-check-circle'></i> $tempid $text</p>";
 			break;
 		default:
-			echo "<p class='alert alert-success'>$tempid $text</p>";
+			echo "<p class='alert alert-info'><i class='fa fa-info-circle'></i> $tempid $text</p>";
 			break;			
 	}
 }
