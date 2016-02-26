@@ -239,7 +239,6 @@
 	"menu.link.snmptrapd": "Snmptrapd",
 	"menu.link.snmptt": "Snmptt",
 	"menu.link.snmpwalk": "SNMPwalk",
-	"menu.link.ssh_access": "Accès ssh",
 	"menu.link.storage": "Stockage",
 	"menu.link.summary": "Résumés",
 	"menu.link.sync_cacti": "Synchronisation cacti",

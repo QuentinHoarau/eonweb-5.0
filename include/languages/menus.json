@@ -371,21 +371,6 @@
 			"icon":"fa fa-wrench",
             "menusubtab":[
                 {
-                    "name":"menu.subtab.local_access",
-                    "link":[
-                        {
-                            "name":"menu.link.ssh_access",
-                            "url":"/module/tool_remoteacces/index_ssh.php",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.snmpwalk",
-                            "url":"/module/tool_all/index_snmpwalk.php",
-                            "target":"main"
-                        }
-                    ]
-                },
-                {
                     "name":"menu.subtab.generality",
                     "link":[
                         {
