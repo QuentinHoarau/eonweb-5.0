@@ -65,6 +65,10 @@
 	vertical-align: middle;
 }
 
+.textarea {
+	resize: vertical;
+}
+
 /*
  * ------------------------------------------------------------------------
  * Footer
