@@ -67,6 +67,7 @@ include("../../side.php");
 				return "Host $host_name already associated with template $host_template";
 			}
 		}
+
 	?>
 
 	<form class="form-inline" method="POST" ENCTYPE="multipart/form-data">
