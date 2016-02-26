@@ -31,7 +31,7 @@ function display_login(){
 			<div class="img col-md-4 col-md-offset-4">
 				<div class="login-panel panel panel-default">
 					<div class="panel-heading">
-						<img class="img-responsive" src="images/logo.png" alt="logo eyesofnetwork">
+						<img class="img-responsive center-block" src="images/logo.png" alt="logo eyesofnetwork">
 					</div>
 					<div class="panel-body">
 						<form role="form" action="login.php" method="POST">
@@ -68,7 +68,7 @@ if(isset($_COOKIE['user_name'])){
 							+	'<div class="img col-md-4 col-md-offset-4">'
 							+		'<div class="login-panel panel panel-default">'
 							+			'<div class="panel-heading">'
-							+				'<img class="img-responsive" src="images/logo.png" alt="logo eyesofnetwork">'
+							+				'<img class="img-responsive center-block" src="images/logo.png" alt="logo eyesofnetwork">'
 							+			'</div>'
 							+			'<div class="panel-body">'
 							+				'<div class="alert alert-info">Vous etes deja connecté en tant que : <?php echo $_COOKIE["user_name"]; ?></div>'
