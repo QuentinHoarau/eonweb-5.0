@@ -41,7 +41,7 @@ include("../../side.php");
 
 		echo "
 			<div class='table-responsive'>
-				<table class='table table-hovered'>";
+				<table class='table table-striped table-condensed'>";
 		echo "<thead><tr><th>".getLabel("label.process")."</th><th>status</th><th>PID</th><th>actions</th></tr></thead>";
 
 		// Execute command if Need
@@ -63,15 +63,19 @@ include("../../side.php");
 		{
 			$cmd_status=$array_proc["status"];
 			exec($cmd_status,$result_cmd);
+
+			if(!isset($result_cmd[0])) {
+				$result_cmd[0]=NULL;
+			}
 			
 			// Display process name
 			if($result_cmd[0] == NULL){ $class = "danger"; }
 			else{ $class = "success"; }
-			echo "<tr class='$class'><td>$proc_name</td>";
+			echo "<tr><td>$proc_name</td>";
 			
 			// Display status
-			if ($result_cmd[0] == NULL) echo "<td class='status_down' >DOWN</td>";
-			else echo "<td  class='status_up'>UP</td>";	
+			if ($result_cmd[0] == NULL) echo "<td class='".$class."' >DOWN</td>";
+			else echo "<td  class='".$class."'>UP</td>";	
 
 			//Display PID
 			echo "<td>";
@@ -88,7 +92,7 @@ include("../../side.php");
 					if(isset($act_name) && $act_name == "stop"){ $class="btn btn-danger"; }
 					elseif(isset($act_name) && ($act_name == "start" || $act_name == "restart") ){ $class="btn btn-success"; }
 					else{ $class="btn btn-primary"; }
-					echo "<a class='$class' href='?getname=$proc_name&getact=$act_name' role='button'>". getLabel("action.".$act_name) ."</a> ";
+					echo "<a class='$class' href='index.php?getname=".urlencode($proc_name)."&getact=$act_name' role='button'>". getLabel("action.".$act_name) ."</a> ";
 				}
 			}
 			echo "</td>";
@@ -104,13 +108,10 @@ include("../../side.php");
 		if(isset($_GET["getname"]) && isset($_GET["getact"]))
 		{
 			//Display the result
-			echo "<h3>".getLabel("label.admin_process.output")."</h3>";
-			echo "<div class='row'>";
-			echo "	<div class='col-md-6'>";
-			echo "		<textarea class='form-control' rows='5' name='result' readonly>";
-							array_walk($result_cmdact,'display_value');
-			echo "		</textarea>";
-			echo "	</div>";
+			echo "<div>";
+			echo "	<textarea class='form-control textarea' rows='8' name='result' readonly>";
+						array_walk($result_cmdact,'display_value');
+			echo "	</textarea>";
 			echo "</div>";
 		}
 	?>

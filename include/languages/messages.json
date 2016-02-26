@@ -56,7 +56,6 @@
 	"label.admin_group.title_upd": "Group settings",
 	"label.admin_import_device.title": "CSV nagios upload",
 	"label.admin_process.title": "Process management",
-	"label.admin_process.output": "Output",
 	"label.admin_user.ldap_log": "LDAP login",
 	"label.admin_user.select_add": "Add user",
 	"label.admin_user.select_del": "Delete user(s)",

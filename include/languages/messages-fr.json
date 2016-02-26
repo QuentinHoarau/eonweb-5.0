@@ -56,7 +56,6 @@
 	"label.admin_group.title_upd": "Paramètres du groupe",
 	"label.admin_import_device.title": "Déploiement nagios via csv",
 	"label.admin_process.title": "Gestion des processus",
-	"label.admin_process.output": "Affichage",
 	"label.admin_user.ldap_log": "Login LDAP",
 	"label.admin_user.select_add": "Ajouter utilisateur",
 	"label.admin_user.select_del": "Supprimer utilisateur(s)",
