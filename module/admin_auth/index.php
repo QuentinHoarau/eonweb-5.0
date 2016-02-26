@@ -44,6 +44,7 @@ include("../../side.php");
 	// Retrieve authentification backend settings
 	$sqlresult=sqlrequest("$database_eonweb","select * from auth_settings;");
 	$backend_selected=mysqli_result($sqlresult,0,"auth_type");
+	
 	if($backend_selected=="1"){
 		$ldap_ip=mysqli_result($sqlresult,0,"ldap_ip");
 		$ldap_port=mysqli_result($sqlresult,0,"ldap_port");
@@ -52,7 +53,9 @@ include("../../side.php");
 		$ldap_user=mysqli_result($sqlresult,0,"ldap_user");
 		$ldap_password=mysqli_result($sqlresult,0,"ldap_password");
 		$ldap_rdn=mysqli_result($sqlresult,0,"ldap_rdn");
-	}	
+	} else {
+		$ldap_password="";
+	}
 
 	// Submit authentification backend settings
 	// If Update button pressed
@@ -203,106 +206,102 @@ include("../../side.php");
 ?>
 
 	<form action='./index.php' name='form_auth' method='GET' class='form'>
-		<div class="row">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<?php echo getLabel("label.admin_auth.auth_backend"); ?>
-				</div>
-				<div class="panel-body">
-					<div class="form-group">
-						<div class="row">
-							<label class="col-md-2">MySQL Backend</label>
-							<label class="radio-inline col-md-1"><input id="mysql" type="radio" value="mysql" name="backend_selected" <?php if($backend_selected=="0")echo "checked"; ?> onclick='disable()'></label>
-						</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<?php echo getLabel("label.admin_auth.auth_backend"); ?>
+			</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<div class="row">
+						<label class="col-md-2">MySQL Backend</label>
+						<label class="radio-inline col-md-1"><input id="mysql" type="radio" value="mysql" name="backend_selected" <?php if($backend_selected=="0")echo "checked"; ?> onclick='disable()'></label>
 					</div>
-					<div>
-						<div class="row">
-							<label class="col-md-2">LDAP Backend</label>
-							<label class="radio-inline col-md-1"><input id="ldap" type="radio" value="ldap" name="backend_selected" <?php if($backend_selected=="1")echo "checked"; ?> onclick='disable()'></label>
-						</div>
+				</div>
+				<div>
+					<div class="row">
+						<label class="col-md-2">LDAP Backend</label>
+						<label class="radio-inline col-md-1"><input id="ldap" type="radio" value="ldap" name="backend_selected" <?php if($backend_selected=="1")echo "checked"; ?> onclick='disable()'></label>
 					</div>
 				</div>
 			</div>
 		</div>
 		
-		<div class="row">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<?php echo getLabel("label.admin_auth.ldap_settings"); ?>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<?php echo getLabel("label.admin_auth.ldap_settings"); ?>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<label class="col-md-3"><?php echo getLabel("label.admin_auth.ldap_ip"); ?></label>
+					<div class="col-md-9">
+						<input type="text" name="ldap_ip" class="form-control"
+						<?php if(isset($ldap_ip))echo 'value="'.$ldap_ip.'"';?>>
+					</div>
 				</div>
-				<div class="panel-body">
-					<div class="row">
-						<label class="col-md-3"><?php echo getLabel("label.admin_auth.ldap_ip"); ?></label>
-						<div class="col-md-9">
-							<input type="text" name="ldap_ip" class="form-control"
-							<?php if(isset($ldap_ip))echo 'value="'.$ldap_ip.'"';?>>
-						</div>
+				<br>
+				<div class="row" style="vertical-align: middle;">
+					<label class="col-md-3"><?php echo getLabel("label.admin_auth.ldap_port"); ?></label>
+					<div class="col-md-9">
+						<input type="text" name="ldap_port" class="form-control"
+						<?php
+							if(isset($ldap_port))
+								echo 'value="'.$ldap_port.'"';
+							else
+								echo 'value="389"'; 
+						?>>
 					</div>
-					<br>
-					<div class="row" style="vertical-align: middle;">
-						<label class="col-md-3"><?php echo getLabel("label.admin_auth.ldap_port"); ?></label>
-						<div class="col-md-9">
-							<input type="text" name="ldap_port" class="form-control"
-							<?php
-								if(isset($ldap_port))
-									echo 'value="'.$ldap_port.'"';
-								else
-									echo 'value="389"'; 
-							?>>
-						</div>
+				</div>
+				<br>
+				<div class="row">
+					<label class="col-md-3"><?php echo getLabel("label.admin_auth.search_dn"); ?></label>
+					<div class="col-md-9">
+						<input type="text" name="ldap_search" class="form-control"
+						<?php if(isset($ldap_search))echo 'value="'.$ldap_search.'"';?>>
 					</div>
-					<br>
-					<div class="row">
-						<label class="col-md-3"><?php echo getLabel("label.admin_auth.search_dn"); ?></label>
-						<div class="col-md-9">
-							<input type="text" name="ldap_search" class="form-control"
-							<?php if(isset($ldap_search))echo 'value="'.$ldap_search.'"';?>>
-						</div>
+				</div>
+				<br>
+				<div class="row">
+					<label class="col-md-3"><?php echo getLabel("label.admin_auth.search_filter"); ?></label>
+					<div class="col-md-9">
+					<input type="text" name="ldap_filter" class="form-control"
+						<?php
+							if(isset($ldap_filter))
+								echo 'value="'.$ldap_filter.'"';
+							else
+								echo 'value="(objectclass=person)"';
+						?>>
 					</div>
-					<br>
-					<div class="row">
-						<label class="col-md-3"><?php echo getLabel("label.admin_auth.search_filter"); ?></label>
-						<div class="col-md-9">
-						<input type="text" name="ldap_filter" class="form-control"
-							<?php
-								if(isset($ldap_filter))
-									echo 'value="'.$ldap_filter.'"';
-								else
-									echo 'value="(objectclass=person)"';
-							?>>
-						</div>
+				</div>
+				<br>
+				<div class="row">
+					<label class="col-md-3"><?php echo getLabel("label.admin_auth.proxy_user"); ?></label>
+					<div class="col-md-9">
+						<input type="text" name="ldap_user" class="form-control"
+						<?php if(isset($ldap_user))echo 'value="'.str_replace("\\","\\\\",$ldap_user).'"';?>>
 					</div>
-					<br>
-					<div class="row">
-						<label class="col-md-3"><?php echo getLabel("label.admin_auth.proxy_user"); ?></label>
-						<div class="col-md-9">
-							<input type="text" name="ldap_user" class="form-control"
-							<?php if(isset($ldap_user))echo 'value="'.str_replace("\\","\\\\",$ldap_user).'"';?>>
-						</div>
+				</div>
+				<br>
+				<div class="row">
+					<label class="col-md-3"><?php echo getLabel("label.admin_auth.proxy_pwd"); ?></label>
+					<div class="col-md-9">
+						<input type="password" name="ldap_password" class="form-control"
+						<?php if(isset($ldap_password))echo 'value="'.$ldap_password.'"';?>>
 					</div>
-					<br>
-					<div class="row">
-						<label class="col-md-3"><?php echo getLabel("label.admin_auth.proxy_pwd"); ?></label>
-						<div class="col-md-9">
-							<input type="password" name="ldap_password" class="form-control"
-							<?php if(isset($ldap_password))echo 'value="'.$ldap_password.'"';?>>
-						</div>
+				</div>
+				<br>
+				<div class="row">
+					<label class="col-md-3"><?php echo getLabel("label.admin_auth.login_rdn"); ?></label>
+					<div class="col-md-9">
+						<input type="text" name="ldap_rdn" class="form-control"
+						<?php if(isset($ldap_rdn))echo 'value="'.$ldap_rdn.'"';?>>
 					</div>
-					<br>
-					<div class="row">
-						<label class="col-md-3"><?php echo getLabel("label.admin_auth.login_rdn"); ?></label>
-						<div class="col-md-9">
-							<input type="text" name="ldap_rdn" class="form-control"
-							<?php if(isset($ldap_rdn))echo 'value="'.$ldap_rdn.'"';?>>
-						</div>
-					</div>
-					<br>
-					<div class="row">
-						<div class="col-md-3">
-						<button class="btn btn-primary" type="submit" name="action" value="Update">
-							<?php echo getLabel("action.update"); ?>
-						</button>
-						</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-3">
+					<button class="btn btn-primary" type="submit" name="action" value="Update">
+						<?php echo getLabel("action.update"); ?>
+					</button>
 					</div>
 				</div>
 			</div>

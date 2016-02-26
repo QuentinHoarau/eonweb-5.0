@@ -108,7 +108,7 @@ function filemodify($path,$get=false){
 			echo "?file=$get";
 		echo "'>";
 		echo '<div class="form-group">';
-		echo "<textarea class='form-control' cols='100' rows='25' name='maj' scrolling='no'>";
+		echo "<textarea class='form-control' cols='100' rows='20' name='maj' scrolling='no'>";
 			print file_get_contents($path);
 		echo "</textarea>";
 		echo '</div>';
