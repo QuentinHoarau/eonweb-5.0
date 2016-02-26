@@ -7,7 +7,20 @@
 $(document).ready(function() {
 	$('#dataTables-adminconf').DataTable({
 		responsive: true,
-		lengthMenu: [ [10, 25, 50, 10, -1], [10, 25, 50, 10, "All"] ]
+		lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, dictionnary['label.all']] ],
+		language: {
+			lengthMenu: dictionnary['action.display'] + " _MENU_ " + dictionnary['label.entries'],
+			search: dictionnary['action.search']+":",
+			paginate: {
+				first:      dictionnary['action.first'],
+				previous:   dictionnary['action.previous'],
+				next:       dictionnary['action.next'],
+				last:       dictionnary['action.last']
+			},
+			info:           dictionnary['label.datatable.info'],
+			infoEmpty:      dictionnary['label.datatable.infoempty'],
+			infoFiltered:   dictionnary['label.datatable.infofiltered']
+		}
 	});
 });
 </script>
