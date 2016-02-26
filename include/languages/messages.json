@@ -34,7 +34,7 @@
 	"label.admin_device.title": "Cacti synchronization",
 	"label.admin_device.import_settings_title": "Import settings",
 	"label.admin_device.snmp_v3_title": "SNMP v3 settings",
-	"label.admin_device.import_host": "Hosts to import",
+	"label.admin_device.import_host": "Nagios hosts to import",
 	"label.admin_device.remove_cacti": "Cacti hosts to remove",
 	"label.admin_files.title_gedcfg": "GED settings",
 	"label.admin_files.title_gedhdb": "GED backends settings",
