@@ -51,12 +51,6 @@
 	}
 }
 
-@media(max-height:600px) {
-	.sidebar li  a {
-		height: 30px;
-	}
-}
-
 .page-header {
     padding-bottom: 9px;
     margin: 15px 0 20px;
