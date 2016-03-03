@@ -49,7 +49,7 @@ include_once("./request.php");
 		$result = sqlrequest($database_lilac, $request);
 		
 		echo "<div class='dataTable_wrapper'>";
-		echo "<table class='table table-striped' id='dataTables-adminconf'>
+		echo "<table class='table table-striped datatable-eonweb'>
 				<thead>
 					<tr>";
 						$line="";
