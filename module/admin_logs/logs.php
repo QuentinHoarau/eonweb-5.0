@@ -22,7 +22,6 @@
 
 include("../../header.php");
 include("../../side.php");
-include("LogBrowser.php");
 
 ?>
 
@@ -48,18 +47,18 @@ include("LogBrowser.php");
 		</div>
 		<div class="row">
 			<div class="form-group col-md-4">
-				<label>module</label>
+				<label>Module</label>
 				<input type="text" id="module" name="module" class="form-control">
 			</div>
 			
 			<div class="form-group col-md-4">
-				<label>description</label>
+				<label>Description</label>
 				<input type="text" id="description" name="description" class="form-control">
 			</div>
 		</div>
 		<div class="row">
 			<div class="form-group col-md-4">
-				<label>source</label>
+				<label>Source</label>
 				<div class="input-group">
 					<input type="text" id="source" name="source" class="form-control">
 					<span class="input-group-btn">
