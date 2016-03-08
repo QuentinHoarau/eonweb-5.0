@@ -316,6 +316,7 @@
 	"message.module.not_installed2": "is not installed",
 	"message.module.not_installed": "Module",
 	"message.no_date_value": "Cannot get date value",
+	"message.no_graph_value": "Cannot get graph type",
 	"message.no_host_value": "Cannot get host value",
 	"message.not_implemented": "Not implemented yet...",
 	"message.tool_all.select_host": "Please select a host",

@@ -161,15 +161,14 @@ function get_host_list(){
 function get_host_listbox_from_nagios(){
 	global $database_lilac;
 	
-	echo "<h2>Host : </h2>";
+	echo "<label>Host</label>";
 	$result=sqlrequest($database_lilac,"SELECT name,address FROM nagios_host ORDER BY name");
-	$mapage='toto';
-	echo "<SELECT name='host_list' class='select' size=10 style='width:250px;'>";
+	echo "<SELECT id='host_list' name='host_list' class='form-control' size=4>";
 	while ($line = mysqli_fetch_array($result))
 	{
 		echo "<OPTION value='$line[0],$line[1]'>&nbsp;$line[0]</OPTION>";
 	}
-	print "</SELECT><br>";
+	echo "</SELECT>";
 
 }
 
@@ -190,16 +189,22 @@ function get_title_list_from_cacti(){
 
 // Host listbox from CACTI
 function get_host_listbox_from_cacti(){
-        
+	
 	global $database_cacti;
-
+	
+	if( isset($_GET['host']) ){
+		$ref = $_GET['host'];
+	}
+	
 	$result=sqlrequest($database_cacti,"SELECT DISTINCT host.id,hostname,description FROM host INNER JOIN graph_local ON host.id = graph_local.host_id ORDER BY hostname ASC");
-	print "<SELECT name='host' class='form-control' size=7>";
+	echo "<SELECT name='host' class='form-control' size=7>";
         while ($line = mysqli_fetch_array($result))
         {
-                print "<OPTION value='$line[0]'>&nbsp;$line[1] ($line[2])&nbsp;</OPTION>";
+			echo "<OPTION value='$line[0]' ";
+			if($ref == $line[0]){echo 'selected="selected"';}
+			echo ">&nbsp;$line[1] ($line[2])&nbsp;</OPTION>";
         }
-        print "</SELECT><br>";
+        echo "</SELECT><br>";
 }
 
 // system function : CUT
@@ -212,29 +217,36 @@ function get_graph_listbox_from_cacti(){
 	
 	global $database_cacti;
 	
-        $result=sqlrequest($database_cacti,"SELECT DISTINCT graph_templates.id,name FROM graph_templates INNER JOIN graph_local ON graph_local.graph_template_id = graph_templates.id ORDER BY name ASC");
-	print "<SELECT name='graph' class='form-control' size=7>";
-        while ($line = mysqli_fetch_array($result))
-        {
-		print "<OPTION value='$line[0]'>&nbsp;$line[1]&nbsp;</OPTION>\n";
-        }
-        print "</SELECT><br>";
+	if( isset($_GET['graph']) ){
+		$ref = $_GET['graph'];
+	}
+	
+	$result=sqlrequest($database_cacti,"SELECT DISTINCT graph_templates.id,name FROM graph_templates INNER JOIN graph_local ON graph_local.graph_template_id = graph_templates.id ORDER BY name ASC");
+	echo "<SELECT name='graph' class='form-control' size=7>";
+	while ($line = mysqli_fetch_array($result))
+	{
+		echo "<OPTION value='$line[0]' ";
+		if($ref == $line[0]){echo 'selected="selected"';}
+		echo ">&nbsp;$line[1]&nbsp;</OPTION>";
+	}
+	echo "</SELECT><br>";
 }
 
 // Display TOOL list
 function get_tool_listbox(){
-	echo "<label>".getLabel("label.tool_all.tool")." : </label>";	
 	// Get the global table
 	global $array_tools;
+	
+	echo "<label>".getLabel("label.tool_all.tool")." : </label>";	
 
 	// Get the first array key
 	reset($array_tools);
 
 	// Display the list of tool
-	echo "<SELECT name='tool_list' class='form-control' size=4>";
+	echo "<SELECT id='tool_list' name='tool_list' class='form-control' size=4>";
  	while (list($tool_name, $tool_url) = each($array_tools)) 
 	{
-		echo "<OPTION value='$tool_url'>&nbsp;$tool_name</OPTION>";
+		echo "<OPTION value='$tool_url'>$tool_name</OPTION>";
 	}
 	echo "</SELECT>";
 }
@@ -243,10 +255,10 @@ function get_tool_listbox(){
 function get_toolport_ports(){
 	global $default_minport;
 	global $default_maxport;
-
-	echo "<label>Port min - Port max <br>(show port ".getLabel("label.tool_all.only").") :</label>";
-	echo "<div class='col-md-6'><input class='form-control' type=text name='min_port' value=$default_minport size=8></div>
-		  <div class='col-md-6'><input class='form-control' type=text name='max_port' value=$default_maxport size=8></div>";
+	
+	echo "<label class='col-md-12'>Port min - Port max (show port ".getLabel("label.tool_all.only").") :</label>";
+	echo "<div class='col-md-2'><input id='min_port' class='form-control' type=text name='min_port' value=$default_minport size=8></div>
+		  <div class='col-md-2'><input id='max_port' class='form-control' type=text name='max_port' value=$default_maxport size=8></div>";
 }
 
 

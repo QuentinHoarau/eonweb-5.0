@@ -317,6 +317,7 @@
 	"message.module.not_installed": "Le module",
 	"message.no_date_value": "Aucune date choisie",
 	"message.no_host_value": "Aucun host choisi",
+	"message.no_graph_value": "Aucun type de graphique choisi",
 	"message.not_implemented": "Pas encore implémenté...",
 	"message.tool_all.select_host": "Sélectionnez un host svp",
 	"message.tool_all.select_tool": "Sélectionnez un outil svp",

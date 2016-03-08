@@ -37,10 +37,12 @@ $array_msg = array (
 	10 => "EON - Name Error");
 
 $array_tools = array (
-	"ssh access" 	 => "../tool_remoteacces/index_ssh.php",
-	"telnet access"  => "../tool_remoteacces/index_telnet.php",
-	"show interface" => "../tool_interface/index.php",
-	"show port" 	 => "../tool_port/index.php");
+	//"ssh access" 	 => "../tool_remoteacces/index_ssh.php",
+	//"telnet access"  => "../tool_remoteacces/index_telnet.php",
+	"snmpwalk"		 => "tools/snmpwalk.php",
+	"show interface" => "tools/interface.php",
+	"show port" 	 => "tools/port.php");
+	// "show port" 	 => "../tool_port/index.php");
 
 $array_group_mgt = array (
     "label.admin_group.select_add" => "add_group",
