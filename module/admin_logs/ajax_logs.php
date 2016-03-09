@@ -51,8 +51,8 @@ $results = sqlrequest($database_eonweb,$sql);
 		<thead>
 			<tr>
 				<th>Date</th>
-				<th><?php echo getLabel("label.user"); ?></th>
-				<th>Module</th>
+				<th class="col-md-2"><?php echo getLabel("label.user"); ?></th>
+				<th class="col-md-2">Module</th>
 				<th>Description</th>
 				<th>Source</th>
 			</tr>

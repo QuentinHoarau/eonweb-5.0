@@ -68,7 +68,7 @@ include("../../side.php");
 			</div>
 		</div>
 	</form>
-		
+	<br>
 	<!-- Loading message -->
 	<div id="loading">
 		<h2>Loading, please wait ...</h2><br>
