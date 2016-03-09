@@ -24,15 +24,39 @@ $('.daterangepicker-eonweb').daterangepicker({
 	locale: {
 		applyLabel: dictionnary['action.apply'],
 		cancelLabel: dictionnary['action.clear'],
-		customRangeLabel: dictionnary['label.custom']
+		customRangeLabel: dictionnary['label.custom'],
+		applyClass: "btn-primary",
+		daysOfWeek: [
+            dictionnary["calendar.sunday"],
+            dictionnary["calendar.monday"],
+            dictionnary["calendar.tuesday"],
+            dictionnary["calendar.wednesday"],
+            dictionnary["calendar.thursday"],
+            dictionnary["calendar.friday"],
+            dictionnary["calendar.saturday"]
+        ],
+        monthNames: [
+			dictionnary["calendar.january"],
+			dictionnary["calendar.february"],
+			dictionnary["calendar.march"],
+			dictionnary["calendar.april"],
+			dictionnary["calendar.may"],
+			dictionnary["calendar.june"],
+			dictionnary["calendar.july"],
+			dictionnary["calendar.august"],
+			dictionnary["calendar.september"],
+			dictionnary["calendar.october"],
+			dictionnary["calendar.november"],
+			dictionnary["calendar.december"]
+        ]
 	},
 	ranges: {
-		'Today': [moment(), moment()],
-		'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-		'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-		'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-		'This Month': [moment().startOf('month'), moment().endOf('month')],
-		'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+		[dictionnary["label.today"]]: [moment(), moment()],
+		[dictionnary["label.yesterday"]]: [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+		[dictionnary["label.last_7_days"]]: [moment().subtract(6, 'days'), moment()],
+		[dictionnary["label.last_30_days"]]: [moment().subtract(29, 'days'), moment()],
+		[dictionnary["label.this_month"]]: [moment().startOf('month'), moment().endOf('month')],
+		[dictionnary["label.last_month"]]: [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
 	}
 });
 	

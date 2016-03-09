@@ -33,6 +33,7 @@ $('.datatable-eonweb').DataTable({
 		},
 		info:           dictionnary['label.datatable.info'],
 		infoEmpty:      dictionnary['label.datatable.infoempty'],
-		infoFiltered:   dictionnary['label.datatable.infofiltered']
+		infoFiltered:   dictionnary['label.datatable.infofiltered'],
+		zeroRecords: 	dictionnary['label.datatable.zerorecords']
 	}
 });
