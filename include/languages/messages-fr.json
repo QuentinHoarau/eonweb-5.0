@@ -56,6 +56,13 @@
 	"label.entries": "éléments",
 	"label.process": "processus",
 	"label.today": "Aujourd'hui",
+	"label.exec_command": "Commande exécutée",
+	"label.sys_name": "Nom système",
+	"label.sys_loc": "Système Location",
+	"label.sys_uptime": "Système uptime",
+	"label.nb_trap_send": "Nbr trap envoyées",
+	"label.sys_desc": "Description système",
+	"label.open_ports": "Ports ouverts",
 	"label.datatable.info": "Affichage de _START_ à _END_ sur _TOTAL_ éléments",
 	"label.datatable.infoempty": "Affichage de 0 à 0 sur 0 éléments",
 	"label.datatable.infofiltered": "(filtré sur _MAX_ éléments au total)",
@@ -228,8 +235,8 @@
 	"label.tool_all.context": "Contexte",
 	"label.tool_all.only": "seulement",
 	"label.tool_all.password": "Mot de passe",
-	"label.tool_all.privacy_passphrase": "Passphrase de confidentialité",
-	"label.tool_all.privacy_protocol": "Protocole de confidentialité",
+	"label.tool_all.privacy_passphrase": "Passphrase confidentialité",
+	"label.tool_all.privacy_protocol": "Protocole confidentialité",
 	"label.tool_all.snmp_community": "Communauté SNMP",
 	"label.tool_all.snmp_version": "Version SNMP",
 	"label.tool_all.title_hostlist": "Outils de production",
@@ -348,5 +355,6 @@
 	"message.tool_all.select_host": "Sélectionnez un host svp",
 	"message.tool_all.select_tool": "Sélectionnez un outil svp",
 	"message.monitoring_passwd.ok": "Utilisateur modifié",
-	"message.monitoring_passwd.error": "Les mot de passe sont différents ou sont vides"
+	"message.monitoring_passwd.error": "Les mot de passe sont différents ou sont vides",
+	"message.ajax_error": "Erreur lors du chargement du résultat..."
 }

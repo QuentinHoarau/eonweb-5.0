@@ -161,15 +161,24 @@ function get_host_list(){
 function get_host_listbox_from_nagios(){
 	global $database_lilac;
 	
+	// create input autocomplete with all nagios host values
 	echo "<label>Host</label>";
-	$result=sqlrequest($database_lilac,"SELECT name,address FROM nagios_host ORDER BY name");
-	echo "<SELECT id='host_list' name='host_list' class='form-control' size=4>";
+	$result=sqlrequest($database_lilac,"SELECT DISTINCT name FROM nagios_host UNION ALL SELECT DISTINCT address FROM nagios_host");
+	$input = "<input id='host_list' class='form-control' type='text' name='host_list' onFocus='$(this).autocomplete({source: [";
 	while ($line = mysqli_fetch_array($result))
 	{
-		echo "<OPTION value='$line[0],$line[1]'>&nbsp;$line[0]</OPTION>";
+		$input .= '"'.$line[0].'",';
 	}
-	echo "</SELECT>";
-
+	$input = rtrim($input, ",");
+	$input .= "]})'>";
+	
+	echo '<div class="input-group">';
+	echo 	$input;
+	echo 	'<span class="input-group-btn">
+				<input class="btn btn-primary" type="submit" name="run" value="'.getLabel("action.run").'" >
+			</span>
+			';
+	echo '</div>';
 }
 
 // Host list from CACTI
@@ -237,13 +246,13 @@ function get_tool_listbox(){
 	// Get the global table
 	global $array_tools;
 	
-	echo "<label>".getLabel("label.tool_all.tool")." : </label>";	
+	echo "<label>".getLabel("label.tool_all.tool")."</label>";	
 
 	// Get the first array key
 	reset($array_tools);
 
 	// Display the list of tool
-	echo "<SELECT id='tool_list' name='tool_list' class='form-control' size=4>";
+	echo "<SELECT id='tool_list' name='tool_list' class='form-control'>";
  	while (list($tool_name, $tool_url) = each($array_tools)) 
 	{
 		echo "<OPTION value='$tool_url'>$tool_name</OPTION>";
@@ -256,9 +265,9 @@ function get_toolport_ports(){
 	global $default_minport;
 	global $default_maxport;
 	
-	echo "<label class='col-md-12'>Port min - Port max (show port ".getLabel("label.tool_all.only").") :</label>";
-	echo "<div class='col-md-2'><input id='min_port' class='form-control' type=text name='min_port' value=$default_minport size=8></div>
-		  <div class='col-md-2'><input id='max_port' class='form-control' type=text name='max_port' value=$default_maxport size=8></div>";
+	echo "<label class='col-md-12'>Port min - Port max</label>";
+	echo "<div class='col-md-4'><input id='min_port' class='form-control' type=text name='min_port' value=$default_minport size=8></div>
+		  <div class='col-md-4'><input id='max_port' class='form-control' type=text name='max_port' value=$default_maxport size=8></div>";
 }
 
 
@@ -692,8 +701,6 @@ function insert_user($user_name, $user_descr, $user_group, $user_password1, $use
 	if($user_descr=="")
 		$user_descr=$user_name;
 
-	// get ID of the group (for ldap !)
-	// $user_group = mysqli_result(sqlrequest("$database_eonweb", "SELECT group_id FROM groups WHERE group_name='$user_group'"), 0, "group_id");
 	if($user_location != "" && $user_location != null){
 		if( strpos($user_location, " -- ") !== false && strpos($user_location, "|") !== false ){
 			$user_location_parts = explode(" -- ", $user_location);

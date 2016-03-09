@@ -266,7 +266,7 @@
                     "link":[
                         {
                             "name":"menu.link.equipments",
-                            "url":"/module/tool_all/index_hostlist.php",
+                            "url":"/module/tool_all/index.php",
                             "target":"main"
                         }
                     ]

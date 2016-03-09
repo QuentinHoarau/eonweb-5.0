@@ -56,6 +56,13 @@
 	"label.entries": "entries",
 	"label.process": "processus",
 	"label.today": "Today",
+	"label.exec_command": "Executed command",
+	"label.sys_name": "System name",
+	"label.sys_loc": "System Location",
+	"label.sys_uptime": "System uptime",
+	"label.nb_trap_send": "Nb of send trap",
+	"label.sys_desc": "System description",
+	"label.open_ports": "Open ports",
 	"label.datatable.info": "Showing _START_ to _END_ of _TOTAL_ entries",
 	"label.datatable.infoempty": "Showing 0 to 0 of 0 entries",
 	"label.datatable.infofiltered": "(filtered from _MAX_ total entries)",
@@ -224,7 +231,7 @@
 	"label.report_performance.to": "to",
 	"label.title.login": "Please sign in",
 	"label.title.logout": "Disconnection",
-	"label.tool_all.auth_protocol": "Authentification protocol",
+	"label.tool_all.auth_protocol": "Auth protocol",
 	"label.tool_all.context": "Context",
 	"label.tool_all.only": "only",
 	"label.tool_all.password": "Password",
@@ -348,5 +355,6 @@
 	"message.tool_all.select_host": "Please select a host",
 	"message.tool_all.select_tool": "Please select a tool",
 	"message.monitoring_passwd.ok": "User updated",
-	"message.monitoring_passwd.error": "Passwords do not match or are empty"
+	"message.monitoring_passwd.error": "Passwords do not match or are empty",
+	"message.ajax_error": "Erreur while loading result..."
 }
