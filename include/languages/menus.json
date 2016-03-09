@@ -268,11 +268,6 @@
                             "name":"menu.link.equipments",
                             "url":"/module/tool_all/index_hostlist.php",
                             "target":"main"
-                        },
-                        {
-                            "name":"menu.link.external",
-                            "url":"/module/tool_all/index_hostname.php",
-                            "target":"main"
                         }
                     ]
                 },
@@ -410,7 +405,7 @@
                         },
                         {
                             "name":"menu.link.logs",
-                            "url":"/module/admin_logs/logs.php",
+                            "url":"/module/admin_logs/index.php",
                             "target":"main"
                         }
                     ]
