@@ -25,10 +25,10 @@
 
 <footer class="footer navbar navbar-default navbar-fixed-bottom">
 	<div class="container">
-		<p class="text-muted">
+		<div class="text-center">
 			<a href="http://www.eyesofnetwork.com" target="_blank">EyesOfNetwork</a>
 			<?php echo getLabel("label.footer.message"); ?>
-		</p>
+		</div>
 	</div>
 </footer> <!-- !#footer -->
 		

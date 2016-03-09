@@ -50,7 +50,7 @@ setcookie("highlightedTreeviewLink",FALSE);
 					<div class="alert alert-info">
 						<?php echo getLabel("label.message.logout.success"); ?>
 					</div>
-					<a class="btn btn-lg btn-success btn-block" href="login.php"><?php echo getLabel("action.connect"); ?></a>
+					<a class="btn btn-lg btn-primary btn-block" href="login.php"><?php echo getLabel("action.connect"); ?></a>
 				</div>
 			</div>
 		</div>

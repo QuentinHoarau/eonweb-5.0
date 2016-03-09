@@ -38,6 +38,8 @@ include("include/function.php");
 	<meta name="description" content="EyesOfNetwork">
 	<meta name="author" content="EyesOfNetwork Team">
 	
+	<link rel="icon" type="image/png" href="/images/favicon.png">
+	
 	<!-- Bootstrap Core CSS -->
 	<link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 	<!-- MetisMenu CSS -->

@@ -34,7 +34,7 @@ function display_login(){
 						<img class="img-responsive center-block" src="images/logo.png" alt="logo eyesofnetwork">
 					</div>
 					<div class="panel-body">
-						<form role="form" action="login.php" method="POST">
+						<form action="login.php" method="POST">
 							<fieldset>
 								<div class="form-group">
 									<input class="form-control" type="text" autofocus="" name="login" placeholder="'. getLabel("label.placeholder.username") .'">
@@ -42,7 +42,7 @@ function display_login(){
 								<div class="form-group">
 									<input class="form-control" type="password" value="" name="mdp" placeholder="'. getLabel("label.placeholder.password") .'">
 								</div>
-								<button type="submit" class="btn btn-lg btn-success btn-block">'. getLabel("action.connect") .'</button>
+								<button type="submit" class="btn btn-lg btn-primary btn-block">'. getLabel("action.connect") .'</button>
 							</fieldset>
 						</form>
 					</div>
@@ -73,7 +73,7 @@ if(isset($_COOKIE['user_name'])){
 							+			'<div class="panel-body">'
 							+				'<div class="alert alert-info">Vous etes deja connecté en tant que : <?php echo $_COOKIE["user_name"]; ?></div>'
 							+				'<div class="btn-group btn-group-justified">'
-							+				'<a class="btn btn-success" href="<?php echo $defaultpage; ?>">Accueil</a>'
+							+				'<a class="btn btn-primary" href="<?php echo $defaultpage; ?>">Accueil</a>'
 							+				'<a class="btn btn-default" href="logout.php">Se déconnecter</a>'
 							+				'</div>'
 							+			'</div>'

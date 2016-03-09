@@ -36,7 +36,7 @@ $menus = $m::createPHPDictionnary();
 			<span class="icon-bar"></span>
 		</button>
 		<a class="navbar-brand" href="/index.php">
-			<img id="logo_eon" src="/images/logo.png" alt="logo eyesofnetwork" style="width: 125px; height: 40px; margin-top: -10px;"/>
+			<img id="logo_eon" class="navbar-logo" src="/images/logo.png" alt="logo eyesofnetwork">
 		</a>
 	</div>
 	<!-- /.navbar-header -->
