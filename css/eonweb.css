@@ -38,14 +38,15 @@
 	#page-wrapper.fullscreen {
 		margin: 0 0 0 0;
 	}
-}
-@media(min-width:768px) {
 	.sidebar {
 		width: 200px;
 	}
 }
 
 @media(max-width:768px) {
+	.footer {
+		font-size: 9px;
+	}
 	.navbar-top-links .dropdown-user {
 		right: auto;
 	}

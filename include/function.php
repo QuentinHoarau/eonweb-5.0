@@ -265,11 +265,10 @@ function get_toolport_ports(){
 	global $default_minport;
 	global $default_maxport;
 	
-	echo "<label class='col-md-12'>Port min - Port max</label>";
-	echo "<div class='col-md-4'><input id='min_port' class='form-control' type=text name='min_port' value=$default_minport size=8></div>
-		  <div class='col-md-4'><input id='max_port' class='form-control' type=text name='max_port' value=$default_maxport size=8></div>";
+	echo "<label>Port min - Port max</label>";
+	echo "<div class='row'><div class='col-md-4'><input id='min_port' class='form-control' type=text name='min_port' value=$default_minport size=8></div>";
+	echo "<div class='col-md-4'><input id='max_port' class='form-control' type=text name='max_port' value=$default_maxport size=8></div></div>";
 }
-
 
 // Display User list
 function get_user_listbox(){

@@ -27,7 +27,6 @@ $(document).ready(function() {
 	
 	hideShowFormParts();
 	$("#loading").hide();
-	$("#loading_snmp").hide();
 });
 
 function changeSnmp(){
@@ -115,18 +114,12 @@ $("#tool-form").on('submit', function(event){
 			snmp_context: snmp_context
 		},
 		beforeSend: function(){
-			if(getToolName() == "snmpwalk"){
-				$("#loading_snmp").show();
-			}else{
-				$("#loading").show();
-			}
+			$("#loading").show();
 			$("#result").hide();
-			$("#result_snmp").hide();
 		},
 		success: function(response){
 			$("#error").html("");
 			$("#loading").hide();
-			$("#loading_snmp").hide();
 
 			if( response.indexOf("<p class='alert alert-danger'>") === 0 ){
 				$("#error").html(response);
@@ -134,12 +127,6 @@ $("#tool-form").on('submit', function(event){
 				return;
 			}
 			
-			// display "snmpwalk" result at the bottom of the form
-			if(getToolName() == "snmpwalk"){
-				$("#result_snmp").html(response);
-				$("#result_snmp").show();
-				return;
-			}
 			$("#result").html(response);
 			$("#result").show();
 		},

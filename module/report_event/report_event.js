@@ -50,7 +50,6 @@ function drawPieChart(div_id, datas)
 		},
 		plotOptions: {
 			pie: {
-				size: 170,
 				dataLabels: {
 					enabled: true,
 					format: '<b>{point.name}</b> : {point.y:.0f}',
@@ -215,7 +214,6 @@ function drawSlaPieChart(div_id, datas)
 		},
 		plotOptions: {
 			pie: {
-				size: 170,
 				dataLabels: {
 					enabled: true,
 					format: '<b>{point.name}</b>: {point.y:.0f}',

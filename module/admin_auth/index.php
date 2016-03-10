@@ -213,14 +213,18 @@ include("../../side.php");
 			<div class="panel-body">
 				<div class="form-group">
 					<div class="row">
-						<label class="col-md-2">MySQL Backend</label>
-						<label class="radio-inline col-md-1"><input id="mysql" type="radio" value="mysql" name="backend_selected" <?php if($backend_selected=="0")echo "checked"; ?> onclick='disable()'></label>
+						<label class="col-md-3">MySQL Backend</label>
+						<div class="col-md-9">
+							<input id="mysql" type="radio" value="mysql" name="backend_selected" <?php if($backend_selected=="0")echo "checked"; ?> onclick='disable()'>
+						</div>
 					</div>
 				</div>
 				<div>
 					<div class="row">
-						<label class="col-md-2">LDAP Backend</label>
-						<label class="radio-inline col-md-1"><input id="ldap" type="radio" value="ldap" name="backend_selected" <?php if($backend_selected=="1")echo "checked"; ?> onclick='disable()'></label>
+						<label class="col-md-3">LDAP Backend</label>
+						<div class="col-md-9">
+							<input id="ldap" type="radio" value="ldap" name="backend_selected" <?php if($backend_selected=="1")echo "checked"; ?> onclick='disable()'>
+						</div>
 					</div>
 				</div>
 			</div>
