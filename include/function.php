@@ -122,23 +122,39 @@ function filemodify($path,$get=false){
 }
 
 // Host List form Nagios
-function get_host_list_from_nagios($field=false){
+function get_host_list_from_nagios($field=false, $queue = false){
 	global $database_lilac;
+	global $database_ged;
 	$hosts=array();
 
-	if($field){
-		$request="SELECT name FROM nagios_$field ORDER BY name";
+	//var_dump($field);
+
+
+	if($field && $field != 'owner'){
+		switch ($field) {
+			case 'service': $column = 'description'; break;
+			case 'description': echo json_encode($hosts); return; break;
+			default: $column = 'name'; break;
+		}
+		$request="SELECT DISTINCT $column FROM nagios_$field ORDER BY $column";
+		$db = $database_lilac;
+	} elseif ($field && $field === 'owner') {
+		$request="SELECT DISTINCT owner FROM nagios_queue_$queue WHERE owner != '' ORDER BY owner";
+		$db = $database_ged;
 	}
 	else {
 		$request="SELECT name FROM nagios_host
 		UNION SELECT name from nagios_hostgroup
 		UNION SELECT name from nagios_service_group
 		ORDER BY name";
+		$db = $database_lilac;
 	}
 
-	$result=sqlrequest($database_lilac,$request);
+	//echo $request;
+	$result=sqlrequest($db,$request);
  	while ($line = mysqli_fetch_array($result)){ 
-		$hosts[]=$line[0];
+		array_push($hosts, $line[0]);
+		//$hosts[]=$line[0];
 	}
 	echo json_encode($hosts);
 }
@@ -821,7 +837,21 @@ function pieChart($queue, $field, $search, $period)
 	$search_clause = "";
 	if( isset($search) && $search != "" )
 	{
-		$search_clause = " AND $field LIKE '%$search%'";
+		switch ($field) {
+			case 'host': $field = 'equipment'; break;
+			case 'hostgroup': $field = 'hostgroups'; break;
+			case 'service_group': $field = 'servicegroups'; break;
+		}
+		$like = "'";
+		if( substr($search, 0, 1) === '*' ){
+			$like .= "%";
+		}
+		$like .= trim($search, '*');
+		if ( substr($search, -1) === '*' ) {
+			$like .= "%";
+		}
+		$like .= "'";
+		$search_clause = " AND $field LIKE $like";
 	}
 	
 	// set the period clause (according to checkboxes checked)
@@ -883,7 +913,21 @@ function barChart($queue, $field, $search)
 	$search_clause = "";
 	if( isset($search) && $search != "" )
 	{
-		$search_clause = " AND $field LIKE '%$search%'";
+		switch ($field) {
+			case 'host': $field = 'equipment'; break;
+			case 'hostgroup': $field = 'hostgroups'; break;
+			case 'service_group': $field = 'servicegroups'; break;
+		}
+		$like = "'";
+		if( substr($search, 0, 1) === '*' ){
+			$like .= "%";
+		}
+		$like .= trim($search, '*');
+		if ( substr($search, -1) === '*' ) {
+			$like .= "%";
+		}
+		$like .= "'";
+		$search_clause = " AND $field LIKE $like";
 	}
 	
 	while( $pkt = mysqli_fetch_row($pkt_result) )
@@ -953,7 +997,21 @@ function slaPieChart($field, $search, $period)
 	$search_clause = "";
 	if( isset($search) && $search != "" )
 	{
-		$search_clause = " AND $field LIKE '%$search%'";
+		switch ($field) {
+			case 'host': $field = 'equipment'; break;
+			case 'hostgroup': $field = 'hostgroups'; break;
+			case 'service_group': $field = 'servicegroups'; break;
+		}
+		$like = "'";
+		if( substr($search, 0, 1) === '*' ){
+			$like .= "%";
+		}
+		$like .= trim($search, '*');
+		if ( substr($search, -1) === '*' ) {
+			$like .= "%";
+		}
+		$like .= "'";
+		$search_clause = " AND $field LIKE $like";
 	}
 	
 	// set the period clause (according to checkboxes checked)
@@ -1022,7 +1080,21 @@ function slaBarChart($field, $search)
 	$search_clause = "";
 	if( isset($search) && $search != "" )
 	{
-		$search_clause = " AND $field LIKE '%$search%'";
+		switch ($field) {
+			case 'host': $field = 'equipment'; break;
+			case 'hostgroup': $field = 'hostgroups'; break;
+			case 'service_group': $field = 'servicegroups'; break;
+		}
+		$like = "'";
+		if( substr($search, 0, 1) === '*' ){
+			$like .= "%";
+		}
+		$like .= trim($search, '*');
+		if ( substr($search, -1) === '*' ) {
+			$like .= "%";
+		}
+		$like .= "'";
+		$search_clause = " AND $field LIKE $like";
 	}
 	
 	while( $pkt = mysqli_fetch_row($pkt_result) )

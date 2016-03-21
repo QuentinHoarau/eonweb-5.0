@@ -65,17 +65,21 @@ include("../../side.php");
 			<div class="col-md-4">
 				<div class="form-group">
 					<label>Filtre</label>
-					<select class="form-control" id="field" name="field" onchange="$('#value').focus();">
+					<select class="form-control" id="field" name="field">
 						<?php
-						for($i=0;$i<count($array_ged_filters);$i++)
-						echo "<option>$array_ged_filters[$i]</option>";
+						foreach ($array_ged_filters as $key => $value) {
+							echo "<option value='$value'>$key</option>";
+						}
 						?>
 					</select>
 				</div>
 				<div class="form-group">
-					<label>Rechercher</label>
+					<label>
+						Rechercher
+						<i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="* permet de faire une recherche sur tout" style="cursor: pointer;"></i>
+					</label>
 					<div class="input-group">
-						<input class="form-control col-md-3" id="value" name="value" type="text" autocomplete="off" onFocus='$(this).autocomplete({source: <?php echo get_host_list_from_nagios();?>})' />
+						<input class="form-control col-md-3" id="value" name="value" type="text" placeholder="*<?php echo getLabel('action.search'); ?>*"/>
 						<span class="input-group-btn">
 							<button class="btn btn-primary" type="submit"><?php echo getLabel("action.search"); ?></button>
 						</span>

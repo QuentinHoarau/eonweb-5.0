@@ -357,9 +357,52 @@ function drawSlaBarChart(div_id, datas)
 		}]
 	});
 }
+/**
+ * will adapt autocomplete list according to <select> value
+ */
+function changeAutocomplete(){
+	var field = $('#field').val();
+	var type = $('#type').val();
+	var queue = '';
+
+	if(type === 'sla'){
+		queue = 'history';
+	} else {
+		queue = 'active';
+	}
+	
+	var datas;
+	$.ajax({
+		url: 'ajax.php',
+		async: false,
+		data: {
+			field: field,
+			queue: queue
+		},
+		type: 'POST',
+		success: function(response){
+			datas = response;
+		}
+	});
+	$("#value").attr('onFocus', '$(this).autocomplete({source: ' + datas + '})');
+
+	$('#value').focus();
+}
 /* ########## END OF FUNCTIONS DECLARATION ########## */
 
 
+$(document).ready(function(){
+	changeAutocomplete();
+	$('[data-toggle="tooltip"]').tooltip();
+});
+
+// <select> change event
+$('#field').on('change', function(){
+	changeAutocomplete();
+});
+
+
+// form submit event
 $("#report-form").on('submit', function(event){
 	event.preventDefault();
 	

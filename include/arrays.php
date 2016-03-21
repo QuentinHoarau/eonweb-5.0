@@ -85,12 +85,12 @@ $array_ged_packets = array (
 );
 
 $array_ged_filters = array (
-	"equipment",
-	"service",
-	"description",
-	"hostgroups",
-	"servicegroups",
-	"owner",
+	"equipment" 	=> "host",
+	"service" 		=> "service",
+	"description" 	=> "description",
+	"hostgroups" 	=> "hostgroup",
+	"servicegroups" => "service_group",
+	"owner" 		=> "owner",
 	/* "s" */
 );
 
