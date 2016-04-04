@@ -38,6 +38,7 @@ include("../../side.php");
 	global $database_host;
 	global $database_username;
 	global $database_password;
+	global $ldap_search_begins;
 
 	$action=retrieve_form_data("action",null);
 
@@ -65,7 +66,7 @@ include("../../side.php");
 		// If mysql selected, deletion of ldap_users list and zeros of auth_settings
 		if($backend_selected=="mysql"){
 			sqlrequest("$database_eonweb","delete from ldap_users_extend");
-			$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='0',ldap_ip=null,ldap_port=null,ldap_search=null,ldap_filter=null,ldap_user=null,ldap_password=null,ldap_rdn=null");
+			$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='0',ldap_ip=null,ldap_port=null,ldap_search=null,ldap_user_filter=null,ldap_group_filter=null,ldap_user=null,ldap_password=null,ldap_rdn=null");
 		}
 		// Else (LDAP selected)
 		else{
@@ -73,7 +74,8 @@ include("../../side.php");
 			$ldap_ip=retrieve_form_data("ldap_ip",null);
 			$ldap_port=retrieve_form_data("ldap_port",null);
 			$ldap_search=retrieve_form_data("ldap_search",null);
-			$ldap_filter=retrieve_form_data("ldap_filter",null);
+			$ldap_user_filter=retrieve_form_data("ldap_user_filter",null);
+			$ldap_group_filter=retrieve_form_data("ldap_group_filter",null);
 			$ldap_user=retrieve_form_data("ldap_user",null);
 			$ldap_rdn=retrieve_form_data("ldap_rdn",null);
 			$ldap_password_new=retrieve_form_data("ldap_password",null);
@@ -100,7 +102,8 @@ include("../../side.php");
 			$ldap_ip="";
 			$ldap_port="389";
 			$ldap_search="";
-			$ldap_filter="(objectclass=person)";
+			$ldap_user_filter="(objectclass=person)";
+			$ldap_group_filter="(objectclass=group)";
 			$ldap_user="";
 			$ldap_password="";
 			$ldap_rdn="";
