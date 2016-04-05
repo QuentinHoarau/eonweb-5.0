@@ -122,7 +122,7 @@ else {
 				$ldap_password = base64_decode(mysqli_result($ldapsql,0,"ldap_password"));
 
 				$ldap_search=mysqli_result($ldapsql,0,"ldap_search");
-				$ldap_filter = mysqli_result($ldapsql,0,"ldap_filter");
+				//$ldap_filter = mysqli_result($ldapsql,0,"ldap_filter");
 				$user_location=str_replace("\\\\","\\",mysqli_result($usersql,0,"user_location"));
 
 				// connection to ldap

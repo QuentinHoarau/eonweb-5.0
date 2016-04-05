@@ -50,7 +50,9 @@ include("../../side.php");
 		$ldap_ip=mysqli_result($sqlresult,0,"ldap_ip");
 		$ldap_port=mysqli_result($sqlresult,0,"ldap_port");
 		$ldap_search=mysqli_result($sqlresult,0,"ldap_search");
-		$ldap_filter=mysqli_result($sqlresult,0,"ldap_filter");
+		//$ldap_filter=mysqli_result($sqlresult,0,"ldap_filter");
+		$ldap_user_filter=mysqli_result($sqlresult,0,"ldap_user_filter");
+		$ldap_group_filter=mysqli_result($sqlresult,0,"ldap_group_filter");
 		$ldap_user=mysqli_result($sqlresult,0,"ldap_user");
 		$ldap_password=mysqli_result($sqlresult,0,"ldap_password");
 		$ldap_rdn=mysqli_result($sqlresult,0,"ldap_rdn");
@@ -66,6 +68,7 @@ include("../../side.php");
 		// If mysql selected, deletion of ldap_users list and zeros of auth_settings
 		if($backend_selected=="mysql"){
 			sqlrequest("$database_eonweb","delete from ldap_users_extend");
+			//$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='0',ldap_ip=null,ldap_port=null,ldap_search=null,ldap_user_filter=null,ldap_group_filter=null,ldap_user=null,ldap_password=null,ldap_rdn=null");
 			$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='0',ldap_ip=null,ldap_port=null,ldap_search=null,ldap_user_filter=null,ldap_group_filter=null,ldap_user=null,ldap_password=null,ldap_rdn=null");
 		}
 		// Else (LDAP selected)
@@ -87,11 +90,13 @@ include("../../side.php");
 			if($ldap_password==$ldap_password_new) { $ldap_password=$ldap_password_new; }
 			else { $ldap_password=base64_encode($ldap_password_new); }
 
-			if($ldap_ip=="" || $ldap_port=="" || $ldap_search=="" || $ldap_rdn=="" || $ldap_filter=="") {
+			//if($ldap_ip=="" || $ldap_port=="" || $ldap_search=="" || $ldap_rdn=="" || $ldap_filter=="") {
+			if($ldap_ip=="" || $ldap_port=="" || $ldap_search=="" || $ldap_rdn=="" || $ldap_user_filter=="" || $ldap_group_filter==""){
 				message(7," : All fields are necessary","warning");
 			}
 			else {
-				$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='1',ldap_ip='$ldap_ip',ldap_port='$ldap_port',ldap_search='$ldap_search',ldap_filter='$ldap_filter',ldap_user='$ldap_user',ldap_password='$ldap_password',ldap_rdn='$ldap_rdn'");
+				//$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='1',ldap_ip='$ldap_ip',ldap_port='$ldap_port',ldap_search='$ldap_search',ldap_filter='$ldap_filter',ldap_user='$ldap_user',ldap_password='$ldap_password',ldap_rdn='$ldap_rdn'");
+				$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='1',ldap_ip='$ldap_ip',ldap_port='$ldap_port',ldap_search='$ldap_search',ldap_user_filter='$ldap_user_filter',ldap_group_filter='$ldap_group_filter',ldap_user='$ldap_user',ldap_password='$ldap_password',ldap_rdn='$ldap_rdn'");
 			}
 		}
 		// In any case
@@ -112,7 +117,9 @@ include("../../side.php");
 			$ldap_ip=mysqli_result($sqlresult1,0,"ldap_ip");
 			$ldap_port=mysqli_result($sqlresult1,0,"ldap_port");
 			$ldap_search=mysqli_result($sqlresult1,0,"ldap_search");
-			$ldap_filter=mysqli_result($sqlresult1,0,"ldap_filter");
+			//$ldap_filter=mysqli_result($sqlresult1,0,"ldap_filter");
+			$ldap_user_filter=mysqli_result($sqlresult1,0,"ldap_user_filter");
+			$ldap_group_filter=mysqli_result($sqlresult1,0,"ldap_group_filter");
 			$ldap_user=mysqli_result($sqlresult1,0,"ldap_user");
 			$ldap_password=mysqli_result($sqlresult1,0,"ldap_password");
 			$ldap_rdn=mysqli_result($sqlresult1,0,"ldap_rdn");
@@ -146,15 +153,19 @@ include("../../side.php");
 
 				// LDAP is case insensitive (RFC 2251)
 				$total=0;	
-				foreach (array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6','7','8','9','0') as $c){
-
-					$ldap_current_filter=str_replace(")",")(name=".$c."*))",$ldap_filter);
-					$ldap_current_filter="(&".$ldap_current_filter;
+				//foreach (array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6','7','8','9','0') as $c){
+				foreach ($ldap_search_begins as $c){
+					//$ldap_current_filter=str_replace(")",")(name=".$c."*))",$ldap_filter);
+					//$ldap_current_filter="(&".$ldap_current_filter;
+					$ldap_current_filter="(&".$ldap_user_filter."(name=".$c."*))";
 
 					//message(6,"Listing ".$c."* users ","ok");
 
 					$sr=ldap_search($ldapconn, $ldap_search, $ldap_current_filter, array("dn" ,"$ldap_rdn","name"));
+					//$info = ldap_get_entries($ldapconn, $sr);
+					//if($info){
 					$info = ldap_get_entries($ldapconn, $sr);
+                    
 					if($info){
 						$total=$total+$info["count"];
 	
@@ -170,25 +181,32 @@ include("../../side.php");
 									//message(6,"INSERTED: $dn","ok");
 							}
 						}
-					}
-					else
-						message(6," : No LDAP entry found","info");
+					}	
+        	        else
+                	   	message(6," : No LDAP entry found","info");
 				}
 				
-				$total_groups=0;
-				$sr=ldap_search($ldapconn, $ldap_search, "(objectclass=group)", array("dn" ,"name"));
-				$info = ldap_get_entries($ldapconn, $sr);
-				if($info){
-					$total_groups=$total_groups+$info["count"];
+				$total_groups=0;			
+				foreach ($ldap_search_begins as $c){
+				
+					$ldap_current_filter="(&".$ldap_group_filter."(name=".$c."*))";
 
-					for($i=0;$i<$info["count"];$i++){
-						$dn=str_replace("\\,","\\\\,",$info[$i]["dn"]);
-						$dn=str_replace("\\2C","\\\\\\\\,",$dn);
-						$dn=str_replace('\'', '\\\'', $dn);
-						$groupname=$info[$i]["name"][0];
-						$resq=mysqli_query($connexion, "UPDATE ldap_groups_extended SET dn='".$dn."', group_name='".$groupname."', checked=1 where dn='".$dn."'");
-						if($resq[0]==0){
-							mysqli_query($connexion, "INSERT INTO ldap_groups_extended VALUES('".$dn."','".$groupname."',1)");
+					$sr=ldap_search($ldapconn, $ldap_search, $ldap_current_filter, array("dn" ,"name"));
+					
+					$info = ldap_get_entries($ldapconn, $sr);
+				
+					if($info){
+						$total_groups=$total_groups+$info["count"];
+
+						for($i=0;$i<$info["count"];$i++){
+							$dn=str_replace("\\,","\\\\,",$info[$i]["dn"]);
+							$dn=str_replace("\\2C","\\\\\\\\,",$dn);
+							$dn=str_replace('\'', '\\\'', $dn);
+							$groupname=$info[$i]["name"][0];
+							$resq=mysqli_query($connexion, "UPDATE ldap_groups_extended SET dn='".$dn."', group_name='".$groupname."', checked=1 where dn='".$dn."'");
+							if($resq[0]==0){
+								mysqli_query($connexion, "INSERT INTO ldap_groups_extended VALUES('".$dn."','".$groupname."',1)");
+							}
 						}
 					}
 				}
@@ -268,14 +286,33 @@ include("../../side.php");
 				</div>
 				<br>
 				<div class="row">
-					<label class="col-md-3"><?php echo getLabel("label.admin_auth.search_filter"); ?></label>
+					<!-- <label class="col-md-3"><?php echo getLabel("label.admin_auth.search_filter"); ?></label> -->
+					<label class="col-md-3"><?php echo getLabel("label.admin_auth.search_user_filter"); ?></label>
 					<div class="col-md-9">
-					<input type="text" name="ldap_filter" class="form-control"
+					<!-- <input type="text" name="ldap_filter" class="form-control" -->
+					<input type="text" name="ldap_user_filter" class="form-control"
 						<?php
-							if(isset($ldap_filter))
-								echo 'value="'.$ldap_filter.'"';
+							/*if(isset($ldap_filter))
+								echo 'value="'.$ldap_filter.'"';*/
+							if(isset($ldap_user_filter))
+								echo 'value="'.$ldap_user_filter.'"';
 							else
 								echo 'value="(objectclass=person)"';
+						?>>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<!-- <label class="col-md-3"><?php echo getLabel("label.admin_auth.search_filter"); ?></label> -->
+					<label class="col-md-3"><?php echo getLabel("label.admin_auth.search_group_filter"); ?></label>
+					<div class="col-md-9">
+					<!-- <input type="text" name="ldap_filter" class="form-control" -->
+					<input type="text" name="ldap_group_filter" class="form-control"
+						<?php
+							if(isset($ldap_group_filter))
+								echo 'value="'.$ldap_group_filter.'"';
+							else
+								echo 'value="(objectclass=group)"';
 						?>>
 					</div>
 				</div>
