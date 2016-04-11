@@ -32,22 +32,34 @@ function message($id, $text, $type){
 	if(isset($array_msg[$id])) { $tempid=$array_msg[$id]; } 
 	else { $tempid=""; }
 	
-	// Display the message
+	// Define the message type and icon
 	switch($type)
 	{
 		case "critical":
-			echo "<p class='alert alert-danger'><i class='fa fa-exclamation-circle'></i> $tempid $text</p>";
+			$alert_type = "danger";
+			$alert_icon = "fa-exclamation-circle";
 			break;
 		case "warning":
-			echo "<p class='alert alert-warning'><i class='fa fa-warning'></i> $tempid $text</p>";
+			$alert_type = "warning";
+			$alert_icon = "fa-warning";
 			break;
    		case "ok":
-			echo "<p class='alert alert-success'><i class='fa fa-check-circle'></i> $tempid $text</p>";
+   			$alert_type = "success";
+			$alert_icon = "fa-check-circle";
 			break;
 		default:
-			echo "<p class='alert alert-info'><i class='fa fa-info-circle'></i> $tempid $text</p>";
-			break;			
+			$alert_type = "info";
+			$alert_icon = "fa-info-circle";
+			break;
 	}
+
+	// Display the message
+	echo "<p class='alert alert-dismissible alert-".$alert_type." fade in'>
+			<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+			  <span aria-hidden='true'>&times;</span>
+			</button>
+			<i class='fa ".$alert_icon."'></i> $tempid $text
+		  </p>";
 }
 
 // Connect to Database

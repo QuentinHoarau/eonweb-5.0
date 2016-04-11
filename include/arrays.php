@@ -43,7 +43,9 @@ $array_tools = array (
 
 $array_group_mgt = array (
     "label.admin_group.select_add" => "add_group",
-	"label.admin_group.select_del" => "delete_group");
+	"label.admin_group.select_del" => "delete_group",
+	"label.admin_group.select_import" => "import_user",
+	);
 
 $array_user_mgt = array (
 	"label.admin_user.select_add" => "add_user",

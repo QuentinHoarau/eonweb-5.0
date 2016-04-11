@@ -50,7 +50,6 @@ include("../../side.php");
 		$ldap_ip=mysqli_result($sqlresult,0,"ldap_ip");
 		$ldap_port=mysqli_result($sqlresult,0,"ldap_port");
 		$ldap_search=mysqli_result($sqlresult,0,"ldap_search");
-		//$ldap_filter=mysqli_result($sqlresult,0,"ldap_filter");
 		$ldap_user_filter=mysqli_result($sqlresult,0,"ldap_user_filter");
 		$ldap_group_filter=mysqli_result($sqlresult,0,"ldap_group_filter");
 		$ldap_user=mysqli_result($sqlresult,0,"ldap_user");
@@ -68,7 +67,6 @@ include("../../side.php");
 		// If mysql selected, deletion of ldap_users list and zeros of auth_settings
 		if($backend_selected=="mysql"){
 			sqlrequest("$database_eonweb","delete from ldap_users_extend");
-			//$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='0',ldap_ip=null,ldap_port=null,ldap_search=null,ldap_user_filter=null,ldap_group_filter=null,ldap_user=null,ldap_password=null,ldap_rdn=null");
 			$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='0',ldap_ip=null,ldap_port=null,ldap_search=null,ldap_user_filter=null,ldap_group_filter=null,ldap_user=null,ldap_password=null,ldap_rdn=null");
 		}
 		// Else (LDAP selected)
@@ -89,13 +87,11 @@ include("../../side.php");
 
 			if($ldap_password==$ldap_password_new) { $ldap_password=$ldap_password_new; }
 			else { $ldap_password=base64_encode($ldap_password_new); }
-
-			//if($ldap_ip=="" || $ldap_port=="" || $ldap_search=="" || $ldap_rdn=="" || $ldap_filter=="") {
+			
 			if($ldap_ip=="" || $ldap_port=="" || $ldap_search=="" || $ldap_rdn=="" || $ldap_user_filter=="" || $ldap_group_filter==""){
 				message(7," : All fields are necessary","warning");
 			}
 			else {
-				//$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='1',ldap_ip='$ldap_ip',ldap_port='$ldap_port',ldap_search='$ldap_search',ldap_filter='$ldap_filter',ldap_user='$ldap_user',ldap_password='$ldap_password',ldap_rdn='$ldap_rdn'");
 				$sqlresult=sqlrequest("$database_eonweb","update auth_settings set auth_type='1',ldap_ip='$ldap_ip',ldap_port='$ldap_port',ldap_search='$ldap_search',ldap_user_filter='$ldap_user_filter',ldap_group_filter='$ldap_group_filter',ldap_user='$ldap_user',ldap_password='$ldap_password',ldap_rdn='$ldap_rdn'");
 			}
 		}
@@ -117,7 +113,6 @@ include("../../side.php");
 			$ldap_ip=mysqli_result($sqlresult1,0,"ldap_ip");
 			$ldap_port=mysqli_result($sqlresult1,0,"ldap_port");
 			$ldap_search=mysqli_result($sqlresult1,0,"ldap_search");
-			//$ldap_filter=mysqli_result($sqlresult1,0,"ldap_filter");
 			$ldap_user_filter=mysqli_result($sqlresult1,0,"ldap_user_filter");
 			$ldap_group_filter=mysqli_result($sqlresult1,0,"ldap_group_filter");
 			$ldap_user=mysqli_result($sqlresult1,0,"ldap_user");
@@ -128,9 +123,8 @@ include("../../side.php");
 			$ldapconn=ldap_connect($ldap_ip,$ldap_port);
 			ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
 			ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0);
-			
 			$ldapbind=ldap_bind($ldapconn, $ldap_user, base64_decode($ldap_password));
-
+			
 			if($ldapbind){
 				message(6," : LDAP Connection Succeed","ok");
 				// Set all ldap_users as unchecked
@@ -152,18 +146,11 @@ include("../../side.php");
 				mysqli_query($connexion,"SET NAMES 'utf8'");
 
 				// LDAP is case insensitive (RFC 2251)
-				$total=0;	
-				//foreach (array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6','7','8','9','0') as $c){
+				$total=0;
 				foreach ($ldap_search_begins as $c){
-					//$ldap_current_filter=str_replace(")",")(name=".$c."*))",$ldap_filter);
-					//$ldap_current_filter="(&".$ldap_current_filter;
 					$ldap_current_filter="(&".$ldap_user_filter."(name=".$c."*))";
 
-					//message(6,"Listing ".$c."* users ","ok");
-
 					$sr=ldap_search($ldapconn, $ldap_search, $ldap_current_filter, array("dn" ,"$ldap_rdn","name"));
-					//$info = ldap_get_entries($ldapconn, $sr);
-					//if($info){
 					$info = ldap_get_entries($ldapconn, $sr);
                     
 					if($info){
@@ -175,10 +162,9 @@ include("../../side.php");
 							$dn=str_replace('\'', '\\\'', $dn);
 							$username=$info[$i]["name"][0];
 							$resq=mysqli_query($connexion, "UPDATE ldap_users_extended SET dn='".$dn."', login='".$info[$i][$ldap_rdn]["0"]."', user='".$username."', checked=1 where dn='".$dn."'");
-							//$resq=mysqli_fetch_array($resq);
+							
 							if($resq[0]==0){
-									mysqli_query($connexion, "INSERT INTO ldap_users_extended VALUES('".$dn."','".$info[$i][$ldap_rdn]["0"]."','".$username."',1)");
-									//message(6,"INSERTED: $dn","ok");
+								mysqli_query($connexion, "INSERT INTO ldap_users_extended VALUES('".$dn."','".$info[$i][$ldap_rdn]["0"]."','".$username."',1)");
 							}
 						}
 					}	
@@ -286,14 +272,10 @@ include("../../side.php");
 				</div>
 				<br>
 				<div class="row">
-					<!-- <label class="col-md-3"><?php echo getLabel("label.admin_auth.search_filter"); ?></label> -->
 					<label class="col-md-3"><?php echo getLabel("label.admin_auth.search_user_filter"); ?></label>
 					<div class="col-md-9">
-					<!-- <input type="text" name="ldap_filter" class="form-control" -->
 					<input type="text" name="ldap_user_filter" class="form-control"
 						<?php
-							/*if(isset($ldap_filter))
-								echo 'value="'.$ldap_filter.'"';*/
 							if(isset($ldap_user_filter))
 								echo 'value="'.$ldap_user_filter.'"';
 							else
@@ -303,10 +285,8 @@ include("../../side.php");
 				</div>
 				<br>
 				<div class="row">
-					<!-- <label class="col-md-3"><?php echo getLabel("label.admin_auth.search_filter"); ?></label> -->
 					<label class="col-md-3"><?php echo getLabel("label.admin_auth.search_group_filter"); ?></label>
 					<div class="col-md-9">
-					<!-- <input type="text" name="ldap_filter" class="form-control" -->
 					<input type="text" name="ldap_group_filter" class="form-control"
 						<?php
 							if(isset($ldap_group_filter))
