@@ -136,7 +136,7 @@
 	"label.capacity_per_device.week": "Semaine",
 	"label.capacity_per_device.year": "Année",
 	"label.capacity_per_label.title": "Capacité par métrique",
-	"label.footer.message": "produit sous GPL2 sponsorisé par AXIANS",
+	"label.footer.message": "produit sous licence GPL2, sponsorisé par AXIANS",
 	"label.home_about.bundle1": "EyesOfNetwork est une solution complète de supervision du système d'informations.",
 	"label.home_about.bundle2": "EyesOfNetwork Supervision est la première brique d’une gamme de produits bâtie autour de la gestion des évènements, de la disponibilité, des problèmes et de la capacité.",
 	"label.home_about.bundle3": "Parmi les fonctionnalités de la solution",
