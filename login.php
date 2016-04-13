@@ -31,16 +31,18 @@ function display_login(){
 			<div class="img col-md-4 col-md-offset-4">
 				<div class="login-panel panel panel-default">
 					<div class="panel-heading">
-						<img class="img-responsive center-block" src="images/logo.png" alt="logo eyesofnetwork">
+						<img class="img-responsive center-block login-logo" src="images/logo.png" alt="logo eyesofnetwork">
 					</div>
 					<div class="panel-body">
 						<form action="login.php" method="POST">
 							<fieldset>
-								<div class="form-group">
-									<input class="form-control" type="text" autofocus="" name="login" placeholder="'. getLabel("label.placeholder.username") .'">
+								<div class="form-group input-group">
+									<span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-user"></i></span>
+									<input class="form-control" type="text" autofocus="" name="login" placeholder="'. getLabel("label.placeholder.username") .'" aria-describedby="basic-addon1">
 								</div>
-								<div class="form-group">
-									<input class="form-control" type="password" value="" name="mdp" placeholder="'. getLabel("label.placeholder.password") .'">
+								<div class="form-group input-group">
+									<span class="input-group-addon" id="basic-addon2"><i class="glyphicon glyphicon-lock"></i></span>
+									<input class="form-control" type="password" value="" name="mdp" placeholder="'. getLabel("label.placeholder.password") .'" aria-describedby="basic-addon2">
 								</div>
 								<button type="submit" class="btn btn-lg btn-primary btn-block">'. getLabel("action.connect") .'</button>
 							</fieldset>
@@ -68,7 +70,7 @@ if(isset($_COOKIE['user_name'])){
 							+	'<div class="img col-md-4 col-md-offset-4">'
 							+		'<div class="login-panel panel panel-default">'
 							+			'<div class="panel-heading">'
-							+				'<img class="img-responsive center-block" src="images/logo.png" alt="logo eyesofnetwork">'
+							+				'<img class="img-responsive center-block imb-logo login-logo" src="images/logo.png" alt="logo eyesofnetwork">'
 							+			'</div>'
 							+			'<div class="panel-body">'
 							+				'<div class="alert alert-info">Vous etes deja connecté en tant que : <?php echo $_COOKIE["user_name"]; ?></div>'
