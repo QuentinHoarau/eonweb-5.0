@@ -187,7 +187,6 @@ include("../../side.php");
 
 	<div id="loading">
 		<h2>Loading, please wait ...</h2><br>
-		<img src="/images/actions/ajax-loader.gif" alt="ajax-loader">
 	</div>
 
 	<?php if($user_id) { ?>

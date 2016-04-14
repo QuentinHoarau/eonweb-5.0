@@ -67,6 +67,7 @@
 	"label.ldap_usr_list": "LDAP users list",
 	"label.group": "Group",
 	"label.import_list": "Import list",
+	"label.period": "Period",
 	"label.datatable.info": "Showing _START_ to _END_ of _TOTAL_ entries",
 	"label.datatable.infoempty": "Showing 0 to 0 of 0 entries",
 	"label.datatable.infofiltered": "(filtered from _MAX_ total entries)",

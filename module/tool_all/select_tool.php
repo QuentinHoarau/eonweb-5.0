@@ -68,8 +68,7 @@ if($tool_list != "")
 			echo "<meta http-equiv='Refresh' content='0;URL=$url_tool?host=$host&host_name=$host&snmp_version=$snmp_version&snmp_com=$snmp_com& max_port=$max_port&min_port=$min_port&username=".$username."&password=".$password."&snmp_auth_protocol=".$snmp_auth_protocol."&snmp_priv_passphrase=".$snmp_priv_passphrase."&snmp_priv_protocol=".$snmp_priv_protocol."&snmp_context=".$snmp_context."'>";
 			echo "</head>";
 			echo "<body id='main'>";		 
-			echo "<h2>Loading, please wait ...</h2><br>";
-			echo "<img src='/images/actions/ajax-loader.gif' alt='ajax-loader'>";  
+			echo "<h2>Loading, please wait ...</h2>";
 		}
 	}	
 }

@@ -197,17 +197,13 @@ include("../../side.php");
 
 	<div id="result"></div>
 
-	<div id="loading-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	<div id="loading-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog">
 		<div class="modal-dialog modal-sm" style="width: 66px;">
 			<div class="modal-content">
 				<img src="/images/loader.gif" alt="loading">
 			</div>
 		</div>
 	</div>
-
-	<!-- <div class="modal-dialog" id="loading-modal">
-		<img src="/images/loader.gif" alt="loading">
-	</div> -->
 
 </div>
 	

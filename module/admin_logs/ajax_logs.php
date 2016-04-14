@@ -50,7 +50,7 @@ $results = sqlrequest($database_eonweb,$sql);
 	<table class="table table-striped datatable-eonweb table-condensed">
 		<thead>
 			<tr>
-				<th>Date</th>
+				<th class="col-md-4">Date</th>
 				<th class="col-md-2"><?php echo getLabel("label.user"); ?></th>
 				<th class="col-md-2">Module</th>
 				<th>Description</th>
