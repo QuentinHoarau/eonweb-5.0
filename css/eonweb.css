@@ -133,3 +133,19 @@
 	overflow: hidden;
 	display: none;
 }
+
+/*
+ * ------------------------------------------------------------------------
+ * Datatable responsive
+ * ------------------------------------------------------------------------
+*/
+
+.datatable-eonweb {
+	border-spacing : 0 !important;
+	width: 100% !important;
+}
+
+.dataTables_filter .form-control {
+	width: auto !important;
+}
+
