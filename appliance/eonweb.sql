@@ -30,7 +30,8 @@ CREATE TABLE `auth_settings` (
   `ldap_user` varchar(255) DEFAULT NULL,
   `ldap_password` varchar(255) DEFAULT NULL,
   `ldap_rdn` varchar(255) DEFAULT NULL,
-  `ldap_filter` varchar(255) DEFAULT NULL,
+  `ldap_user_filter` varchar(255) DEFAULT NULL,
+  `ldap_group_filter` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`auth_type`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -41,7 +42,7 @@ CREATE TABLE `auth_settings` (
 
 LOCK TABLES `auth_settings` WRITE;
 /*!40000 ALTER TABLE `auth_settings` DISABLE KEYS */;
-INSERT INTO `auth_settings` VALUES (0,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `auth_settings` VALUES (0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `auth_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
