@@ -43,6 +43,17 @@ $(document).ready(function() {
 
 		uncheckSqlGroups();
 		var grp_names = getSelectedGroups();
+		
+		if(grp_names.length < 1){
+			$("#errors").html("<p class='alert alert-dismissible alert-warning fade in'>"
+								+	"<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"
+								+	  "<span aria-hidden='true'>&times;</span>"
+								+	"</button>"
+								+	"<i class='fa fa-warning'> "
+								+	" Aucun groupe n'a été choisit"
+							   +"</p>");
+			return;
+		}
 
 		$.ajax({
 			url: 'ajax.php',

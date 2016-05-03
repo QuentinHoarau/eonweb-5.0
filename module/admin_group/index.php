@@ -87,6 +87,8 @@ include("../../side.php");
 	}
 	if( isset($_POST['action']) && $_POST['action'] == "import" ){
 		if(!empty($_POST['import_list'])){
+			$errors_names = array();
+			$nbr_ok = 0;
 			foreach ($_POST['import_list'] as $key => $value) {
 				$infos = explode("::", $value);
 				$usrname = $infos[0];
@@ -103,8 +105,15 @@ include("../../side.php");
 				$query = sqlrequest($database_eonweb, $sql);
 				$usergroup = mysqli_result($query,0,"group_id");
 
-				insert_user(stripAccents($usrname), $userdesc, $usergroup, $user_password1, $user_password2, $usrtype, $usrlocation,$usrmail,$usrlimitation, true);
+				$test = insert_user(stripAccents($usrname), $userdesc, $usergroup, $user_password1, $user_password2, $usrtype, $usrlocation,$usrmail,$usrlimitation, false);
+				
+				if( is_null($test) ){
+					array_push($errors_names, $usrname);
+				} else {
+					$nbr_ok++;
+				}
 			}
+			message(8, " : " . $nbr_ok . " import(s) OK", "ok");
 		}
 	}
 
