@@ -20,8 +20,8 @@
 #########################################
 */
 
-include("../../header.php");
-include("../../side.php");
+include("header.php");
+include("side.php");
 
 ?>
 
@@ -61,7 +61,7 @@ include("../../side.php");
 		}	
 	?>
 	
-	<form action='./index.php' method='POST' name='form_user'>
+	<form method='POST' name='form_user'>
 		<div class="form-group">
 			<div class="row">
 				<label class="col-md-3"><?php echo getLabel("label.monitoring_passwd.pwd"); ?></label>
@@ -79,7 +79,7 @@ include("../../side.php");
 			</div>
 		</div>
 		<button class='btn btn-primary' type='submit' name='update' value='update'><?php echo getLabel("action.update"); ?></button>
-		<button id="back_btn" class='btn btn-default' type='button'><?php echo getLabel("action.cancel"); ?></button>
+		<button id="back_btn" class='btn btn-default' type='button' onclick='history.go(-1);'><?php echo getLabel("action.cancel"); ?></button>
 	</form>
 
 </div> <!-- !#page-wrapper -->
