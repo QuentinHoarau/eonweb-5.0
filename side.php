@@ -23,7 +23,6 @@
 $m = new Translator();
 $m::initFile($path_menus,$path_menus_custom);
 $menus = $m::createPHPDictionnary();
-
 ?>
 
 <!-- Nav menu -->
@@ -47,7 +46,7 @@ $menus = $m::createPHPDictionnary();
 				<i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
 			</a>
 			<ul class="dropdown-menu dropdown-user">
-				<li><a href="/module/monitoring_passwd/index.php"><i class="fa fa-user fa-fw"></i> <?php echo getLabel("menu.user.profile"); ?></a>
+				<li><a href="/password.php"><i class="fa fa-user fa-fw"></i> <?php echo getLabel("menu.user.profile"); ?></a>
 				</li>
 				<li class="divider"></li>
 				<li><a href="/logout.php"><i class="fa fa-sign-out fa-fw"></i> <?php echo getLabel("menu.user.disconnect"); ?></a>
@@ -88,6 +87,20 @@ $menus = $m::createPHPDictionnary();
 						<span class="fa arrow"></span>
 					</a>
 					<ul class="nav nav-second-level collapse">
+					<?php
+					foreach($menutab as $key => $value){
+						if($key == "link"){
+							foreach($value as $index => $item){	
+								$url=$item["url"];
+								if($item["target"]=="_blank") { $url=$url.'" target="_blank'; }
+								elseif($item["target"]=="frame") { $url=$path_frame.urlencode($item["url"]); }
+					?>
+					<li><a href="<?php echo $url; ?>"><?php echo getLabel($item["name"]); ?></a></li>
+					<?php 
+							}
+						} elseif($key == "menusubtab") {
+					?>
+					
 						<?php foreach($menutab["menusubtab"] as $menusubtab) { ?>
 						<li>
 							<a href="#"><?php echo getLabel($menusubtab["name"]); ?> <span class="fa arrow"></span> </a>
@@ -105,6 +118,11 @@ $menus = $m::createPHPDictionnary();
 							</ul>
 						</li>
 						<?php } ?>
+					
+					<?php 
+						}
+					}
+					?>
 					</ul>
 				</li>
 				<?php } ?>

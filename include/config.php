@@ -54,8 +54,8 @@ $datepurge="-1 month";
 
 // # Menu Config
 // You can view tabid in eonweb database
-$defaulttab=2;
-$defaultpage="./module/monitoring_view/index.php";
+$defaulttab=1;
+$defaultpage="./module/dashboard_view/index.php";
 
 // # Max number of lines in a tablesorter
 $maxlines=100;
@@ -89,7 +89,7 @@ $max_dup = 9999;
 // # Define All Path
 $path_eon="/srv/eyesofnetwork";
 $path_eonweb="$path_eon/eonweb";
-$path_frame="/module/monitoring_frame/index.php?url=";
+$path_frame="/module/module_frame/index.php?url=";
 $dir_imgcache="cache";
 $path_languages="$path_eonweb/include/languages";
 $path_messages="$path_languages/messages";

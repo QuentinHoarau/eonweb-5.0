@@ -1,3 +1,4 @@
+<?php
 /*
 #########################################
 #
@@ -19,30 +20,16 @@
 #########################################
 */
 
-var path_frame="/module/module_frame/index.php?url=";
-var path_nagios_cgi="/thruk/cgi-bin";
-var path_nagios_status=path_nagios_cgi+"/status.cgi";
+include("../../header.php");
+include("../../side.php");
 
-var graph_color = {
-	ok: "#00CC33",
-	warning: "#FFA500",
-	critical: "#FF3300",
-	unknown: "#CC77C6"
-}
+$url=retrieve_form_data("url",null);
 
-var barChart_active_categories = [
-	'0 ~ 5min',
-	'5 ~ 15min',
-	'15 ~ 30min',
-	'30min ~ 1h',
-	'more'
-];
+?>
 
-
-var barChart_history_categories = [
-	'day',
-	'week',
-	'month',
-	'year',
-	'more'
-];
+<div id="page-wrapper">
+	<iframe style="display:none;"></iframe>
+	<iframe class="iframe" src="<?php echo $url; ?>"></iframe>
+</div>
+	
+<?php include("../../footer.php"); ?>
