@@ -38,6 +38,6 @@ $(function() {
 		$(".iframe").css("left",leftOffset);
 		$(".iframe").height(height-$(".footer").height());
 		$(".iframe").width(width-leftOffset);
-		$(".iframe").css("display","unset");
+		$(".iframe").css("display","block");
 	});
 });

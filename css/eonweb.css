@@ -32,6 +32,9 @@
 }
 
 @media(min-width:768px) {
+	body {
+		overflow-x: hidden;
+	}
 	#page-wrapper {
 		margin: 0 0 0 200px;
 	}
