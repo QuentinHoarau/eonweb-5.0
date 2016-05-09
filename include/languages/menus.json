@@ -1,6 +1,6 @@
 {
     "menutab":[
-		{
+        {
             "id":"1",
             "name":"menu.tab.dashboards",
             "icon":"fa fa-dashboard",
@@ -113,11 +113,6 @@
                             "target":"frame"
                         },
                         {
-                            "name":"menu.link.app",
-                            "url":"/module/admin_bp/index.php",
-                            "target":"main"
-                        },
-                        {
                             "name":"menu.link.impact_view",
                             "url":"/nagiosbp/cgi-bin/nagios-bp.cgi?mode=bi",
                             "target":"frame"
@@ -179,7 +174,7 @@
                     "target":"frame"
                 },
                 {
-                    "name":"menu.link.equipments",
+                    "name":"menu.link.tools",
                     "url":"/module/tool_all/index.php",
                     "target":"main"
                 }
@@ -255,6 +250,21 @@
                     "target":"frame"
                 },
                 {
+                    "name":"menu.link.equipments",
+                    "url":"/lilac/hosts.php",
+                    "target":"frame"
+                },
+                {
+                    "name":"menu.link.models",
+                    "url":"/lilac/templates.php",
+                    "target":"frame"
+                },
+                {
+                    "name":"menu.link.app",
+                    "url":"/module/admin_bp/index.php",
+                    "target":"main"
+                },
+                {
                     "name":"menu.link.apply_conf",
                     "url":"/lilac/export.php",
                     "target":"frame"
@@ -295,26 +305,6 @@
                     "name":"menu.subtab.nagios",
                     "link":[
                         {
-                            "name":"menu.link.equipments",
-                            "url":"/lilac/hosts.php",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.models",
-                            "url":"/lilac/templates.php",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.app",
-                            "url":"/module/admin_bp/index.php",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.notif",
-                            "url":"/module/admin_files/index.php?file=notification",
-                            "target":"main"
-                        },
-                        {
                             "name":"menu.link.csv_deployment",
                             "url":"/module/admin_import_device/",
                             "target":"main"
@@ -325,8 +315,18 @@
                             "target":"main"
                         },
                         {
+                            "name":"menu.link.notif",
+                            "url":"/module/admin_files/index.php?file=notification",
+                            "target":"main"
+                        },
+                        {
                             "name":"menu.link.nagios_reports",
                             "url":"/module/admin_conf/",
+                            "target":"main"
+                        },
+                        {
+                            "name":"menu.link.execution",
+                            "url":"/thruk/cgi-bin/extinfo.cgi?type=4",
                             "target":"main"
                         }
                     ]
