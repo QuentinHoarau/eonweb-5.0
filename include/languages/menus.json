@@ -2,151 +2,63 @@
     "menutab":[
         {
             "id":"1",
-            "name":"menu.tab.project",
-			"icon":"fa fa-question-circle",
-            "menusubtab":[
+            "name":"menu.tab.dashboards",
+            "icon":"fa fa-dashboard",
+            "link":[
                 {
-                    "name":"menu.subtab.about",
-                    "link":[
-                        {
-                            "name":"menu.link.eyesofnetwork",
-                            "url":"/module/home_about/",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.website",
-                            "url":"http://www.eyesofnetwork.com",
-                            "target":"_blank"
-                        }
-                    ]
+                    "name":"menu.link.dashboard",
+                    "url":"/module/dashboard_view/",
+                    "target":"main"
                 },
                 {
-                    "name":"menu.subtab.components",
-                    "link":[
-                        {
-                            "name":"menu.link.centos",
-                            "url":"http://www.centos.org/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.ged",
-                            "url":"http://generic-ed.sourceforge.net/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.thruk",
-                            "url":"http://www.thruk.org/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.nagios",
-                            "url":"http://www.nagios.org/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.nagiosbp",
-                            "url":"http://bp-addon.monitoringexchange.org/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.cacti",
-                            "url":"http://www.cacti.net/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.snmptt",
-                            "url":"http://www.snmptt.org/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.nagvis",
-                            "url":"http://www.nagvis.org/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.weathermap",
-                            "url":"http://www.network-weathermap.com/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.pnp4nagios",
-                            "url":"http://www.pnp4nagios.org/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.glpi",
-                            "url":"http://www.glpi-project.org/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.ocsinventory_ng",
-                            "url":"http://www.ocsinventory-ng.org/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.fusion_inventory",
-                            "url":"http://fusioninventory.org/",
-                            "target":"_blank"
-                        }
-                    ]
+                    "name":"menu.link.technical_table",
+                    "url":"/thruk/cgi-bin/tac.cgi",
+                    "target":"frame"
+                },
+                {
+                    "name":"menu.link.panorama",
+                    "url":"/thruk/cgi-bin/panorama.cgi",
+                    "target":"_blank"
+                },
+                {
+                    "name":"menu.link.thruk",
+                    "url":"/thruk/cgi-bin/statusmap.cgi",
+                    "target":"frame"
+                },
+                {
+                    "name":"menu.link.nagvis",
+                    "url":"/nagvis",
+                    "target":"frame"
+                },
+                {
+                    "name":"menu.link.network",
+                    "url":"/cacti/plugins/weathermap/weathermap-cacti-plugin.php?action=",
+                    "target":"_blank"
                 }
             ]
         },
         {
             "id":"2",
             "name":"menu.tab.dispo",
-			"icon":"fa fa-sitemap",
+            "icon":"fa fa-sitemap",
+            "link":[
+                {
+                    "name":"menu.link.problems",
+                    "url":"/thruk/cgi-bin/status.cgi?style=combined&hst_s0_hoststatustypes=4&hst_s0_servicestatustypes=31&hst_s0_hostprops=10&hst_s0_serviceprops=0&svc_s0_hoststatustypes=3&svc_s0_servicestatustypes=28&svc_s0_hostprops=10&svc_s0_serviceprops=10&svc_s0_hostprop=2&svc_s0_hostprop=8&title=All+Unhandled+Problems",
+                    "target":"frame"
+                },
+                {
+                    "name":"menu.link.equipment_incident",
+                    "url":"/thruk/cgi-bin/status.cgi?hostgroup=all&style=hostdetail&hoststatustypes=12",
+                    "target":"frame"
+                },
+                {
+                    "name":"menu.link.service_incident",
+                    "url":"/thruk/cgi-bin/status.cgi?host=all&servicestatustypes=28",
+                    "target":"frame"
+                }
+            ],
             "menusubtab":[
-                {
-                    "name":"menu.subtab.global_views",
-                    "link":[
-                        {
-                            "name":"menu.link.dashboard",
-                            "url":"/module/monitoring_view/",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.technical_table",
-                            "url":"/thruk/cgi-bin/tac.cgi",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.panorama",
-                            "url":"/thruk/cgi-bin/panorama.cgi",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.execution",
-                            "url":"/thruk/cgi-bin/extinfo.cgi?type=4",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.problems",
-                            "url":"/thruk/cgi-bin/status.cgi?style=combined&hst_s0_hoststatustypes=4&hst_s0_servicestatustypes=31&hst_s0_hostprops=10&hst_s0_serviceprops=0&svc_s0_hoststatustypes=3&svc_s0_servicestatustypes=28&svc_s0_hostprops=10&svc_s0_serviceprops=10&svc_s0_hostprop=2&svc_s0_hostprop=8&title=All+Unhandled+Problems",
-                            "target":"frame"
-                        }
-                    ]
-                },
-                {
-                    "name":"menu.subtab.maps",
-                    "link":[
-                        {
-                            "name":"menu.link.thruk",
-                            "url":"/thruk/cgi-bin/statusmap.cgi",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.nagvis",
-                            "url":"/nagvis",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.network",
-                            "url":"/cacti/plugins/weathermap/weathermap-cacti-plugin.php?action=",
-                            "target":"_blank"
-                        }
-                    ]
-                },
                 {
                     "name":"menu.subtab.events",
                     "link":[
@@ -193,26 +105,16 @@
                     ]
                 },
                 {
-                    "name":"menu.subtab.incidents",
+                    "name":"menu.subtab.apps",
                     "link":[
                         {
-                            "name":"menu.link.equipment_incident",
-                            "url":"/thruk/cgi-bin/status.cgi?hostgroup=all&style=hostdetail&hoststatustypes=12",
+                            "name":"menu.link.application_view",
+                            "url":"/nagiosbp/cgi-bin/nagios-bp.cgi",
                             "target":"frame"
                         },
                         {
-                            "name":"menu.link.service_incident",
-                            "url":"/thruk/cgi-bin/status.cgi?host=all&servicestatustypes=28",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.planned_downtime",
-                            "url":"/thruk/cgi-bin/extinfo.cgi?type=6",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.recurring_planned_downtime",
-                            "url":"/thruk/cgi-bin/extinfo.cgi?type=6&recurring",
+                            "name":"menu.link.impact_view",
+                            "url":"/nagiosbp/cgi-bin/nagios-bp.cgi?mode=bi",
                             "target":"frame"
                         }
                     ]
@@ -222,7 +124,7 @@
         {
             "id":"3",
             "name":"menu.tab.capacity",
-			"icon":"fa fa-dashboard",
+            "icon":"fa fa-bar-chart",
             "menusubtab":[
                 {
                     "name":"menu.subtab.graphical_views",
@@ -259,59 +161,36 @@
         {
             "id":"4",
             "name":"menu.tab.prod",
-			"icon":"fa fa-gears",
-            "menusubtab":[
+            "icon":"fa fa-gears",
+            "link":[
                 {
-                    "name":"menu.subtab.tools",
-                    "link":[
-                        {
-                            "name":"menu.link.equipments",
-                            "url":"/module/tool_all/index_hostlist.php",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.external",
-                            "url":"/module/tool_all/index_hostname.php",
-                            "target":"main"
-                        }
-                    ]
+                    "name":"menu.link.planned_downtime",
+                    "url":"/thruk/cgi-bin/extinfo.cgi?type=6",
+                    "target":"frame"
                 },
                 {
-                    "name":"menu.subtab.logs",
-                    "link":[
-                        {
-                            "name":"menu.link.nagios",
-                            "url":"/thruk/cgi-bin/showlog.cgi",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.system",
-                            "url":"/cacti/plugins/syslog/syslog.php",
-                            "target":"_blank"
-                        }
-                    ]
+                    "name":"menu.link.recurring_planned_downtime",
+                    "url":"/thruk/cgi-bin/extinfo.cgi?type=6&recurring",
+                    "target":"frame"
                 },
                 {
-                    "name":"menu.subtab.configuration",
-                    "link":[
-                        {
-                            "name":"menu.link.park_management",
-                            "url":"/module/index.php?module=glpi&link=/glpi/index.php",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.inventory",
-                            "url":"/module/index.php?module=ocsinventory-reports&link=/ocsreports",
-                            "target":"_blank"
-                        }
-                    ]
+                    "name":"menu.link.tools",
+                    "url":"/module/tool_all/index.php",
+                    "target":"main"
                 }
             ]
         },
         {
             "id":"5",
             "name":"menu.tab.report",
-			"icon":"fa fa-bar-chart-o",
+            "icon":"fa fa-file-text",
+            "link":[
+                {
+                    "name":"menu.link.reporting",
+                    "url":"/thruk/cgi-bin/reports2.cgi",
+                    "target":"frame"
+                }
+            ],
             "menusubtab":[
                 {
                     "name":"menu.subtab.events",
@@ -345,46 +224,53 @@
                             "name":"menu.link.summary",
                             "url":"/thruk/cgi-bin/summary.cgi",
                             "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.reporting",
-                            "url":"/thruk/cgi-bin/reports2.cgi",
-                            "target":"frame"
                         }
                     ]
                 },
                 {
                     "name":"menu.subtab.capacity",
                     "link":[
-						{
-							"name":"menu.link.performances",
-							"url":"/module/report_performance/",
-							"target":"main"
-						}
-					]
+                        {
+                            "name":"menu.link.performances",
+                            "url":"/module/report_performance/",
+                            "target":"main"
+                        }
+                    ]
                 }
             ]
         },
         {
             "id":"6",
             "name":"menu.tab.admin",
-			"icon":"fa fa-wrench",
-            "menusubtab":[
+            "icon":"fa fa-wrench",
+            "link":[
                 {
-                    "name":"menu.subtab.local_access",
-                    "link":[
-                        {
-                            "name":"menu.link.ssh_access",
-                            "url":"/module/tool_remoteacces/index_ssh.php",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.snmpwalk",
-                            "url":"/module/tool_all/index_snmpwalk.php",
-                            "target":"main"
-                        }
-                    ]
+                    "name":"menu.link.conf_nagios",
+                    "url":"/lilac/index.php",
+                    "target":"frame"
                 },
+                {
+                    "name":"menu.link.equipments",
+                    "url":"/lilac/hosts.php",
+                    "target":"frame"
+                },
+                {
+                    "name":"menu.link.models",
+                    "url":"/lilac/templates.php",
+                    "target":"frame"
+                },
+                {
+                    "name":"menu.link.app",
+                    "url":"/module/admin_bp/index.php",
+                    "target":"main"
+                },
+                {
+                    "name":"menu.link.apply_conf",
+                    "url":"/lilac/export.php",
+                    "target":"frame"
+                }
+            ],
+            "menusubtab":[
                 {
                     "name":"menu.subtab.generality",
                     "link":[
@@ -409,23 +295,8 @@
                             "target":"main"
                         },
                         {
-                            "name":"menu.link.snmp",
-                            "url":"/module/admin_files/index.php?file=snmpconf",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.snmptrapd",
-                            "url":"/module/admin_files/index.php?file=snmptrapconf",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.saves",
-                            "url":"/module/admin_files/index.php?file=backupconf",
-                            "target":"main"
-                        },
-                        {
                             "name":"menu.link.logs",
-                            "url":"/module/admin_logs/logs.php",
+                            "url":"/module/admin_logs/index.php",
                             "target":"main"
                         }
                     ]
@@ -433,36 +304,6 @@
                 {
                     "name":"menu.subtab.nagios",
                     "link":[
-                        {
-                            "name":"menu.link.conf",
-                            "url":"/lilac/index.php",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.equipments",
-                            "url":"/lilac/hosts.php",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.models",
-                            "url":"/lilac/templates.php",
-                            "target":"frame"
-                        },
-                        {
-                            "name":"menu.link.app",
-                            "url":"/module/admin_bp/index.php",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.planned_downtime",
-                            "url":"/module/admin_files/index.php?file=nagiosdowntime",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.notif",
-                            "url":"/module/admin_files/index.php?file=notification",
-                            "target":"main"
-                        },
                         {
                             "name":"menu.link.csv_deployment",
                             "url":"/module/admin_import_device/",
@@ -474,38 +315,18 @@
                             "target":"main"
                         },
                         {
-                            "name":"menu.link.apply_conf",
-                            "url":"/lilac/export.php",
-                            "target":"frame"
+                            "name":"menu.link.notif",
+                            "url":"/module/admin_files/index.php?file=notification",
+                            "target":"main"
                         },
                         {
                             "name":"menu.link.nagios_reports",
                             "url":"/module/admin_conf/",
                             "target":"main"
-                        }
-                    ]
-                },
-                {
-                    "name":"menu.subtab.ged",
-                    "link":[
-                        {
-                            "name":"menu.link.conf",
-                            "url":"/module/admin_files/index.php?file=gedcfg",
-                            "target":"main"
                         },
                         {
-                            "name":"menu.link.storage",
-                            "url":"/module/admin_files/index.php?file=gedhdb",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.relay",
-                            "url":"/module/admin_files/index.php?file=gedtcfg",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.client",
-                            "url":"/module/admin_files/index.php?file=gedqcfg",
+                            "name":"menu.link.execution",
+                            "url":"/thruk/cgi-bin/extinfo.cgi?type=4",
                             "target":"main"
                         }
                     ]
@@ -545,92 +366,22 @@
         {
             "id":"7",
             "name":"menu.tab.help",
-			"icon":"fa fa-book",
-            "menusubtab":[
+            "icon":"fa fa-question-circle",
+            "link":[
                 {
-                    "name":"menu.subtab.eyesofnetwork",
-                    "link":[
-                        {
-                            "name":"menu.link.install",
-                            "url":"http://www.eyesofnetwork.com/?page_id=495",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.exploit",
-                            "url":"http://www.eyesofnetwork.com/?page_id=495",
-                            "target":"_blank"
-                        }
-                    ]
+                    "name":"menu.link.eyesofnetwork",
+                    "url":"/module/help_about/",
+                    "target":"main"
                 },
                 {
-                    "name":"menu.subtab.components",
-                    "link":[
-                        {
-                            "name":"menu.link.centos",
-                            "url":"http://wiki.centos.org/Documentation",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.ged",
-                            "url":"http://generic-ed.sourceforge.net",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.thruk",
-                            "url":"/thruk/documentation.html",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.nagios",
-                            "url":"http://library.nagios.com/library/products/nagioscore/manuals/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.nagiosbp",
-                            "url":"http://bp-addon.monitoringexchange.org/doc/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.cacti",
-                            "url":"http://www.cacti.net/downloads/docs/html/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.snmptt",
-                            "url":"http://snmptt.sourceforge.net/docs/snmptt.shtml",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.nagvis",
-                            "url":"http://www.nagvis.org/doc",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.weathermap",
-                            "url":"/cacti/plugins/weathermap/docs/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.pnp4nagios",
-                            "url":"http://docs.pnp4nagios.org/fr/pnp-0.6/start",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.glpi",
-                            "url":"http://www.glpi-project.org/wiki/doku.php",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.ocsinventory_ng",
-                            "url":"http://wiki.ocsinventory-ng.org/",
-                            "target":"_blank"
-                        },
-                        {
-                            "name":"menu.link.fusioninventory",
-                            "url":"http://fusioninventory.org/documentation/",
-                            "target":"_blank"
-                        }
-                    ]
+                    "name":"menu.link.website",
+                    "url":"http://www.eyesofnetwork.com",
+                    "target":"_blank"
+                },
+                {
+                    "name":"menu.link.documentations",
+                    "url":"https://www.eyesofnetwork.com/?page_id=495",
+                    "target":"_blank"
                 }
             ]
         }

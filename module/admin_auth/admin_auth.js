@@ -28,7 +28,9 @@ function disable(){
 		document.form_auth.ldap_user.disabled=false;
 		document.form_auth.ldap_password.disabled=false;
 		document.form_auth.ldap_rdn.disabled=false;
-		document.form_auth.ldap_filter.disabled=false;
+		//document.form_auth.ldap_filter.disabled=false;
+		document.form_auth.ldap_user_filter.disabled=false;
+		document.form_auth.ldap_group_filter.disabled=false;
 	}
 	else{
 		document.form_auth.ldap_ip.disabled=true;
@@ -37,7 +39,9 @@ function disable(){
 		document.form_auth.ldap_user.disabled=true;
 		document.form_auth.ldap_password.disabled=true;
 		document.form_auth.ldap_rdn.disabled=true;
-		document.form_auth.ldap_filter.disabled=true;
+		//document.form_auth.ldap_filter.disabled=true;
+		document.form_auth.ldap_user_filter.disabled=true;
+		document.form_auth.ldap_group_filter.disabled=true;
 	}
 }
 

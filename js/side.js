@@ -68,7 +68,7 @@ function my_ajax_search()
 				}
 			});
 			str = str.substring(0, str.length-1);
-			str += '], select: function(event, ui) { $("form").submit();} })';
+			str += '], select: function(event, ui) { $("#sideMenuSearch").submit();} })';
 				
 			$("#s0_value").attr('onFocus', str);
 		}
@@ -83,7 +83,7 @@ $("#sideMenuSearch").on("submit", function(event){
 	event.preventDefault();
 	
 	// create the url to fill the <iframe>
-	var target_url = $("form").attr("action");
+	var target_url = $("#sideMenuSearch").attr("action");
 	var param = $("#s0_value").val();
 	target_url += encodeURIComponent(path_nagios_status+"?s0_op=~&s0_type=search&s0_value="+param);
 	

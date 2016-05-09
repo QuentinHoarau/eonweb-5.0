@@ -32,6 +32,7 @@ if(isset($_POST["display"])) {
 	// search fields results
 	$field = $_POST["field"];
 	$value = $_POST["value"];
+	
 	if( isset($value) && $value != "" ){
 		echo "<p class='alert alert-info'><i class='fa fa-info-circle'> </i> ".$field." : ".$value."</p>";
 	}

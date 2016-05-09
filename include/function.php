@@ -32,22 +32,34 @@ function message($id, $text, $type){
 	if(isset($array_msg[$id])) { $tempid=$array_msg[$id]; } 
 	else { $tempid=""; }
 	
-	// Display the message
+	// Define the message type and icon
 	switch($type)
 	{
 		case "critical":
-			echo "<p class='alert alert-danger'>$tempid $text</p>";
+			$alert_type = "danger";
+			$alert_icon = "fa-exclamation-circle";
 			break;
 		case "warning":
-			echo "<p class='alert alert-warning'>$tempid $text</p>";
+			$alert_type = "warning";
+			$alert_icon = "fa-warning";
 			break;
    		case "ok":
-			echo "<p class='alert alert-success'>$tempid $text</p>";
+   			$alert_type = "success";
+			$alert_icon = "fa-check-circle";
 			break;
 		default:
-			echo "<p class='alert alert-success'>$tempid $text</p>";
-			break;			
+			$alert_type = "info";
+			$alert_icon = "fa-info-circle";
+			break;
 	}
+
+	// Display the message
+	echo "<p class='alert alert-dismissible alert-".$alert_type." fade in'>
+			<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+			  <span aria-hidden='true'>&times;</span>
+			</button>
+			<i class='fa ".$alert_icon."'></i> $tempid $text
+		  </p>";
 }
 
 // Connect to Database
@@ -108,7 +120,7 @@ function filemodify($path,$get=false){
 			echo "?file=$get";
 		echo "'>";
 		echo '<div class="form-group">';
-		echo "<textarea class='form-control' cols='100' rows='25' name='maj' scrolling='no'>";
+		echo "<textarea class='form-control textarea' cols='100' rows='20' name='maj' scrolling='no'>";
 			print file_get_contents($path);
 		echo "</textarea>";
 		echo '</div>';
@@ -122,23 +134,39 @@ function filemodify($path,$get=false){
 }
 
 // Host List form Nagios
-function get_host_list_from_nagios($field=false){
+function get_host_list_from_nagios($field=false, $queue = false){
 	global $database_lilac;
+	global $database_ged;
 	$hosts=array();
 
-	if($field){
-		$request="SELECT name FROM nagios_$field ORDER BY name";
+	//var_dump($field);
+
+
+	if($field && $field != 'owner'){
+		switch ($field) {
+			case 'service': $column = 'description'; break;
+			case 'description': echo json_encode($hosts); return; break;
+			default: $column = 'name'; break;
+		}
+		$request="SELECT DISTINCT $column FROM nagios_$field ORDER BY $column";
+		$db = $database_lilac;
+	} elseif ($field && $field === 'owner') {
+		$request="SELECT DISTINCT owner FROM nagios_queue_$queue WHERE owner != '' ORDER BY owner";
+		$db = $database_ged;
 	}
 	else {
 		$request="SELECT name FROM nagios_host
 		UNION SELECT name from nagios_hostgroup
 		UNION SELECT name from nagios_service_group
 		ORDER BY name";
+		$db = $database_lilac;
 	}
 
-	$result=sqlrequest($database_lilac,$request);
+	//echo $request;
+	$result=sqlrequest($db,$request);
  	while ($line = mysqli_fetch_array($result)){ 
-		$hosts[]=$line[0];
+		array_push($hosts, $line[0]);
+		//$hosts[]=$line[0];
 	}
 	echo json_encode($hosts);
 }
@@ -161,16 +189,24 @@ function get_host_list(){
 function get_host_listbox_from_nagios(){
 	global $database_lilac;
 	
-	echo "<h2>Host : </h2>";
-	$result=sqlrequest($database_lilac,"SELECT name,address FROM nagios_host ORDER BY name");
-	$mapage='toto';
-	echo "<SELECT name='host_list' class='select' size=10 style='width:250px;'>";
+	// create input autocomplete with all nagios host values
+	echo "<label>Host</label>";
+	$result=sqlrequest($database_lilac,"SELECT DISTINCT name FROM nagios_host UNION ALL SELECT DISTINCT address FROM nagios_host");
+	$input = "<input id='host_list' class='form-control' type='text' name='host_list' onFocus='$(this).autocomplete({source: [";
 	while ($line = mysqli_fetch_array($result))
 	{
-		echo "<OPTION value='$line[0],$line[1]'>&nbsp;$line[0]</OPTION>";
+		$input .= '"'.$line[0].'",';
 	}
-	print "</SELECT><br>";
-
+	$input = rtrim($input, ",");
+	$input .= "]})'>";
+	
+	echo '<div class="input-group">';
+	echo 	$input;
+	echo 	'<span class="input-group-btn">
+				<input class="btn btn-primary" type="submit" name="run" value="'.getLabel("action.run").'" >
+			</span>
+			';
+	echo '</div>';
 }
 
 // Host list from CACTI
@@ -190,16 +226,22 @@ function get_title_list_from_cacti(){
 
 // Host listbox from CACTI
 function get_host_listbox_from_cacti(){
-        
+	
 	global $database_cacti;
-
+	
+	if( isset($_GET['host']) ){
+		$ref = $_GET['host'];
+	}
+	
 	$result=sqlrequest($database_cacti,"SELECT DISTINCT host.id,hostname,description FROM host INNER JOIN graph_local ON host.id = graph_local.host_id ORDER BY hostname ASC");
-	print "<SELECT name='host' class='form-control' size=7>";
+	echo "<SELECT name='host' class='form-control' size=7>";
         while ($line = mysqli_fetch_array($result))
         {
-                print "<OPTION value='$line[0]'>&nbsp;$line[1] ($line[2])&nbsp;</OPTION>";
+			echo "<OPTION value='$line[0]' ";
+			if($ref == $line[0]){echo 'selected="selected"';}
+			echo ">&nbsp;$line[1] ($line[2])&nbsp;</OPTION>";
         }
-        print "</SELECT><br>";
+        echo "</SELECT><br>";
 }
 
 // system function : CUT
@@ -212,29 +254,36 @@ function get_graph_listbox_from_cacti(){
 	
 	global $database_cacti;
 	
-        $result=sqlrequest($database_cacti,"SELECT DISTINCT graph_templates.id,name FROM graph_templates INNER JOIN graph_local ON graph_local.graph_template_id = graph_templates.id ORDER BY name ASC");
-	print "<SELECT name='graph' class='form-control' size=7>";
-        while ($line = mysqli_fetch_array($result))
-        {
-		print "<OPTION value='$line[0]'>&nbsp;$line[1]&nbsp;</OPTION>\n";
-        }
-        print "</SELECT><br>";
+	if( isset($_GET['graph']) ){
+		$ref = $_GET['graph'];
+	}
+	
+	$result=sqlrequest($database_cacti,"SELECT DISTINCT graph_templates.id,name FROM graph_templates INNER JOIN graph_local ON graph_local.graph_template_id = graph_templates.id ORDER BY name ASC");
+	echo "<SELECT name='graph' class='form-control' size=7>";
+	while ($line = mysqli_fetch_array($result))
+	{
+		echo "<OPTION value='$line[0]' ";
+		if($ref == $line[0]){echo 'selected="selected"';}
+		echo ">&nbsp;$line[1]&nbsp;</OPTION>";
+	}
+	echo "</SELECT><br>";
 }
 
 // Display TOOL list
 function get_tool_listbox(){
-	echo "<label>".getLabel("label.tool_all.tool")." : </label>";	
 	// Get the global table
 	global $array_tools;
+	
+	echo "<label>".getLabel("label.tool_all.tool")."</label>";	
 
 	// Get the first array key
 	reset($array_tools);
 
 	// Display the list of tool
-	echo "<SELECT name='tool_list' class='form-control' size=4>";
+	echo "<SELECT id='tool_list' name='tool_list' class='form-control'>";
  	while (list($tool_name, $tool_url) = each($array_tools)) 
 	{
-		echo "<OPTION value='$tool_url'>&nbsp;$tool_name</OPTION>";
+		echo "<OPTION value='$tool_url'>$tool_name</OPTION>";
 	}
 	echo "</SELECT>";
 }
@@ -243,12 +292,11 @@ function get_tool_listbox(){
 function get_toolport_ports(){
 	global $default_minport;
 	global $default_maxport;
-
-	echo "<label>Port min - Port max <br>(show port ".getLabel("label.tool_all.only").") :</label>";
-	echo "<div class='col-md-6'><input class='form-control' type=text name='min_port' value=$default_minport size=8></div>
-		  <div class='col-md-6'><input class='form-control' type=text name='max_port' value=$default_maxport size=8></div>";
+	
+	echo "<label>Port min - Port max</label>";
+	echo "<div class='row'><div class='col-md-4'><input id='min_port' class='form-control' type=text name='min_port' value=$default_minport size=8></div>";
+	echo "<div class='col-md-4'><input id='max_port' class='form-control' type=text name='max_port' value=$default_maxport size=8></div></div>";
 }
-
 
 // Display User list
 function get_user_listbox(){
@@ -680,8 +728,6 @@ function insert_user($user_name, $user_descr, $user_group, $user_password1, $use
 	if($user_descr=="")
 		$user_descr=$user_name;
 
-	// get ID of the group (for ldap !)
-	// $user_group = mysqli_result(sqlrequest("$database_eonweb", "SELECT group_id FROM groups WHERE group_name='$user_group'"), 0, "group_id");
 	if($user_location != "" && $user_location != null){
 		if( strpos($user_location, " -- ") !== false && strpos($user_location, "|") !== false ){
 			$user_location_parts = explode(" -- ", $user_location);
@@ -803,7 +849,21 @@ function pieChart($queue, $field, $search, $period)
 	$search_clause = "";
 	if( isset($search) && $search != "" )
 	{
-		$search_clause = " AND $field LIKE '%$search%'";
+		switch ($field) {
+			case 'host': $field = 'equipment'; break;
+			case 'hostgroup': $field = 'hostgroups'; break;
+			case 'service_group': $field = 'servicegroups'; break;
+		}
+		$like = "'";
+		if( substr($search, 0, 1) === '*' ){
+			$like .= "%";
+		}
+		$like .= trim($search, '*');
+		if ( substr($search, -1) === '*' ) {
+			$like .= "%";
+		}
+		$like .= "'";
+		$search_clause = " AND $field LIKE $like";
 	}
 	
 	// set the period clause (according to checkboxes checked)
@@ -865,7 +925,21 @@ function barChart($queue, $field, $search)
 	$search_clause = "";
 	if( isset($search) && $search != "" )
 	{
-		$search_clause = " AND $field LIKE '%$search%'";
+		switch ($field) {
+			case 'host': $field = 'equipment'; break;
+			case 'hostgroup': $field = 'hostgroups'; break;
+			case 'service_group': $field = 'servicegroups'; break;
+		}
+		$like = "'";
+		if( substr($search, 0, 1) === '*' ){
+			$like .= "%";
+		}
+		$like .= trim($search, '*');
+		if ( substr($search, -1) === '*' ) {
+			$like .= "%";
+		}
+		$like .= "'";
+		$search_clause = " AND $field LIKE $like";
 	}
 	
 	while( $pkt = mysqli_fetch_row($pkt_result) )
@@ -935,7 +1009,21 @@ function slaPieChart($field, $search, $period)
 	$search_clause = "";
 	if( isset($search) && $search != "" )
 	{
-		$search_clause = " AND $field LIKE '%$search%'";
+		switch ($field) {
+			case 'host': $field = 'equipment'; break;
+			case 'hostgroup': $field = 'hostgroups'; break;
+			case 'service_group': $field = 'servicegroups'; break;
+		}
+		$like = "'";
+		if( substr($search, 0, 1) === '*' ){
+			$like .= "%";
+		}
+		$like .= trim($search, '*');
+		if ( substr($search, -1) === '*' ) {
+			$like .= "%";
+		}
+		$like .= "'";
+		$search_clause = " AND $field LIKE $like";
 	}
 	
 	// set the period clause (according to checkboxes checked)
@@ -1004,7 +1092,21 @@ function slaBarChart($field, $search)
 	$search_clause = "";
 	if( isset($search) && $search != "" )
 	{
-		$search_clause = " AND $field LIKE '%$search%'";
+		switch ($field) {
+			case 'host': $field = 'equipment'; break;
+			case 'hostgroup': $field = 'hostgroups'; break;
+			case 'service_group': $field = 'servicegroups'; break;
+		}
+		$like = "'";
+		if( substr($search, 0, 1) === '*' ){
+			$like .= "%";
+		}
+		$like .= trim($search, '*');
+		if ( substr($search, -1) === '*' ) {
+			$like .= "%";
+		}
+		$like .= "'";
+		$search_clause = " AND $field LIKE $like";
 	}
 	
 	while( $pkt = mysqli_fetch_row($pkt_result) )

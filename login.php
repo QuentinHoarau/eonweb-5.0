@@ -31,18 +31,20 @@ function display_login(){
 			<div class="img col-md-4 col-md-offset-4">
 				<div class="login-panel panel panel-default">
 					<div class="panel-heading">
-						<img class="img-responsive" src="images/logo.png" alt="logo eyesofnetwork">
+						<img class="img-responsive center-block login-logo" src="images/logo.png" alt="logo eyesofnetwork">
 					</div>
 					<div class="panel-body">
-						<form role="form" action="login.php" method="POST">
+						<form action="login.php" method="POST">
 							<fieldset>
-								<div class="form-group">
-									<input class="form-control" type="text" autofocus="" name="login" placeholder="'. getLabel("label.placeholder.username") .'">
+								<div class="form-group input-group">
+									<span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-user"></i></span>
+									<input class="form-control" type="text" autofocus="" name="login" placeholder="'. getLabel("label.placeholder.username") .'" aria-describedby="basic-addon1">
 								</div>
-								<div class="form-group">
-									<input class="form-control" type="password" value="" name="mdp" placeholder="'. getLabel("label.placeholder.password") .'">
+								<div class="form-group input-group">
+									<span class="input-group-addon" id="basic-addon2"><i class="glyphicon glyphicon-lock"></i></span>
+									<input class="form-control" type="password" value="" name="mdp" placeholder="'. getLabel("label.placeholder.password") .'" aria-describedby="basic-addon2">
 								</div>
-								<button type="submit" class="btn btn-lg btn-success btn-block">'. getLabel("action.connect") .'</button>
+								<button type="submit" class="btn btn-lg btn-primary btn-block">'. getLabel("action.connect") .'</button>
 							</fieldset>
 						</form>
 					</div>
@@ -68,12 +70,12 @@ if(isset($_COOKIE['user_name'])){
 							+	'<div class="img col-md-4 col-md-offset-4">'
 							+		'<div class="login-panel panel panel-default">'
 							+			'<div class="panel-heading">'
-							+				'<img class="img-responsive" src="images/logo.png" alt="logo eyesofnetwork">'
+							+				'<img class="img-responsive center-block imb-logo login-logo" src="images/logo.png" alt="logo eyesofnetwork">'
 							+			'</div>'
 							+			'<div class="panel-body">'
 							+				'<div class="alert alert-info">Vous etes deja connecté en tant que : <?php echo $_COOKIE["user_name"]; ?></div>'
 							+				'<div class="btn-group btn-group-justified">'
-							+				'<a class="btn btn-success" href="<?php echo $defaultpage; ?>">Accueil</a>'
+							+				'<a class="btn btn-primary" href="<?php echo $defaultpage; ?>">Accueil</a>'
 							+				'<a class="btn btn-default" href="logout.php">Se déconnecter</a>'
 							+				'</div>'
 							+			'</div>'
@@ -122,7 +124,7 @@ else {
 				$ldap_password = base64_decode(mysqli_result($ldapsql,0,"ldap_password"));
 
 				$ldap_search=mysqli_result($ldapsql,0,"ldap_search");
-				$ldap_filter = mysqli_result($ldapsql,0,"ldap_filter");
+				//$ldap_filter = mysqli_result($ldapsql,0,"ldap_filter");
 				$user_location=str_replace("\\\\","\\",mysqli_result($usersql,0,"user_location"));
 
 				// connection to ldap

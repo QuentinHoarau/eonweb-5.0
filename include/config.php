@@ -54,8 +54,8 @@ $datepurge="-1 month";
 
 // # Menu Config
 // You can view tabid in eonweb database
-$defaulttab=2;
-$defaultpage="./module/monitoring_view/index.php";
+$defaulttab=1;
+$defaultpage="./module/dashboard_view/index.php";
 
 // # Max number of lines in a tablesorter
 $maxlines=100;
@@ -69,6 +69,9 @@ $cookie_domain="";
 // # Cookie destroy time
 $cookie_time=0;
 // 4 hour : $cookie_time=4*60*60;
+
+// LDAP
+$ldap_search_begins=array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','1','2','3','4','5','6','7','8','9','0','\\28');
 
 // Max Display value
 $max_display=5;
@@ -86,7 +89,7 @@ $max_dup = 9999;
 // # Define All Path
 $path_eon="/srv/eyesofnetwork";
 $path_eonweb="$path_eon/eonweb";
-$path_frame="/module/monitoring_frame/index.php?url=";
+$path_frame="/module/module_frame/index.php?url=";
 $dir_imgcache="cache";
 $path_languages="$path_eonweb/include/languages";
 $path_messages="$path_languages/messages";

@@ -37,14 +37,15 @@ $array_msg = array (
 	10 => "EON - Name Error");
 
 $array_tools = array (
-	"ssh access" 	 => "../tool_remoteacces/index_ssh.php",
-	"telnet access"  => "../tool_remoteacces/index_telnet.php",
-	"show interface" => "../tool_interface/index.php",
-	"show port" 	 => "../tool_port/index.php");
+	"snmpwalk"		 => "tools/snmpwalk.php",
+	"show interface" => "tools/interface.php",
+	"show port" 	 => "tools/port.php");
 
 $array_group_mgt = array (
     "label.admin_group.select_add" => "add_group",
-	"label.admin_group.select_del" => "delete_group");
+	"label.admin_group.select_del" => "delete_group",
+	"label.admin_group.select_import" => "import_user",
+	);
 
 $array_user_mgt = array (
 	"label.admin_user.select_add" => "add_user",
@@ -86,12 +87,12 @@ $array_ged_packets = array (
 );
 
 $array_ged_filters = array (
-	"equipment",
-	"service",
-	"description",
-	"hostgroups",
-	"servicegroups",
-	"owner",
+	"equipment" 	=> "host",
+	"service" 		=> "service",
+	"description" 	=> "description",
+	"hostgroups" 	=> "hostgroup",
+	"servicegroups" => "service_group",
+	"owner" 		=> "owner",
 	/* "s" */
 );
 
@@ -119,38 +120,38 @@ $array_serv_system = array (
 	"Nagios" => array (
 		"status" => "pidof -o $$ -o %PPID -x nagios",
 		"proc_act" => array (
-			"start" => "sudo /etc/init.d/nagios start",
-			"stop" => "sudo /etc/init.d/nagios stop",
-			"restart" => "sudo /etc/init.d/nagios restart",
-			"reload" => "sudo /etc/init.d/nagios reload",
+			"start" => "sudo /bin/systemctl start nagios ; sudo /bin/systemctl status nagios",
+			"stop" => "sudo /bin/systemctl stop nagios ; sudo /bin/systemctl status nagios",
+			"restart" => "sudo /bin/systemctl restart nagios ; sudo /bin/systemctl status nagios",
+			"reload" => "sudo /bin/systemctl reload nagios ; sudo /bin/systemctl status nagios",
 			"verify" => "$path_nagios_bin -v $path_nagios_etc")),
 	"Ged agent" => array (
 		"status" => "pidof -o $$ -o %PPID -x ged",
 		"proc_act" => array (
-			"start" => "sudo /etc/init.d/gedd start",
-			"stop" => "sudo /etc/init.d/gedd stop",
-			"restart" => "sudo /etc/init.d/gedd restart")),
+			"start" => "sudo /bin/systemctl start gedd ; sudo /bin/systemctl status gedd",
+			"stop" => "sudo /bin/systemctl stop gedd ; sudo /bin/systemctl status gedd",
+			"restart" => "sudo /bin/systemctl restart gedd ; sudo /bin/systemctl status gedd")),
 	"SNMP agent" => array (
 		"status" => "pidof -o $$ -o %PPID -x snmpd",
 		"proc_act" => array (
-			"start" => "sudo /etc/init.d/snmpd start",
-			"stop" => "sudo /etc/init.d/snmpd stop",
-			"restart" => "sudo /etc/init.d/snmpd restart",
-			"reload" => "sudo /etc/init.d/snmpd reload")),
+			"start" => "sudo /bin/systemctl start snmpd ; sudo /bin/systemctl status snmpd",
+			"stop" => "sudo /bin/systemctl stop snmpd ; sudo /bin/systemctl status snmpd",
+			"restart" => "sudo /bin/systemctl restart snmpd ; sudo /bin/systemctl status snmpd",
+			"reload" => "sudo /bin/systemctl reload snmpd ; sudo /bin/systemctl status snmpd")),
 	"SNMP trap agent" => array (
 		"status" => "pidof -o $$ -o %PPID -x snmptrapd",
 		"proc_act" => array (
-			"start" => "sudo /etc/init.d/snmptrapd start",
-			"stop" => "sudo /etc/init.d/snmptrapd stop",
-			"restart" => "sudo /etc/init.d/snmptrapd restart",
-			"reload" => "sudo /etc/init.d/snmptrapd reload")),
+			"start" => "sudo /bin/systemctl start snmptrapd ; sudo /bin/systemctl status snmptrapd",
+			"stop" => "sudo /bin/systemctl stop snmptrapd ; sudo /bin/systemctl status snmptrapd",
+			"restart" => "sudo /bin/systemctl restart snmptrapd ; sudo /bin/systemctl status snmptrapd",
+			"reload" => "sudo /bin/systemctl reload snmptrapd ; sudo /bin/systemctl status snmptrapd")),
 	"SNMP trap traductor" => array (
 		"status" => "pidof -o $$ -o %PPID -x snmptt",
 		"proc_act" => array (
-			"start" => "sudo /etc/init.d/snmptt start",
-			"stop" => "sudo /etc/init.d/snmptt stop",
-			"restart" => "sudo /etc/init.d/snmptt restart",
-			"reload" => "sudo /etc/init.d/snmptt reload")),
+			"start" => "sudo /bin/systemctl start snmptt ; sudo /bin/systemctl status snmptt",
+			"stop" => "sudo /bin/systemctl stop snmptt ; sudo /bin/systemctl status snmptt",
+			"restart" => "sudo /bin/systemctl restart snmptt ; sudo /bin/systemctl status snmptt",
+			"reload" => "sudo /bin/systemctl reload snmptt ; sudo /bin/systemctl status snmptt")),
 );
 
 $ged_active_intervals = array(
@@ -172,6 +173,12 @@ $ged_sla_intervals = array(
 	"second" 	=> 60*10,
 	"third" 	=> 60*20,
 	"fourth" 	=> "",
+);
+
+
+// sockets definition (for multi-backends !)
+$sockets = array(
+        "unix::-1:/srv/eyesofnetwork/nagios/var/log/rw/live"
 );
 
 ?>

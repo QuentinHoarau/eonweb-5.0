@@ -19,6 +19,7 @@
   "dependencies": {
     "startbootstrap-sb-admin-2": "^1.0.8",
     "highcharts": "hightcharts#^4.2.3",
-    "jquery-ui": "^1.11.4"
+    "jquery-ui": "^1.11.4",
+    "bootstrap-daterangepicker": "^2.1.19"
   }
 }

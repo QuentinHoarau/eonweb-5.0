@@ -33,19 +33,21 @@ include("../../side.php");
 		</div>
 	</div>
 
-<?php 
+	<div id="errors"></div>
+
+	<?php
 	global $database_eonweb;
 	global $database_lilac;
 	$action=retrieve_form_data("action",null);
 	$group_mgt_list=retrieve_form_data("group_mgt_list",null);
-	$group_selected=retrieve_form_data("group_selected",null); 
+	$group_selected=retrieve_form_data("group_selected",null);
 	
 	if 	($action == 'submit')
 	{
 		switch($group_mgt_list)
 		{
 			case "add_group":
-				echo "<META HTTP-EQUIV=refresh CONTENT='0;URL=add_modify_group.php'>";
+				echo "<meta http-equiv=refresh content='0;URL=add_modify_group.php'>";
 				break;
 			case "delete_group":
 				if (isset($group_selected[0]))
@@ -83,34 +85,75 @@ include("../../side.php");
 				break;
 		}
 	}
+	if( isset($_POST['action']) && $_POST['action'] == "import" ){
+		if(!empty($_POST['import_list'])){
+			$errors_names = array();
+			$nbr_ok = 0;
+			foreach ($_POST['import_list'] as $key => $value) {
+				$infos = explode("::", $value);
+				$usrname = $infos[0];
+				$userdesc = $usrname;
+				$usergroup = $infos[1];
+				$user_password1 = "abcdefghijklmnopqrstuvwxyz";
+				$user_password2 = "abcdefghijklmnopqrstuvwxyz";
+				$usrtype = 1;
+				$usrlocation = $infos[2];
+				$usrmail = $infos[3];
+				$usrlimitation = 0;
+
+				$sql = "SELECT group_id FROM groups WHERE group_name = '$usergroup'";
+				$query = sqlrequest($database_eonweb, $sql);
+				$usergroup = mysqli_result($query,0,"group_id");
+
+				$test = insert_user(stripAccents($usrname), $userdesc, $usergroup, $user_password1, $user_password2, $usrtype, $usrlocation,$usrmail,$usrlimitation, false);
+				
+				if( is_null($test) ){
+					array_push($errors_names, $usrname);
+				} else {
+					$nbr_ok++;
+				}
+			}
+			message(8, " : " . $nbr_ok . " import(s) OK", "ok");
+		}
+	}
 
 	//Get the name group and description group
-	$group_name_descr=sqlrequest("$database_eonweb","SELECT group_name,group_descr,group_id FROM groups ORDER BY group_name");
-?>
+	$group_name_descr=sqlrequest("$database_eonweb","SELECT group_name,group_descr,group_id,group_type FROM groups ORDER BY group_name");
+	
+	// determine if there is LDAP conf
+	$request = sqlrequest($database_eonweb, "SELECT auth_type FROM auth_settings");
+	$conf_type=mysqli_result($request,0,"auth_type");
+	$ldap_conf = ($conf_type == "1") ? true : false;
+	?>
 
-	<form action='./index.php' method='GET'>
+	<form action="./index.php" method="GET" class="form-inline">
 		<div class="table-responsive">
-			<table class="table table-striped">
+			<table class="table table-striped table-condensed">
 				<thead>
 				<tr>
-					<th> <?php echo getLabel("label.admin_group.group_name"); ?> </th>
-					<th> <?php echo getLabel("label.admin_group.group_desc"); ?> </th>
-					<th class="col-md-2 text-center"> <?php echo getLabel("label.admin_group.select"); ?> </th>
+					<th><?php echo getLabel("label.admin_group.group_name"); ?></th>
+					<th><?php echo getLabel("label.admin_group.group_type"); ?></th>
+					<th><?php echo getLabel("label.admin_group.group_desc"); ?></th>
+					<th class="col-md-2 text-center"><?php echo getLabel("label.admin_group.select"); ?></th>
 				</tr>
 				</thead>
 				<tbody>
 				<?php
 				while ($line = mysqli_fetch_array($group_name_descr))
 				{
+				$type = ($line[3] == "0") ? "MySQL" : "LDAP";
 				?>
-				<tr>
+				<tr class="<?php echo $type; ?>">
 					<td>
 						<?php
 						if($line[2]=="1")
 							echo"$line[0]";
 						else
-							echo"<a href='./add_modify_group.php?group_id=$line[2]'> $line[0] </a>";
+							echo"<a href='./add_modify_group.php?group_id=$line[2]'>$line[0]</a>";
 						?>
+					</td>
+					<td>
+						<?php echo $type ?>
 					</td>
 					<td>
 						<?php echo "$line[1]";?>
@@ -118,9 +161,9 @@ include("../../side.php");
 					<td class="text-center">
 						<?php
 						if($line[2]=="1")
-							echo "<INPUT type='checkbox' name='group_selected[]' value='$line[2]' disabled>";
+							echo "<input type='checkbox' name='group_selected[]' value='$line[2]' disabled>";
 						else
-							echo "<INPUT type='checkbox' name='group_selected[]' value='$line[2]'>";
+							echo "<input type='checkbox' name='group_selected[]' value='$line[2]'>";
 						?>
 					</td>
 				</tr>
@@ -131,28 +174,45 @@ include("../../side.php");
 			</table>
 		</div>
 		
-		<div class="row">
-			<div class="col-md-3">
-				<div class="form-group">
+		<div class="form-group">
+			<select class="form-control" name="group_mgt_list" size=1>
 			<?php
-				// Get the global table
-				global $array_group_mgt;
+			// Get the global table
+			global $array_group_mgt;
 
-				// Get the first array key
-				reset($array_group_mgt);
+			// Get the first array key
+			reset($array_group_mgt);
 
-				// Display the list of management choices
-				echo "<SELECT class='form-control' name='group_mgt_list' size=1>";
-				while (list($mgt_name, $mgt_url) = each($array_group_mgt)) {
-						echo "<OPTION value='$mgt_url'>".getLabel($mgt_name)."</OPTION>";
+			// Display the list of management choices
+			$cpt = 1;
+			while (list($mgt_name, $mgt_url) = each($array_group_mgt)) {
+				if($cpt == 3){
+					if($ldap_conf){
+						echo "<option value='$mgt_url'>".getLabel($mgt_name)."</option>";
+					}
+				} else {
+					echo "<option value='$mgt_url'>".getLabel($mgt_name)."</option>";
 				}
-				echo "</SELECT>";
+				$cpt++;
+			}
 			?>
-				</div>
-				<button class="btn btn-primary" type="submit" name="action" value="submit"><?php echo getLabel("action.submit"); ?></button>
+			</select>
+		</div>
+		<button id="mgt_group_submit" class="btn btn-primary" type="submit" name="action" value="submit"><?php echo getLabel("action.submit"); ?></button>
+		<button class="btn btn-primary hidden" id="show_ldap_users"><?php echo getLabel("action.show_ldap_users"); ?></button>
+	</form>
+
+	<br>
+
+	<div id="result"></div>
+
+	<div id="loading-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-sm" style="width: 66px;">
+			<div class="modal-content">
+				<img src="/images/loader.gif" alt="loading">
 			</div>
 		</div>
-	</form>
+	</div>
 
 </div>
 	
