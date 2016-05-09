@@ -21,8 +21,15 @@
 */
 
 $m = new Translator();
-$m::initFile($path_menus,$path_menus_custom);
+
+// load right menu file according to user limitation
+if( $_COOKIE['user_limitation'] != 0 ){
+	$m::initFile($path_menu_limited, $path_menu_limited_custom);
+} else {
+	$m::initFile($path_menus,$path_menus_custom);
+}
 $menus = $m::createPHPDictionnary();
+
 ?>
 
 <!-- Nav menu -->
@@ -61,6 +68,7 @@ $menus = $m::createPHPDictionnary();
 	<div class="navbar-default sidebar" role="navigation">
 		<div class="sidebar-nav navbar-collapse">
 			<ul id="side-menu" class="nav in">
+				<?php if($_COOKIE['user_limitation'] == 0) : ?>
 				<li class="sidebar-search">
 					<form id="sideMenuSearch" method="get" action="<?php echo $path_frame; ?>" style="margin-bottom: 0;">
 						<div class="input-group custom-search-form">
@@ -73,59 +81,82 @@ $menus = $m::createPHPDictionnary();
 						</div>
 					</form>
 				</li>
+				<?php endif; ?>
 				<?php 
-				foreach($menus["menutab"] as $menutab) { 	
-					// Verify group rights
-					$tab_request = "SELECT tab_".$menutab["id"]." FROM groupright WHERE group_id=".$_COOKIE['group_id'].";";
-					$tab_right = mysqli_result(sqlrequest($database_eonweb, $tab_request),0);				
-					if($tab_right == 0){ continue; }
-				?>
-				<li>
-					<a href="#">
-						<i class="<?php echo $menutab["icon"]; ?>"></i>
-						<?php echo getLabel($menutab["name"]); ?>
-						<span class="fa arrow"></span>
-					</a>
-					<ul class="nav nav-second-level collapse">
-					<?php
-					foreach($menutab as $key => $value){
-						if($key == "link"){
-							foreach($value as $index => $item){	
-								$url=$item["url"];
-								if($item["target"]=="_blank") { $url=$url.'" target="_blank'; }
-								elseif($item["target"]=="frame") { $url=$path_frame.urlencode($item["url"]); }
+				// check if there's menutabs (user not limited)
+				if(isset($menus['menutab'])){
+					// loop on each menutab
+					foreach($menus["menutab"] as $menutab) { 	
+						// Verify group rights
+						$tab_request = "SELECT tab_".$menutab["id"]." FROM groupright WHERE group_id=".$_COOKIE['group_id'].";";
+						$tab_right = mysqli_result(sqlrequest($database_eonweb, $tab_request),0);				
+						if($tab_right == 0){ continue; }
 					?>
-					<li><a href="<?php echo $url; ?>"><?php echo getLabel($item["name"]); ?></a></li>
-					<?php 
-							}
-						} elseif($key == "menusubtab") {
-					?>
-					
-						<?php foreach($menutab["menusubtab"] as $menusubtab) { ?>
-						<li>
-							<a href="#"><?php echo getLabel($menusubtab["name"]); ?> <span class="fa arrow"></span> </a>
-							<ul class="nav nav-third-level collapse">
-								<?php foreach($menusubtab["link"] as $menulink) { ?>
-								<li>
-									<?php
-										$url=$menulink["url"];
-										if($menulink["target"]=="_blank") { $url=$url.'" target="_blank'; }
-										elseif($menulink["target"]=="frame") { $url=$path_frame.urlencode($menulink["url"]); }
+					<li>
+						<a href="#">
+							<i class="<?php echo $menutab["icon"]; ?>"></i>
+							<?php echo getLabel($menutab["name"]); ?>
+							<span class="fa arrow"></span>
+						</a>
+						<ul class="nav nav-second-level collapse">
+						<?php
+						// loop on level 2 to identify links ans subtabs
+						foreach($menutab as $key => $value){
+							// we have links
+							if($key == "link"){
+								foreach($value as $index => $item){	
+									$url=$item["url"];
+									if($item["target"]=="_blank") { $url=$url.'" target="_blank'; }
+									elseif($item["target"]=="frame") { $url=$path_frame.urlencode($item["url"]); }
+						?>
+						<li><a href="<?php echo $url; ?>"><?php echo getLabel($item["name"]); ?></a></li>
+						<?php
+								}
+							// we have subtabas
+							} elseif($key == "menusubtab") {
+						?>
+						
+							<?php 
+							// loop on level 3
+							foreach($menutab["menusubtab"] as $menusubtab) {
+							?>
+							<li>
+								<a href="#"><?php echo getLabel($menusubtab["name"]); ?> <span class="fa arrow"></span> </a>
+								<ul class="nav nav-third-level collapse">
+									<?php 
+									// loop on level 4 (subtab's links)
+									foreach($menusubtab["link"] as $menulink) { 
 									?>
-									<a href="<?php echo $url; ?>"><?php echo getLabel($menulink["name"]); ?></a>
-								</li>
-								<?php } ?>
-							</ul>
-						</li>
-						<?php } ?>
-					
-					<?php 
-						}
-					}
+									<li>
+										<?php
+											$url=$menulink["url"];
+											if($menulink["target"]=="_blank") { $url=$url.'" target="_blank'; }
+											elseif($menulink["target"]=="frame") { $url=$path_frame.urlencode($menulink["url"]); }
+										?>
+										<a href="<?php echo $url; ?>"><?php echo getLabel($menulink["name"]); ?></a>
+									</li>
+									<?php } ?>
+								</ul>
+							</li>
+							<?php }
+						
+							}
+						
+					} ?>
+						</ul>
+					</li>
+					<?php }
+				} else {
+					// no menutabs (user limited)
+					foreach ($menus["link"] as $key => $value) {
 					?>
-					</ul>
-				</li>
-				<?php } ?>
+						<li>
+							<a href="<?php echo $value['url']; ?>"><?php echo getLabel($value["name"]); ?></a>
+						</li>
+					<?php
+					}
+				}
+				?>
 			</ul>
 		</div>
 		<!-- /.sidebar-collapse -->
