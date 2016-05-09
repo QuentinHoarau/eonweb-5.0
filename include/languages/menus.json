@@ -178,6 +178,23 @@
                     "url":"/module/tool_all/index.php",
                     "target":"main"
                 }
+            ],
+            "menusubtab":[
+                {
+                    "name":"menu.subtab.configuration",
+                    "link":[
+                        {
+                            "name":"menu.link.park_management",
+                            "url":"/module/index.php?module=glpi&link=/glpi/index.php",
+                            "target":"_blank"
+                        },
+                        {
+                            "name":"menu.link.inventory",
+                            "url":"/module/index.php?module=ocsinventory-reports&link=/ocsreports",
+                            "target":"_blank"
+                        }
+                    ]
+                }
             ]
         },
         {
