@@ -94,8 +94,8 @@ include("../../side.php");
 	?>
 
 	<form action="./index.php" method="GET" class="form-inline">
-		<div class="table-responsive">
-			<table class="table table-striped">
+		<div class="dataTable_wrapper">
+			<table class="table table-striped datatable-eonweb table-condensed">
 				<thead>
 				<tr>
 					<th><?php echo getLabel("label.admin_user.user_name"); ?></th>

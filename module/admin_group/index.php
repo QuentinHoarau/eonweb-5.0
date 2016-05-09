@@ -127,8 +127,8 @@ include("../../side.php");
 	?>
 
 	<form action="./index.php" method="GET" class="form-inline">
-		<div class="table-responsive">
-			<table class="table table-striped table-condensed">
+		<div class="dataTable_wrapper">
+			<table class="table table-striped datatable-eonweb table-condensed">
 				<thead>
 				<tr>
 					<th><?php echo getLabel("label.admin_group.group_name"); ?></th>
