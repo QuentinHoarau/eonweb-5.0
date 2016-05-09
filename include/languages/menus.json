@@ -327,7 +327,7 @@
                         {
                             "name":"menu.link.execution",
                             "url":"/thruk/cgi-bin/extinfo.cgi?type=4",
-                            "target":"main"
+                            "target":"frame"
                         }
                     ]
                 },
