@@ -87,6 +87,12 @@ include("../../side.php");
 	}
 	if( isset($_POST['action']) && $_POST['action'] == "import" ){
 		if(!empty($_POST['import_list'])){
+			// define if we import in nagvis or cacti (or both)
+			if(isset($_POST['import_nagvis'])){ $in_nagvis = "yes"; }
+			else { $in_nagvis = false; }
+			if(isset($_POST['import_cacti'])){ $in_cacti = "yes"; }
+			else { $in_cacti = false; }
+
 			$errors_names = array();
 			$nbr_ok = 0;
 			foreach ($_POST['import_list'] as $key => $value) {
@@ -105,7 +111,7 @@ include("../../side.php");
 				$query = sqlrequest($database_eonweb, $sql);
 				$usergroup = mysqli_result($query,0,"group_id");
 
-				$test = insert_user(stripAccents($usrname), $userdesc, $usergroup, $user_password1, $user_password2, $usrtype, $usrlocation,$usrmail,$usrlimitation, false);
+				$test = insert_user(stripAccents($usrname), $userdesc, $usergroup, $user_password1, $user_password2, $usrtype, $usrlocation,$usrmail,$usrlimitation, false, $in_nagvis, $in_cacti);
 				
 				if( is_null($test) ){
 					array_push($errors_names, $usrname);
