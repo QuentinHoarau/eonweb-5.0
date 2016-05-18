@@ -797,7 +797,7 @@ function insert_user($user_name, $user_descr, $user_group, $user_password1, $use
 				$req = $bdd->query("SELECT count(*) FROM user_auth WHERE username='$user_name'");
 				$cacti_user_exist = $req->fetch();
 				if ($cacti_user_exist["count(*)"] == 0){
-					$bdd->exec("INSERT INTO user_auth (username,realm,full_name,show_tree,show_list,show_preview,graph_settings,login_opts,policy_graphs,policy_trees,policy_hosts,policy_graph_templates,enabled) VALUES ('$user_name',2,'$user_descr','on','on','on','on',3,2,2,2,2,'on')");
+					$bdd->exec("INSERT INTO user_auth (username,password,realm,full_name,show_tree,show_list,show_preview,graph_settings,login_opts,policy_graphs,policy_trees,policy_hosts,policy_graph_templates,enabled) VALUES ('$user_name','',2,'$user_descr','on','on','on','on',3,2,2,2,2,'on')");
 				}
 			}
 

@@ -90,31 +90,52 @@ include("../../side.php");
 					if($lilac_groupid!="" and $lilac_userid!="" and $user_limitation!="1")
 						sqlrequest("$database_lilac","INSERT into nagios_contact_group_member (contactgroup,contact) values('$lilac_groupid','$lilac_userid')");
 
-					/*
-					// Insert into nagvis
-                    if($create_user_in_nagvis=="yes"){
-                        $bdd = new PDO('sqlite:/srv/eyesofnetwork/nagvis/etc/auth.db');
+					
+					// update user into nagvis :
+					$bdd = new PDO('sqlite:/srv/eyesofnetwork/nagvis/etc/auth.db');
+					$req = $bdd->query("SELECT userId, name FROM users WHERE name='".$_POST["user_name_old"]."'");
+                    $nagvis_user_exist = $req->fetch();
 
-                        $req = $bdd->query("SELECT count(*) FROM users WHERE name='$user_name'");
-                        $nagvis_user_exist = $req->fetch();
+                    // this is nagvis default salt for password encryption security
+					$nagvis_salt = '29d58ead6a65f5c00342ae03cdc6d26565e20954';
 
-                        if ($nagvis_user_exist["count(*)"] == 0){
-                                $bdd->exec("INSERT INTO users (name) VALUES ('$user_name')");
-                        }
-                    }
-
-                     // Insert into cacti
-                    if($create_user_in_cacti=="yes"){
-                        $bdd = new PDO('mysql:host='.$database_host.';dbname='.$database_cacti, $database_username, $database_password);
-                        $req = $bdd->query("SELECT count(*) FROM user_auth WHERE username='$user_name'");
-                        $cacti_user_exist = $req->fetch();
-                        if ($cacti_user_exist["count(*)"] == 0){
-                            $bdd->exec("INSERT INTO user_auth (username,realm,full_name,show_tree,show_list,show_preview,graph_settings,login_opts,policy_graphs,policy_trees,policy_hosts,policy_graph_templates,enabled) VALUES ('$user_name',2,'$user_descr','on','on','on','on',3,2,2,2,2,'on')");
-                        }
+					if($nagvis_user_exist["userId"] > 0){
+						// update in nagvis
+						if($create_user_in_nagvis=="yes"){
+							$nagvis_id = $nagvis_user_exist["userId"];
+							$bdd->exec("UPDATE users SET name = '$user_name', password = '".sha1($nagvis_salt.$passwd_temp)."' WHERE userId = $nagvis_id");
+						} else { // delete in nagvis
+							$bdd->exec("DELETE FROM users WHERE userId = ".$nagvis_user_exist["userId"]);
+							$bdd->exec("DELETE FROM users2roles WHERE userId = ".$nagvis_user_exist["userId"]);
+						}
+					} else{ // no user found in nagvis, so if checkbox is checked, we create
+						if($create_user_in_nagvis=="yes"){
+							$bdd->exec("INSERT INTO users (name, password) VALUES ('$user_name', '".sha1($nagvis_salt.$passwd_temp)."')");
+							$nagvis_id = $bdd->lastInsertId();
+							echo "<pre>";
+							var_dump($nagvis_id);
+							echo "</pre>";
+						}
 					}
-					*/
 
+                     // Update user into cacti
+                    $bdd = new PDO('mysql:host='.$database_host.';dbname='.$database_cacti, $database_username, $database_password);
+                    $req = $bdd->query("SELECT id FROM user_auth WHERE username='".$_POST["user_name_old"]."'");
+                    $cacti_user_exist = $req->fetch();
 
+                    if($cacti_user_exist["id"] > 0){
+                    	$cacti_id = $cacti_user_exist["id"];
+                    	if($create_user_in_cacti == "yes"){
+                    		$bdd->exec("UPDATE user_auth SET username = '$user_name' WHERE id = $cacti_id");
+                    	} else {
+                    		$bdd->exec("DELETE FROM user_auth WHERE id = $cacti_id");
+                    	}
+                    } else {
+                    	if($create_user_in_cacti == "yes"){
+        					$bdd->exec("INSERT INTO user_auth (username,realm,full_name,show_tree,show_list,show_preview,graph_settings,login_opts,policy_graphs,policy_trees,policy_hosts,policy_graph_templates,enabled) VALUES ('$user_name',2,'$user_descr','on','on','on','on',3,2,2,2,2,'on')");
+                    	}
+                    }
+					
 					// logging action
 					logging("admin_user","UPDATE : $user_id $user_name $user_descr $user_limitation $user_group $user_type $user_location");
 

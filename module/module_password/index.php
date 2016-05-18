@@ -48,6 +48,20 @@ include("../../side.php");
 					// Insert into eonweb
 					sqlrequest("$database_eonweb","UPDATE users set user_passwd='$user_password' WHERE user_id='$usrid';");
 
+					// update password into nagvis if user is in
+					$bdd = new PDO('sqlite:/srv/eyesofnetwork/nagvis/etc/auth.db');
+					$req = $bdd->query("SELECT userId, name FROM users WHERE name='".$login."'");
+                    $nagvis_user_exist = $req->fetch();
+
+                    // this is nagvis default salt for password encryption security
+					$nagvis_salt = '29d58ead6a65f5c00342ae03cdc6d26565e20954';
+
+					if($nagvis_user_exist["userId"] > 0){
+						$nagvis_id = $nagvis_user_exist["userId"];
+						$hashed_password = sha1($nagvis_salt.$user_password1);
+						$bdd->exec("UPDATE users SET password = '$hashed_password' WHERE userId = $nagvis_id");
+					}
+
 					// logging action
 					logging("admin_user","UPDATE PASSWORD : $usrid $login");
 				}
