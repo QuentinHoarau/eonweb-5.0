@@ -82,6 +82,11 @@ if($backend_selected=="1"){
 	message(0," : Aucune configuration LDAP trouvée...","warning"); die;
 }
 
+// search all nagvis groups
+$bdd = new PDO('sqlite:/srv/eyesofnetwork/nagvis/etc/auth.db');
+$req = $bdd->query("SELECT * FROM roles");
+$nagvis_groups = $req->fetchAll(PDO::FETCH_OBJ);
+
 ?>
 
 
@@ -134,11 +139,30 @@ if($backend_selected=="1"){
 					<button class="btn btn-primary btn-xs" type="submit" name="action" value="import"><?php echo getLabel("action.import"); ?></button>
 				</div>
 				<div class="panel-body">
-					<!-- <div class="col-md-12"> -->
-						<div class="checkbox-inline"><input name="import_nagvis" type="checkbox" value="yes"> <label>Nagvis</label></div>
-						<div class="checkbox-inline"><input name="import_cacti" type="checkbox" value="yes"> <label>Cacti</label></div>
-					<!-- </div> -->
-
+					<div class="row form-group">
+						<label class="col-md-3">Nagvis</label>			
+						<div class="col-md-9">
+							<div class="input-group col-md-12">
+								<span class="input-group-addon">
+				                    <input type='checkbox' class='checkbox' name='create_user_in_nagvis' value='yes'>
+								</span>
+								<select class="form-control" name="nagvis_group">
+									<?php foreach ($nagvis_groups as $group):
+										$selected = "";
+										if($group->name == "Guests"){
+											$selected = "selected";
+										}
+									?>
+										<option value="<?php echo $group->roleId; ?>" <?php echo $selected; ?>><?php echo $group->name; ?></option>
+									<?php endforeach ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group">
+						<label class="col-md-3">Cacti</label>
+						<div class="col-md-9"><input name="import_cacti" type="checkbox" value="yes"></div>
+					</div>
 					<table class="table table-condensed table-striped">
 						<thead>
 							<tr>

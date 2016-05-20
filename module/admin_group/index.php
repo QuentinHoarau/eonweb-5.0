@@ -111,7 +111,18 @@ include("../../side.php");
 				$query = sqlrequest($database_eonweb, $sql);
 				$usergroup = mysqli_result($query,0,"group_id");
 
-				$test = insert_user(stripAccents($usrname), $userdesc, $usergroup, $user_password1, $user_password2, $usrtype, $usrlocation,$usrmail,$usrlimitation, false, $in_nagvis, $in_cacti);
+				// will insert in nagvis, only if checked
+				if(isset($_POST["create_user_in_nagvis"])){
+					$nagvis_role_id = $_POST["nagvis_group"];
+					$in_nagvis = "yes";
+				}
+
+				// will insert in cacti, only if checked
+				if(isset($_POST["create_user_in_cacti"])){
+					$in_cacti = "yes";
+				}
+
+				$test = insert_user(stripAccents($usrname), $userdesc, $usergroup, $user_password1, $user_password2, $usrtype, $usrlocation,$usrmail,$usrlimitation, false, $in_nagvis, $in_cacti, $nagvis_role_id);
 				
 				if( is_null($test) ){
 					array_push($errors_names, $usrname);
@@ -120,6 +131,8 @@ include("../../side.php");
 				}
 			}
 			message(8, " : " . $nbr_ok . " import(s) OK", "ok");
+		} else {
+			message(8, " : Aucun user LDAP dans la liste d'imports...", "warning");
 		}
 	}
 

@@ -716,7 +716,7 @@ function ldap_escape ($str){
 }
 
 // User creation
-function insert_user($user_name, $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_mail, $user_limitation, $message, $in_nagvis = false, $in_cacti = false){
+function insert_user($user_name, $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_mail, $user_limitation, $message, $in_nagvis = false, $in_cacti = false, $nagvis_group){
 	global $database_host;
 	global $database_cacti;
 	global $database_username;
@@ -786,7 +786,7 @@ function insert_user($user_name, $user_descr, $user_group, $user_password1, $use
 					$result = $req->fetch();
 					$nagvis_id = $result['userId'];
 
-					$sql = "INSERT INTO users2roles (userId, roleId) VALUES ($nagvis_id, 3)";
+					$sql = "INSERT INTO users2roles (userId, roleId) VALUES ($nagvis_id, $nagvis_group)";
 					$bdd->exec($sql);
 				}
 			}

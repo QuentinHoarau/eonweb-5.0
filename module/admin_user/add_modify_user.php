@@ -42,7 +42,7 @@ include("../../side.php");
 		//--------------------------------------------------------
 
 		// Update User Information & Right
-		function update_user($user_id, $user_name, $user_descr, $user_group, $user_password1, $user_password2 ,$user_type, $user_location, $user_mail, $user_limitation, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti)
+		function update_user($user_id, $user_name, $user_descr, $user_group, $user_password1, $user_password2 ,$user_type, $user_location, $user_mail, $user_limitation, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id)
 		{
 			global $database_host;
 			global $database_cacti;
@@ -104,6 +104,7 @@ include("../../side.php");
 						if($create_user_in_nagvis=="yes"){
 							$nagvis_id = $nagvis_user_exist["userId"];
 							$bdd->exec("UPDATE users SET name = '$user_name', password = '".sha1($nagvis_salt.$passwd_temp)."' WHERE userId = $nagvis_id");
+							$bdd->exec("UPDATE users2roles SET roleId = $nagvis_role_id WHERE userId = $nagvis_id");
 						} else { // delete in nagvis
 							$bdd->exec("DELETE FROM users WHERE userId = ".$nagvis_user_exist["userId"]);
 							$bdd->exec("DELETE FROM users2roles WHERE userId = ".$nagvis_user_exist["userId"]);
@@ -112,9 +113,7 @@ include("../../side.php");
 						if($create_user_in_nagvis=="yes"){
 							$bdd->exec("INSERT INTO users (name, password) VALUES ('$user_name', '".sha1($nagvis_salt.$passwd_temp)."')");
 							$nagvis_id = $bdd->lastInsertId();
-							echo "<pre>";
-							var_dump($nagvis_id);
-							echo "</pre>";
+							$dbb->exec("INSERT INTO users2roles (userId, roleId) VALUES ('$agvis_id', $nagvis_role_id)");
 						}
 					}
 
@@ -186,6 +185,7 @@ include("../../side.php");
 		$old_name = retrieve_form_data("user_name_old","");
 
 		$create_user_in_nagvis = retrieve_form_data("create_user_in_nagvis","");
+		$nagvis_role_id = retrieve_form_data("nagvis_group","");
 		$create_user_in_cacti = retrieve_form_data("create_user_in_cacti","");
 
 		if($user_type=="1"){
@@ -224,7 +224,8 @@ include("../../side.php");
 				else { $cacti_user = false; }
 				
 				$user_group = retrieve_form_data("user_group","");
-				$user_id=insert_user(stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location,$user_mail,$user_limitation, true, $create_user_in_nagvis, $create_user_in_cacti);
+				$nagvis_grp = retrieve_form_data("nagvis_group", "");
+				$user_id=insert_user(stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location,$user_mail,$user_limitation, true, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_grp);
 				//message(8,"User location: $user_location",'ok');	// For debug pupose, to be removed
 
 				// Retrieve Group Information from database
@@ -255,7 +256,7 @@ include("../../side.php");
 						// ACCOUNT UPDATE (and retrieve parameters)
 						//------------------------------------------------------------------------------------------------
 			if (isset($_POST['update'])){
-				update_user($user_id, stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_mail, $user_limitation, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti);	
+				update_user($user_id, stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_mail, $user_limitation, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id);	
 				//message(8,"Update: User location = $user_location",'ok');	// For debug pupose, to be removed
 				//message(8,"Update: User name =  $user_name",'ok');			// For debug pupose, to be removed
 			}
@@ -289,6 +290,27 @@ include("../../side.php");
 			//message(8,"Mod: User name =  $user_name",'ok');                      // For debug pupose, to be removed
 
 			//------------------------------------------------------------------------------------------------
+		}
+
+		// search all nagvis groups
+		$bdd = new PDO('sqlite:/srv/eyesofnetwork/nagvis/etc/auth.db');
+		$req = $bdd->query("SELECT * FROM roles");
+		$nagvis_groups = $req->fetchAll(PDO::FETCH_OBJ);
+
+		// get userId in Nagvis
+		$req = $bdd->query("SELECT userId from users WHERE name = '$user_name'");
+		$result = $req->fetch(PDO::FETCH_OBJ);
+
+		$id_nagvis = false;
+		$role_id = false;
+		if($result){
+			$id_nagvis = $result->userId;
+			$req = $bdd->query("SELECT roleId FROM users2roles WHERE userId = $id_nagvis");
+			$result = $req->fetch(PDO::FETCH_OBJ);
+
+			if($result){
+				$role_id = $result->roleId;
+			}
 		}
 	?>
 
@@ -390,11 +412,28 @@ include("../../side.php");
 		<div class="row form-group">
 			<label class="col-md-3">Nagvis User</label>
 			<div class="col-md-9">
-				<?php
-					if($nagvis_user=="yes") $checked="checked='yes'";
-                    else $checked="";
-                    echo "<input type='checkbox' class='checkbox' name='create_user_in_nagvis' value='yes' $checked>";
-				?>
+				<div class="input-group col-md-5">
+					<span class="input-group-addon">
+		                <?php
+							if($nagvis_user=="yes") $checked="checked='yes'";
+		                    else $checked="";
+		                    echo "<input type='checkbox' class='checkbox' name='create_user_in_nagvis' value='yes' $checked>";
+						?>
+					</span>
+					<select class="form-control" name="nagvis_group">
+						<?php foreach ($nagvis_groups as $group):
+							$selected = "";
+							if(!isset($_GET["user_id"]) && $group->name == "Guests"){
+								$selected = "selected";
+							}
+							if($role_id == $group->roleId){
+								$selected = "selected";
+							}
+						?>
+							<option value="<?php echo $group->roleId; ?>" <?php echo $selected; ?>><?php echo $group->name; ?></option>
+						<?php endforeach ?>
+					</select>
+				</div>
 			</div>
 		</div>
 
