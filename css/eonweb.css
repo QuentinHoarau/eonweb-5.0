@@ -143,7 +143,7 @@
  * ------------------------------------------------------------------------
 */
 
-.datatable-eonweb {
+.datatable-eonweb, .datatable-eonweb-ajax {
 	border-spacing : 0 !important;
 	width: 100% !important;
 }
