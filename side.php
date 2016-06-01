@@ -22,13 +22,30 @@
 
 $m = new Translator();
 
-// load right menu file according to user limitation
+// load right menu file according to user limitation (LEFT menu)
 if( $_COOKIE['user_limitation'] != 0 ){
 	$m::initFile($path_menu_limited, $path_menu_limited_custom);
 } else {
 	$m::initFile($path_menus,$path_menus_custom);
 }
 $menus = $m::createPHPDictionnary();
+
+// load right menu file according to user limitation (TOP menu)
+$navbar_menus = false;
+if( strpos($_SERVER["PHP_SELF"], "/module/module_frame") !== false ){
+	if(isset($_GET["url"])){
+		// define module name
+		$ref_url = urldecode($_GET["url"]);
+		$ref_url = trim($ref_url, "/");
+		$ref_url_parts = explode("/", $ref_url);
+		$test_url = $ref_url_parts[0];
+
+		// we test the module name in lower case (that is easier)
+		if($m::initFile($path_menus."-".$test_url,$path_menus_custom."-".$test_url)){
+			$navbar_menus = $m::createPHPDictionnary();
+		}
+	}
+}
 
 ?>
 
@@ -48,6 +65,40 @@ $menus = $m::createPHPDictionnary();
 	<!-- /.navbar-header -->
 	
 	<ul class="nav navbar-top-links navbar-right">
+		<?php
+		// create the top navbar menu
+		if(isset($navbar_menus["navbarlink"])){
+			foreach ($navbar_menus["navbarlink"] as $navbarlink) {
+		?>
+				<li><a href="/module/module_frame/index.php?url=<?php echo urlencode($navbarlink["url"]); ?>"><?php echo getLabel($navbarlink["name"]); ?></a></li>
+		<?php
+			}
+		}
+		if(isset($navbar_menus["navbarsubtab"])){
+			foreach ($navbar_menus["navbarsubtab"] as $navbarsubtab) {
+		?>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#"> <?php echo getLabel($navbarsubtab["name"]); ?> <i class="fa fa-caret-down"></i></a>
+					<ul class="dropdown-menu dropdown-user">
+		<?php
+					if(isset($navbarsubtab["link"])){
+						foreach ($navbarsubtab["link"] as $link) {
+		?>
+							<li>
+								<a href="/module/module_frame/index.php?url=<?php echo $link["url"]; ?>">
+									<?php echo getLabel($link["name"]); ?>
+								</a>
+							</li>
+		<?php
+						}
+					}
+		?>
+					</ul>
+				</li>
+		<?php
+			}
+		}
+		?>
 		<li class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 				<i class="fa fa-user fa-fw"></i> <?php echo $_COOKIE['user_name']; ?> <i class="fa fa-caret-down"></i>
