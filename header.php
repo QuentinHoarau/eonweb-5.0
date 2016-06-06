@@ -57,6 +57,12 @@ include("include/function.php");
 	
 	<!-- EonWeb Custom CSS -->
 	<link href="/css/eonweb.css" rel="stylesheet">
+
+	<!-- EonWeb Module CSS -->
+	<?php
+	$module_path=basename(dirname($_SERVER["PHP_SELF"]));
+	$module_css=$module_path.".css";
+	if(file_exists($module_css)) { ?><link href="<?php echo $module_css; ?>" rel="stylesheet"><?php } ?>	
 </head>
 
 <body>
