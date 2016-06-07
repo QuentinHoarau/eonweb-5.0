@@ -16,27 +16,23 @@ catch(Exception $e) {
 }
 
 print "<div id=\"page-wrapper\">";
-	print "<div class=\"container\">";
-		print "<br>";
-		print "<h2 class=\"bp_name text-info col-xs-6\">Business Process : $bp_name</h2>";
+	print "<div class=\"col-lg-12\">";
+		print "<h1 class=\"page-header\">Business Process : $bp_name</h1>";
     print "</div>";
 
-	print "<form class=\"form-horizontal pad-top col-xs-6\">";
+	print "<form class=\"col-xs-6\">";
 
-		print "<div class=\"row col-xs-8\" style=\"left:130px\">";
+		print "<div class=\"row col-xs-8 form-group\">";
 			if($display_actually_bp == 0){
 				$disabled = "";
 			}
 			else{
 				$disabled = "disabled";
 			}
-            print "<button type=\"button\" id=\"button_service\" class=\"btn btn-info btn-block\" onclick=\"HideShowService();\" $disabled>";
-                print "<span class=\"glyphicon glyphicon-cog\" style=\"color:#4f4;\"></span>Adding Services";
+            print "<button type=\"button\" id=\"button_service\" class=\"btn btn-primary\" onclick=\"HideShowService();\" $disabled>";
+                print "Adding Services";
             print "</button>";
         print "</div>";
-		print "<br>";
-
-		print "<br>";
 
 		if($display_actually_bp > 0){
             $disabled = "";
@@ -45,46 +41,44 @@ print "<div id=\"page-wrapper\">";
         	$disabled = "disabled";
         }
 
-        print "<div class=\"row col-xs-8\" style=\"left:130px\">";
-            print "<button type=\"button\" id=\"button_process\" class=\"btn btn-info btn-block\" onclick=\"HideShowProcess();\" $disabled>";
-                print "<span class=\"glyphicon glyphicon-cog\" style=\"color:#4f4;\"></span>Adding Process";
+        print "<div class=\"row col-xs-8 form-group\">";
+            print "<button type=\"button\" id=\"button_process\" class=\"btn btn-primary\" onclick=\"HideShowProcess();\" $disabled>";
+                print "Adding Process";
             print "</button>";
         print "</div>";
-        print "<br>";
 
-		print "<div class=\"container\" id=\"container_service\" style=\"display:none\">";
-		print "<div class=\"row marge\">";
+        print "<div style=\"clear: both;\"></div>";
+
+        print "<div>";
+		print "<div id=\"container_service\" style=\"display:none\">";
+			print "<div>";
+				print "<div class=\"input-group col-xs-6\">";
+	  				print "<span class=\"input-group-addon\" id=\"sizing-addon1\"><img src=\"./images/server.png\" height=\"20\" width=\"25\"></span>";
+	  				print "<input type=\"text\" class=\"form-control\" id=\"host\" placeholder=\"Hostname\" aria-describedby=\"sizing-addon1\">";
+				print "</div>";
+			print "</div>";
+
 			print "<br>";
-			print "<div class=\"input-group col-xs-6\">";
-  				print "<span class=\"input-group-addon\" id=\"sizing-addon1\"><img src=\"./images/server.png\" height=\"20\" width=\"25\"></span>";
-  				print "<input type=\"text\" class=\"form-control\" id=\"host\" placeholder=\"Hostname\" aria-describedby=\"sizing-addon1\">";
+			print "<div>";
+	           	print "<div class=\"form-group\">";
+	               	print "<label style=\"font-weight:lighter;font-size:16px;\" for=\"services\" class=\"col-xs-8 control-label pad-top text-primary\">Services linked to this host</label>";
+				print "</div>";
 			print "</div>";
-		print "</div>";
 
-		print "<br>";
-		print "<div class=\"row\">";
-           	print "<div class=\"form-group\">";
-               	print "<label style=\"font-weight:lighter;font-size:16px;\" for=\"services\" class=\"col-xs-8 control-label pad-top text-primary\">Services linked to this host</label>";
-			print "</div>";
-		print "</div>";
-
-		print "<div class=\"row\">";
-            print "<div class=\"form-group\">";
-				print "<ul id=\"draggablePanelList\" class=\"list-unstyled\">";
-				print "</ul>";
-            print "</div>";
-       	print "</div>";
-
+			print "<div>";
+	            print "<div class=\"form-group\">";
+					print "<ul id=\"draggablePanelList\" class=\"list-unstyled\">";
+					print "</ul>";
+	            print "</div>";
+	       	print "</div>";
         print "</div>";
 
-		print "<div class=\"container\" id=\"container_process\" style=\"display:none\">";
-        print "<div class=\"row\">";
-            print "<br>";
-            print "<div class=\"form-group\">";
-                print "<label style=\"font-weight:normal\" for=\"display\" class=\"col-xs-3 control-label\">Display : </label>";
+		print "<div id=\"container_process\" style=\"display:none\">";
+            print "<div class=\"form-group row\">";
+                print "<label class=\"col-xs-3\" for=\"display\"> Display : </label>";
                 print "<div class=\"col-xs-8\">";
-                    print "<select class=\"selectpicker\" name=\"display\">";
-                        print "<option></option>";
+                    print "<select class=\"form-control\" name=\"display\">";
+                        print "<option> </option>";
                         print "<option>0</option>";
                         print "<option>1</option>";
                         print "<option>2</option>";
@@ -95,8 +89,8 @@ print "<div id=\"page-wrapper\">";
                 print "</div>";
             print "</div>";
         print "</div>";
+        print "</div>";
 
-		print "<br>";
         print "<div class=\"row\">";
             print "<div class=\"form-group\">";
                 print "<label style=\"font-weight:lighter;font-size:16px;\" id=\"process\" class=\"col-xs-8 control-label pad-top text-primary\">Process for display</label>";
@@ -108,8 +102,6 @@ print "<div id=\"page-wrapper\">";
                 print "<ul id=\"draggablePanelListProcess\" class=\"list-unstyled\">";
                 print "</ul>";
             print "</div>";
-        print "</div>";
-
         print "</div>";
 
     print "</form>";
@@ -336,7 +328,7 @@ function DeleteService(line_service){
 }
 
 function ApplyService(){
-	var element = $('.bp_name').html();
+	var element = $('h1.page-header').html();
 	var bp_name = element.split(" : ")[1];
 	console.log($list_new_services);
 	$.get(
@@ -349,7 +341,7 @@ function ApplyService(){
 		function ReturnError(values){
 			console.log(values);
 			setTimeout(function(){
-				$(location).attr('href',"./admin.php");
+				$(location).attr('href',"./index.php");
 				},
 				1000
 			);
@@ -358,7 +350,7 @@ function ApplyService(){
 }
 
 function ApplyProcess(){
-    var element = $('.bp_name').html();
+    var element = $('h1.page-header').html();
     var bp_name = element.split(" : ")[1];
     $.get(
         './php/function_bp.php',
@@ -369,7 +361,7 @@ function ApplyProcess(){
         },
         function ReturnError(){
             setTimeout(function(){
-                $(location).attr('href',"./admin.php");
+                $(location).attr('href',"./index.php");
                 },
                 1000
             );
@@ -380,7 +372,7 @@ function ApplyProcess(){
 function HideShowService(){
 	$service = $('#container_service');
 	if($service.is(':hidden')){
-		$service.css('display', 'inline');
+		$service.css('display', 'block');
 		$('#container_process').css('display', 'none');
 	}
 	else{
@@ -391,7 +383,7 @@ function HideShowService(){
 function HideShowProcess(){
     $service = $('#container_process');
     if($service.is(':hidden')){
-        $service.css('display', 'inline');
+        $service.css('display', 'block');
 		$('#container_service').css('display', 'none');
     }
     else{

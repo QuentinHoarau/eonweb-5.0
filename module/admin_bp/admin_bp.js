@@ -32,6 +32,14 @@ $(document).ready(function () {
 			findIt();
     	}
 	});
+
+	// event when we confirm the modal
+	$('#modal-confirmation-apply-conf').on('click', function(){
+		ApplyConfiguration();
+	});
+	$('#modal-confirmation-del-bp').on('click', function(){
+		DeleteBP();
+	});
 });
 
 $('#FindIt').on('click', findIt());
@@ -67,8 +75,13 @@ function AddingApplication(){
 	$(location).attr('href',"./add_application.php");
 }
 
-function DeleteBP(bp){
-    $('body').append('<div id="popup_confirmation" title="Suppression"></div>');
+function ShowModalDeleteBP(bp){
+	$("#popup_confirmation .modal-body").html('Supprimer le BP: ' + bp);
+	$("#popup_confirmation button").hide();
+	$("#modal-confirmation-del-bp").show();
+	$("#action-cancel").show();
+	$("#popup_confirmation").modal('show');
+    /*$('body').append('<div id="popup_confirmation" title="Suppression"></div>');
     $("#popup_confirmation").html('Supprimer le BP ' + bp);
 
     $("#popup_confirmation").dialog({
@@ -100,11 +113,38 @@ function DeleteBP(bp){
                 }
             }
         ]
-    }).dialog("open");
+    }).dialog("open");*/
 }
 
-function ApplyConfiguration(){
-	$('body').append('<div id="popup_confirmation" title="Suppression"></div>');
+function DeleteBP(){
+	var message = $(".modal-body").html();
+	var message_parts = message.split(': ');
+	var bp = message_parts[1];
+
+	$('div[id="' + bp + '"]').remove();
+
+	$.get(
+		'./php/function_bp.php',
+		{
+			action: 'delete_bp',
+			bp_name: bp
+		},
+		function ReturnAction(){
+				location.reload();
+		}
+	);
+
+	// and close the modal
+	$("#popup_confirmation").modal('hide');
+}
+
+function ShowModalApplyConfiguration(){
+	$("#popup_confirmation .modal-body").html('Appliquer la configuration ?');
+	$("#popup_confirmation button").hide();
+	$("#modal-confirmation-apply-conf").show();
+	$("#action-cancel").show();
+	$("#popup_confirmation").modal('show');
+	/*$('body').append('<div id="popup_confirmation" title="Suppression"></div>');
     $("#popup_confirmation").html("Appliquer la configuration ?");
 
     $("#popup_confirmation").dialog({
@@ -133,7 +173,22 @@ function ApplyConfiguration(){
                 }
             }
         ]
-    }).dialog("open");
+    }).dialog("open");*/
+}
+
+function ApplyConfiguration(){
+	$.get(
+		'./php/function_bp.php',
+		{
+			action: 'build_file'
+		},
+		function ReturnValue(value){
+			console.log(value);
+		}
+	);
+
+	// and close the modal
+	$("#popup_confirmation").modal('hide');
 }
 
 function editApplication(bp_name){

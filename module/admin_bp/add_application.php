@@ -4,7 +4,9 @@ include("../../include/config.php");
 include("../../header.php");
 include("../../side.php");
 
-$bp_name = $_GET['bp_name'];
+if(isset($_GET['bp_name'])){
+    $bp_name = $_GET['bp_name'];
+}
 
 if(! empty($bp_name)){
 	try {
@@ -27,154 +29,163 @@ if(! empty($bp_name)){
 }
 
 print "<div id=\"page-wrapper\" class=\"container-background\">";
-	print "<div class=\"pull-right col-xs-5\">";
+	print "<p class=\"text-right\">";
         print "<label style=\"font-weight:lighter;\" class=\"control-label\">Les champs marqués d'une </label>";
-        print "<span class=\"glyphicon glyphicon-asterisk\" style=\"font-size:10px;color:#707070;\"></span>";
+        print " <span class=\"glyphicon glyphicon-asterisk\" style=\"font-size:10px;color:#707070;\"></span> ";
         print "<label style=\"font-weight:lighter;\" class=\"control-label\"> sont obligatoires</label>";
-	print "</div>";
-	print "<div class=\"marge\" style=\"padding-top:80px;\">";
-	print "<form class=\"form-horizontal col-xs-8 container-presentation\">";
-        print "<div class=\"row pad-top\">";
-        	print "<div class=\"form-group\">";
-            	print "<label style=\"font-weight:normal\" for=\"uniq_name\" class=\"col-xs-3 control-label\">Uniq Name : </label>";
-                print "<div class=\"col-xs-8\">";
-                	print "<input type=\"text\" class=\"form-control\" id=\"uniq_name\" onkeyup=\"this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')\" value=\""; echo (isset($bp_name)?$bp_name:'');
-					print "\">";
-                print "</div>";
-                print "<div class=\"control-label form-group col-xs-1\">";
-                	print "<span class=\"glyphicon glyphicon-asterisk\" style=\"font-size:10px;color:#707070;\"></span>";
-                print "</div>";
-			print "</div>";
+	print "</p>";
+
+    print "<div class=\"panel panel-default\">"; // panel start here
+        print "<div class=\"panel-heading\">";
+            print "Create New Application";
         print "</div>";
-
-		print "<div class=\"row\">";
-            print "<div class=\"form-group\">";
-                print "<label style=\"font-weight:normal\" for=\"process_name\" class=\"col-xs-3 control-label\">Process Name : </label>";
-                print "<div class=\"col-xs-8\">";
-                    print "<input type=\"text\" class=\"form-control\" id=\"process_name\" onkeyup=\"this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')\" value=\""; echo (isset($bp_desc)?$bp_desc:'');
-					print "\">";
+        print "<div class=\"panel-body\">";
+        	print "<form class=\"form-horizontal col-md-8 col-md-offset-2\">";
+                print "<div class=\"row\">";
+                	print "<div class=\"form-group\">";
+                    	print "<label style=\"font-weight:normal\" for=\"uniq_name\" class=\"col-xs-3 control-label\">Uniq Name : </label>";
+                        print "<div class=\"col-xs-8\">";
+                        	print "<input type=\"text\" class=\"form-control\" id=\"uniq_name\" onkeyup=\"this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')\" value=\""; echo (isset($bp_name)?$bp_name:'');
+        					print "\">";
+                        print "</div>";
+                        print "<div class=\"control-label form-group col-xs-1\">";
+                        	print "<span class=\"glyphicon glyphicon-asterisk\" style=\"font-size:10px;color:#707070;\"></span>";
+                        print "</div>";
+        			print "</div>";
                 print "</div>";
-                print "<div class=\"control-label form-group col-xs-1\">";
-                    print "<span class=\"glyphicon glyphicon-asterisk\" style=\"font-size:10px;color:#707070;\"></span>";
-                print "</div>";
-            print "</div>";
-        print "</div>";
 
-		print "<div class=\"row\">";
-            print "<div class=\"form-group\">";
-                print "<label style=\"font-weight:normal\" for=\"display\" class=\"col-xs-3 control-label\">Display : </label>";
-                print "<div class=\"col-xs-8\">";
-					$disabled = "";
-					if(isset($bp_prior)){
-						if($bp_prior == 0){
-							$disabled = "disabled";
-						}
-					}
-			
-					print "<select class=\"selectpicker\" name=\"display\" $disabled>";
-						print "<option>"; echo (isset($bp_prior)?$bp_prior:'None');
-						print "</option>";
-						$list_display = array('0','1','2','3','4','5');
-						foreach($list_display as $display){
-							if(isset($bp_prior)){
-								if($display != $bp_prior){
-  									print "<option>$display</option>";
-								}
-							}
-							else{
-								print "<option>$display</option>";
-							}
-						}
-					print "</select>";
+        		print "<div class=\"row\">";
+                    print "<div class=\"form-group\">";
+                        print "<label style=\"font-weight:normal\" for=\"process_name\" class=\"col-xs-3 control-label\">Process Name : </label>";
+                        print "<div class=\"col-xs-8\">";
+                            print "<input type=\"text\" class=\"form-control\" id=\"process_name\" onkeyup=\"this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')\" value=\""; echo (isset($bp_desc)?$bp_desc:'');
+        					print "\">";
+                        print "</div>";
+                        print "<div class=\"control-label form-group col-xs-1\">";
+                            print "<span class=\"glyphicon glyphicon-asterisk\" style=\"font-size:10px;color:#707070;\"></span>";
+                        print "</div>";
+                    print "</div>";
                 print "</div>";
-                print "<div class=\"control-label form-group col-xs-1\">";
-                    print "<span class=\"glyphicon glyphicon-asterisk\" style=\"font-size:10px;color:#707070;\"></span>";
+
+        		print "<div class=\"row\">";
+                    print "<div class=\"form-group\">";
+                        print "<label style=\"font-weight:normal\" for=\"display\" class=\"col-xs-3 control-label\">Display : </label>";
+                        print "<div class=\"col-xs-8\">";
+        					$disabled = "";
+        					if(isset($bp_prior)){
+        						if($bp_prior == 0){
+        							$disabled = "disabled";
+        						}
+        					}
+        			        
+        					print "<select class=\"form-control\" name=\"display\" $disabled>";
+        						print "<option>"; echo (isset($bp_prior)?$bp_prior:'None');
+        						print "</option>";
+        						$list_display = array('0','1','2','3','4','5');
+        						foreach($list_display as $display){
+        							if(isset($bp_prior)){
+        								if($display != $bp_prior){
+          									print "<option>$display</option>";
+        								}
+        							}
+        							else{
+        								print "<option>$display</option>";
+        							}
+        						}
+        					print "</select>";
+                        print "</div>";
+                        print "<div class=\"control-label form-group col-xs-1\">";
+                            print "<span class=\"glyphicon glyphicon-asterisk\" style=\"font-size:10px;color:#707070;\"></span>";
+                        print "</div>";
+                    print "</div>";
                 print "</div>";
-            print "</div>";
-        print "</div>";
 
-		print "<div class=\"row\">";
-            print "<div class=\"form-group\">";
-                print "<label style=\"font-weight:normal\" for=\"url\" class=\"col-xs-3 control-label\">Url : </label>";
-                print "<div class=\"col-xs-8\">";
-                    print "<input type=\"text\" class=\"form-control\" id=\"url\" value=\""; echo (isset($bp_url)?$bp_url:'');
-					print "\">";
+        		print "<div class=\"row\">";
+                    print "<div class=\"form-group\">";
+                        print "<label style=\"font-weight:normal\" for=\"url\" class=\"col-xs-3 control-label\">Url : </label>";
+                        print "<div class=\"col-xs-8\">";
+                            print "<input type=\"text\" class=\"form-control\" id=\"url\" value=\""; echo (isset($bp_url)?$bp_url:'');
+        					print "\">";
+                        print "</div>";
+                    print "</div>";
                 print "</div>";
-            print "</div>";
-        print "</div>";
 
-		print "<div class=\"row\">";
-            print "<div class=\"form-group\">";
-                print "<label style=\"font-weight:normal\" for=\"command\" class=\"col-xs-3 control-label\">Command : </label>";
-                print "<div class=\"col-xs-8\">";
-                    print "<input type=\"text\" class=\"form-control\" id=\"command\" value=\""; echo (isset($bp_command)?$bp_command:'');
-					print "\">";
+        		print "<div class=\"row\">";
+                    print "<div class=\"form-group\">";
+                        print "<label style=\"font-weight:normal\" for=\"command\" class=\"col-xs-3 control-label\">Command : </label>";
+                        print "<div class=\"col-xs-8\">";
+                            print "<input type=\"text\" class=\"form-control\" id=\"command\" value=\""; echo (isset($bp_command)?$bp_command:'');
+        					print "\">";
+                        print "</div>";
+                    print "</div>";
                 print "</div>";
-            print "</div>";
-        print "</div>";
 
-		print "<div class=\"row\">";
-            print "<div class=\"form-group\">";
-                print "<label style=\"font-weight:normal\" for=\"type\" class=\"col-xs-3 control-label\">Type : </label>";
-                print "<div class=\"col-xs-8\">";
-                    print "<select class=\"selectpicker\" name=\"type\">";
-						if(isset($bp_type)){
-							print "<option>$bp_type</option>";
-						}
+        		print "<div class=\"row\">";
+                    print "<div class=\"form-group\">";
+                        print "<label style=\"font-weight:normal\" for=\"type\" class=\"col-xs-3 control-label\">Type : </label>";
+                        print "<div class=\"col-xs-8\">";
+                            print "<select class=\"form-control\" name=\"type\">";
+        						if(isset($bp_type)){
+        							print "<option>$bp_type</option>";
+        						}
 
-                        $list_type = array('ET','OU','MIN');
-                        foreach($list_type as $type){
-                            if(isset($bp_type)){
-                                if($type != $bp_type){
-                                    print "<option>$type</option>";
+                                $list_type = array('ET','OU','MIN');
+                                foreach($list_type as $type){
+                                    if(isset($bp_type)){
+                                        if($type != $bp_type){
+                                            print "<option>$type</option>";
+                                        }
+                                    }
+                                    else{
+                                        print "<option>$type</option>";
+                                    }
                                 }
-                            }
-                            else{
-                                print "<option>$type</option>";
-                            }
-                        }
-                    print "</select>";
+                            print "</select>";
+                        print "</div>";
+                        print "<div class=\"control-label form-group col-xs-1\">";
+                            print "<span class=\"glyphicon glyphicon-asterisk\" style=\"font-size:10px;color:#707070;\"></span>";
+                        print "</div>";
+                    print "</div>";
                 print "</div>";
-                print "<div class=\"control-label form-group col-xs-1\">";
-                    print "<span class=\"glyphicon glyphicon-asterisk\" style=\"font-size:10px;color:#707070;\"></span>";
-                print "</div>";
-            print "</div>";
-        print "</div>";
 
-		print "<div class=\"row\" id=\"container_select_minimum\">";
-            print "<div class=\"form-group\">";
-                print "<label style=\"font-weight:normal\" for=\"select_mininum\" class=\"col-xs-3 control-label\">Minimum Value : </label>";
-                print "<div class=\"col-xs-8\">";
-                    print "<select class=\"selectpicker\" name=\"min_value\">";
-						print "<option>"; echo (isset($bp_minvalue)?$bp_minvalue:'None');
-                        print "</option>";
-                        $list_minvalue = array('0','1','2','3','4','5','6','7','8','9');
-                        foreach($list_minvalue as $minvalue){
-                            if(isset($bp_prior)){
-                                if($minvalue != $bp_minvalue){
-                                    print "<option>$minvalue</option>";
+        		print "<div class=\"row\" id=\"container_select_minimum\">";
+                    print "<div class=\"form-group\">";
+                        print "<label style=\"font-weight:normal\" for=\"select_mininum\" class=\"col-xs-3 control-label\">Minimum Value : </label>";
+                        print "<div class=\"col-xs-8\">";
+                            print "<select class=\"form-control\" name=\"min_value\">";
+        						print "<option>"; echo (isset($bp_minvalue)?$bp_minvalue:'None');
+                                print "</option>";
+                                $list_minvalue = array('0','1','2','3','4','5','6','7','8','9');
+                                foreach($list_minvalue as $minvalue){
+                                    if(isset($bp_prior)){
+                                        if($minvalue != $bp_minvalue){
+                                            print "<option>$minvalue</option>";
+                                        }
+                                    }
+                                    else{
+                                        print "<option>$minvalue</option>";
+                                    }
                                 }
-                            }
-                            else{
-                                print "<option>$minvalue</option>";
-                            }
-                        }
-                    print "</select>";
+                            print "</select>";
+                        print "</div>";
+                    print "</div>";
                 print "</div>";
-            print "</div>";
+
+        		print "<div class=\"row\" style=\"margin:auto;\">";
+                    print "<div class=\"form-group\">";
+        				print "<button class=\"btn btn-primary col-xs-offset-3\" type=\"submit\" id=\"submit\" "; echo (isset($bp_name)?'':'disabled');
+        				print ">Créer";
+            			print "</button>";
+                        print " ";
+                        print "<a href=\"index.php\" class=\"btn btn-default\" ";
+                        print ">Annuler";
+                        print "</a>";
+        			print "</div>";
+        		print "</div>";
+
+        	print "</form>";
         print "</div>";
-
-		print "<div class=\"row pad-top\" style=\"margin:auto;\">";
-            print "<div class=\"form-group\">";
-				print "<button class=\"button-center btn btn-primary\" type=\"submit\" id=\"submit\" "; echo (isset($bp_name)?'':'disabled');
-				print ">Créer";
-        			print "<span class=\"glyphicon glyphicon-ok\" style=\"color:#4f4;\"></span>";
-    			print "</button>";
-			print "</div>";
-		print "</div>";
-
-	print "</div>";
-	print "</form>";
+    print "</div>";
 
 include("../../footer.php");
 ?>

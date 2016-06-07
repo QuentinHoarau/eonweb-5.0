@@ -89,7 +89,7 @@ include("../../side.php");
 		print "<font size=\"2\" color=\"#262635\">(".$desc_bp.")</font></label>&nbsp;\n";
 		//print "<a class=\"img-hover\" onclick=\"DeleteBP('$bp');\"><img src=\"./images/link_delete.png\" height=\"25\" width=\"25\"></a>&nbsp;\n";
 		print "<button type=\"button\" class=\"btn-group light-round btn-info marge-left\" onclick=\"editApplication('$bp');\"><span class=\"glyphicon glyphicon-pencil\"></span></button>";
-		print "<button type=\"button\" class=\"light-round btn-group btn-danger\" onclick=\"DeleteBP('$bp');\"><span class=\"glyphicon glyphicon-trash\"></span></button>";
+		print "<button type=\"button\" class=\"light-round btn-group btn-danger\" onclick=\"ShowModalDeleteBP('$bp');\"><span class=\"glyphicon glyphicon-trash\"></span></button>";
 		echo "\n";
 	}
 
@@ -200,8 +200,8 @@ include("../../side.php");
 	?>
     
 	<form class="form-vertical">
-		<div class="row" style="padding-top:20px;padding-left:15px;">
-			<div class="col-xs-4">
+		<div class="row">
+			<div class="form-group col-md-4">
 				<div class="input-group">
 					<span class="input-group-btn">
 						<button class="btn btn-info" type="button" onclick="ShowAll();">Show All</button>
@@ -214,15 +214,11 @@ include("../../side.php");
 				</div><!-- /input-group -->
 			</div>
 
-			<div class="col-xs-4">		                   
-				<button type="button" class="btn btn-success btn-block" onclick="AddingApplication();">
-					<span class="glyphicon glyphicon-plus" style="color:#4f4;"></span>
+			<div class="form-group col-md-8">		                   
+				<button type="button" class="btn btn-success" onclick="AddingApplication();">
 					Add new application
 				</button>
-			</div>
-			<div class="col-xs-4">
-				<button type="button" class="btn btn-danger btn-block" onclick="ApplyConfiguration();">
-					<span class="glyphicon glyphicon-plus" style="color:#4f4;"></span>
+				<button type="button" class="btn btn-primary" onclick="ShowModalApplyConfiguration();">
 					Apply Configuration
 				</button>
 			</div> 
@@ -241,5 +237,32 @@ include("../../side.php");
 		?>
 		</div>
 	</form>
+
+	<!-- modal for apply conf button -->
+	<div id="popup_confirmation" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content panel-info">
+				<div class="modal-header panel-heading">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Suppression</h4>
+				</div>
+				<div class="modal-body">
+				</div>
+				<div class="modal-footer">
+					<button id="modal-confirmation-apply-conf" type="button" class="btn btn-primary">
+						<?php echo getLabel("label.yes"); ?>
+					</button>
+					<button id="modal-confirmation-del-bp" type="button" class="btn btn-primary">
+						<?php echo getLabel("label.yes"); ?>
+					</button>
+					<button id="action-cancel" type="button" class="btn btn-default" data-dismiss="modal">
+						<?php echo getLabel("label.no"); ?>
+					</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+</div>
 
 <?php include("../../footer.php"); ?>
