@@ -34,7 +34,8 @@ $array_msg = array (
 	7 => "EON - Form error ",
 	8 => "EON - User / Group ",
 	9 => "EON - Graph ",
-	10 => "EON - Name Error");
+	10 => "EON - Name Error",
+	11 => "EON - GED");
 
 $array_tools = array (
 	"snmpwalk"		 => "tools/snmpwalk.php",
